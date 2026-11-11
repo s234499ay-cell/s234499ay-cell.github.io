@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.yaqeen.app",
+        "sha256_cert_fingerprints": ["07:FE:B9:45:76:D7:8F:D3:73:48:E5:11:F1:94:8C:16:82:76:2E:2D:A7:47:71:B7:2E:4C:63:98:DB:97:97:38"]
+      }
+    }]
