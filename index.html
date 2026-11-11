@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f4f2ed">
+    <title>يَقينُ</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="يَقينُ">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            color-scheme: light;
+            --background: #f4f2ed;
+            --surface: #fff;
+            --surface-soft: #ebe8df;
+            --text: #292720;
+            --muted: #777267;
+            --primary: #29251c;
+            --primary-contrast: #fff;
+            --gold: #b89452;
+            --border: #e5e0d5;
+            --shadow: 0 5px 18px rgba(45, 38, 24, .07);
+        }
+
+        body.dark-theme {
+            color-scheme: dark;
+            --background: #151411;
+            --surface: #211f1a;
+            --surface-soft: #2b2821;
+            --text: #f1eee6;
+            --muted: #aaa497;
+            --primary: #b89452;
+            --primary-contrast: #171613;
+            --gold: #d4b36e;
+            --border: #39352c;
+            --shadow: 0 5px 18px rgba(0, 0, 0, .22);
+        }
+
+        @font-face {
+            font-family: 'AmiriQuranLocal';
+            src: url('AmiriQuran-Regular.ttf') format('truetype');
+            font-display: swap;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+            font-family: Tahoma, Arial, sans-serif;
+            direction: rtl;
+            transition: background .2s, color .2s;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 58px;
+            padding: 0 16px;
+            background: var(--background);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-group {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .brand {
+            color: var(--text);
+            font-size: 1.05rem;
+            font-weight: bold;
+        }
+
+        .hamburger {
+            padding: 4px;
+            border: 0;
+            background: transparent;
+            color: var(--text);
+            font-size: 23px;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -280px;
+            z-index: 1002;
+            width: 265px;
+            height: 100%;
+            padding-top: 68px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+            transition: right .25s ease;
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover {
+            background: var(--surface-soft);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1001;
+            background: rgba(0, 0, 0, .45);
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        .page {
+            display: none;
+            width: min(100%, 540px);
+            min-height: calc(100vh - 58px);
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .auth-page {
+            display: none;
+            min-height: calc(100vh - 58px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-page.active {
+            display: flex;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 390px;
+            padding: 25px 21px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .auth-mark {
+            margin-bottom: 9px;
+            color: var(--gold);
+            font-size: 2rem;
+        }
+
+        .auth-container h1 {
+            margin: 0 0 7px;
+            color: var(--text);
+            font-size: 1.4rem;
+        }
+
+        .auth-description {
+            margin: 0 0 18px;
+            color: var(--muted);
+            font-size: .84rem;
+            line-height: 1.7;
+        }
+
+        .auth-container input {
+            width: 100%;
+            margin: 6px 0;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        .auth-container input:focus {
+            border-color: var(--gold);
+        }
+
+        .primary-button,
+        .guest-button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 11px 15px;
+            border: 0;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .primary-button {
+            background: var(--primary);
+            color: var(--primary-contrast);
+        }
+
+        .guest-button {
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .auth-toggle {
+            margin: 15px 0 0;
+            color: var(--gold);
+            font-size: .85rem;
+            cursor: pointer;
+        }
+
+        .welcome-card {
+            padding: 21px 18px;
+            margin: 2px 0 15px;
+            border: 1px solid rgba(184, 148, 82, .35);
+            border-radius: 17px;
+            background: linear-gradient(135deg, #24221d, #11110f);
+            color: #f5f0e5;
+            box-shadow: var(--shadow);
+        }
+
+        .welcome-card h1 {
+            margin: 0 0 8px;
+            color: #e4c982;
+            font-size: 1.18rem;
+        }
+
+        .welcome-card p {
+            margin: 0;
+            color: #e7e2d8;
+            font-size: .8rem;
+            line-height: 1.8;
+        }
+
+        .mosque-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .mosque-card {
+            min-height: 126px;
+            padding: 15px 12px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: var(--surface);
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .mosque-icon {
+            margin-bottom: 4px;
+            font-size: 1.7rem;
+        }
+
+        .mosque-card h2 {
+            margin: 5px 0 11px;
+            font-size: .92rem;
+        }
+
+        .primary-button.small {
+            width: auto;
+            margin: 0;
+            padding: 9px 16px;
+            font-size: .78rem;
+        }
+
+        .home-section {
+            margin-top: 20px;
+        }
+
+        .home-section h2 {
+            margin: 0 0 5px;
+            font-size: 1.08rem;
+        }
+
+        .section-subtitle {
+            margin: 0 0 12px;
+            color: var(--muted);
+            font-size: .8rem;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 13px;
+        }
+
+        .filter-row select {
+            min-width: 0;
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--surface);
+            color: var(--text);
+            font-size: .76rem;
+        }
+
+        .subpage-back-row {
+            display: flex;
+            justify-content: flex-start;
+            margin: 0 0 8px;
+        }
+
+        .back-button {
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .mosque-heading {
+            margin: 8px 0 16px;
+            text-align: center;
+            font-size: 1.15rem;
+        }
+
+        .recitation-card {
+            margin-bottom: 10px;
+            padding: 13px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .recitation-info {
+            margin-bottom: 9px;
+            font-size: .85rem;
+            font-weight: bold;
+        }
+
+        audio {
+            width: 100%;
+            height: 38px;
+        }
+
+        .empty-message {
+            padding: 14px;
+            color: var(--muted);
+            font-size: .85rem;
+            text-align: center;
+        }
+
+        .settings-card {
+            padding: 17px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .settings-card h2 {
+            margin: 0 0 6px;
+            font-size: 1.1rem;
+        }
+
+        .settings-description {
+            margin: 0 0 16px;
+            color: var(--muted);
+            font-size: .82rem;
+        }
+
+        .theme-setting {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 13px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .theme-setting-label {
+            font-size: .9rem;
+        }
+
+        .theme-toggle {
+            min-width: 105px;
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--surface-soft);
+            color: var(--text);
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 16px 15px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: var(--surface);
+            color: var(--text);
+            font-size: .95rem;
+            font-weight: bold;
+            text-align: right;
+            box-shadow: var(--shadow);
+        }
+
+        .menu-item:active {
+            background: var(--surface-soft);
+        }
+
+        .menu-item-arrow {
+            color: var(--gold);
+            font-size: 1.4rem;
+            line-height: 1;
+        }
+
+        .adhkar-summary {
+            position: sticky;
+            top: 58px;
+            z-index: 5;
+            margin: 0 0 12px;
+            padding: 11px 13px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .adhkar-summary-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: .82rem;
+            font-weight: bold;
+        }
+
+        .adhkar-reset {
+            padding: 5px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface-soft);
+            color: var(--muted);
+            font-size: .74rem;
+        }
+
+        .adhkar-bar {
+            height: 6px;
+            overflow: hidden;
+            border-radius: 99px;
+            background: var(--surface-soft);
+        }
+
+        .adhkar-bar > div {
+            width: 0;
+            height: 100%;
+            border-radius: 99px;
+            background: var(--gold);
+            transition: width .25s ease;
+        }
+
+        .adhkar-card {
+            margin-bottom: 12px;
+            padding: 16px 15px 13px;
+            border: 1px solid var(--border);
+            border-right: 4px solid var(--gold);
+            border-radius: 14px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+            transition: opacity .2s;
+        }
+
+        .adhkar-card.quran {
+            background: linear-gradient(135deg, #24221d, #11110f);
+            border-color: rgba(184, 148, 82, .35);
+            border-right-color: var(--gold);
+            color: #f5f0e5;
+        }
+
+        .adhkar-card.quran .adhkar-text {
+            font-family: 'AmiriQuranLocal', 'Amiri Quran', 'Traditional Arabic', serif;
+            color: #f5f0e5;
+            text-align: center;
+            font-size: 1.12rem;
+            line-height: 2.3;
+        }
+
+        .adhkar-card.done {
+            opacity: .65;
+        }
+
+        .adhkar-text {
+            font-size: 1rem;
+            line-height: 2.2;
+            text-align: justify;
+        }
+
+        .adhkar-counter {
+            position: relative;
+            display: block;
+            width: 100%;
+            margin-top: 12px;
+            padding: 11px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: var(--surface-soft);
+            color: var(--text);
+            font-weight: bold;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .adhkar-counter:active {
+            transform: scale(.985);
+        }
+
+        .adhkar-counter-fill {
+            position: absolute;
+            inset: 0 0 0 auto;
+            width: 0;
+            background: rgba(184, 148, 82, .35);
+            transition: width .2s ease;
+        }
+
+        .adhkar-counter-label {
+            position: relative;
+        }
+
+        .adhkar-card.done .adhkar-counter {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .adhkar-meta {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: .76rem;
+        }
+
+        .menu-item-end {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-item-count {
+            min-width: 26px;
+            padding: 2px 8px;
+            border-radius: 99px;
+            background: var(--surface-soft);
+            color: var(--muted);
+            font-size: .76rem;
+            text-align: center;
+        }
+
+        .rules-group-title {
+            margin: 6px 4px 10px;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .rules-card {
+            margin-bottom: 18px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .rule-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .rule-row:last-child {
+            border-bottom: 0;
+        }
+
+        .rule-num {
+            flex: 0 0 auto;
+            width: 30px;
+            height: 30px;
+            border: 1px solid rgba(184, 148, 82, .5);
+            border-radius: 50%;
+            background: var(--surface-soft);
+            color: var(--gold);
+            font-size: .82rem;
+            font-weight: bold;
+            line-height: 28px;
+            text-align: center;
+        }
+
+        .rule-text {
+            flex: 1;
+            font-size: .95rem;
+            line-height: 1.9;
+        }
+
+        @media (min-width: 600px) {
+            .page {
+                padding-top: 20px;
+            }
+
+            .mosque-cards {
+                flex-direction: row;
+            }
+
+            .mosque-card {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-group">
+            <button class="hamburger"
+                    type="button"
+                    aria-label="فتح القائمة"
+                    onclick="toggleSidebar()">☰</button>
+            <span class="brand">يَقينُ</span>
+        </div>
+    </nav>
+
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <a onclick="showPage('home')">الرئيسية</a>
+        <a onclick="showPage('haram')">المسجد الحرام</a>
+        <a onclick="showPage('nabawi')">المسجد النبوي</a>
+        <a onclick="showPage('adhkar')">الأذكار</a>
+        <a onclick="showPage('prayer')">أحكام الصلاة</a>
+        <a onclick="showPage('settings')">الإعدادات</a>
+        <a id="sidebar-login" onclick="showPage('auth')">دخول / حساب</a>
+        <a id="sidebar-logout"
+           onclick="handleLogout()"
+           style="display:none">خروج</a>
+    </aside>
+
+    <main>
+        <section id="auth" class="page auth-page active">
+            <div class="auth-container">
+                <div class="auth-mark">۞</div>
+                <h1 id="auth-title">مرحبًا بك في يَقينُ</h1>
+                <p class="auth-description" id="auth-description">
+                    سجّل الدخول للاستماع إلى تلاوات الحرمين
+                </p>
+
+                <input type="email"
+                       id="auth-email"
+                       placeholder="البريد الإلكتروني"
+                       autocomplete="email">
+
+                <input type="password"
+                       id="auth-password"
+                       placeholder="كلمة المرور"
+                       autocomplete="current-password">
+
+                <button class="primary-button"
+                        id="auth-main-btn"
+                        type="button"
+                        onclick="handleAuth()">دخول</button>
+
+                <button class="guest-button"
+                        id="guest-btn"
+                        type="button"
+                        onclick="continueAsGuest()">استمر كضيف</button>
+
+                <p class="auth-toggle"
+                   id="auth-toggle"
+                   onclick="toggleAuthMode()">إنشاء حساب جديد</p>
+            </div>
+        </section>
+
+        <section id="home" class="page">
+            <div class="welcome-card">
+                <h1>أصغِ إلى تلاوات الحرمين</h1>
+                <p>استمع إلى تلاوات مختارة من المسجد الحرام والمسجد النبوي.</p>
+            </div>
+
+            <div class="mosque-cards">
+                <article class="mosque-card">
+                    <div class="mosque-icon">🕋</div>
+                    <h2>المسجد الحرام</h2>
+                    <button class="primary-button small"
+                            type="button"
+                            onclick="showPage('haram')">عرض التلاوات</button>
+                </article>
+
+                <article class="mosque-card">
+                    <div class="mosque-icon">🕌</div>
+                    <h2>المسجد النبوي</h2>
+                    <button class="primary-button small"
+                            type="button"
+                            onclick="showPage('nabawi')">عرض التلاوات</button>
+                </article>
+
+                <article class="mosque-card">
+                    <div class="mosque-icon">🤲</div>
+                    <h2>الأذكار</h2>
+                    <button class="primary-button small"
+                            type="button"
+                            onclick="showPage('adhkar')">عرض الأذكار</button>
+                </article>
+
+                <article class="mosque-card">
+                    <div class="mosque-icon">📿</div>
+                    <h2>أحكام الصلاة</h2>
+                    <button class="primary-button small"
+                            type="button"
+                            onclick="showPage('prayer')">عرض الأحكام</button>
+                </article>
+            </div>
+        </section>
+
+        <section id="adhkar-view" class="page">
+            <div class="subpage-back-row">
+                <button class="back-button"
+                        type="button"
+                        onclick="adhkarBack()">← رجوع</button>
+            </div>
+
+            <h2 id="adhkar-title" class="mosque-heading">الأذكار</h2>
+
+            <div id="adhkar-list" class="menu-list"></div>
+        </section>
+
+        <section id="prayer-view" class="page">
+            <div class="subpage-back-row">
+                <button class="back-button"
+                        type="button"
+                        onclick="prayerBack()">← رجوع</button>
+            </div>
+
+            <h2 id="prayer-title" class="mosque-heading">أحكام الصلاة</h2>
+
+            <div id="prayer-list" class="menu-list"></div>
+        </section>
+
+        <section id="mosque-view" class="page">
+            <div class="subpage-back-row">
+                <button class="back-button"
+                        type="button"
+                        onclick="goBack()">← رجوع</button>
+            </div>
+
+            <h2 id="mosque-title" class="mosque-heading"></h2>
+
+            <div class="filter-row">
+                <select id="prayer-filter" onchange="filterRecitations()">
+                    <option value="all">كل الصلوات</option>
+                    <option value="الفجر">الفجر</option>
+                    <option value="المغرب">المغرب</option>
+                    <option value="العشاء">العشاء</option>
+                </select>
+            </div>
+
+            <div id="recitations-list"></div>
+        </section>
+
+        <section id="settings" class="page">
+            <div class="subpage-back-row">
+                <button class="back-button"
+                        type="button"
+                        onclick="goBack()">← رجوع</button>
+            </div>
+
+            <div class="settings-card">
+                <h2>الإعدادات</h2>
+                <p class="settings-description">خصّص مظهر تطبيق يَقينُ.</p>
+
+                <div class="theme-setting">
+                    <span class="theme-setting-label">المظهر</span>
+                    <button class="theme-toggle"
+                            id="theme-toggle"
+                            type="button">داكن</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        const SUPABASE_URL =
+            'https://wbjgotyjxlnkgxkamvet.supabase.co/';
+
+        const SUPABASE_KEY =
+            'sb_publishable_odJSX2nIpjMMndVAzJSnWA_o5DuKrcH';
+
+        const supabaseClient = supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+        let currentMosque = '';
+        let isLoginMode = true;
+        let currentUser = null;
+        let allRecs = [];
+        let adhkarPath = [];
+        let prayerPath = [];
+
+        let currentPage = 'auth';
+        const pageHistory = [];
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        }
+
+        function goBack() {
+            const previousPage = pageHistory.pop() || 'home';
+            showPage(previousPage, true);
+        }
+
+        function showPage(id, isGoingBack = false) {
+            closeSidebar();
+
+            if (!isGoingBack && id !== currentPage) {
+                pageHistory.push(currentPage);
+            }
+
+            currentPage = id;
+
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            if (id === 'prayer') {
+                prayerPath = [];
+                document.getElementById('prayer-view').classList.add('active');
+                renderPrayer();
+                return;
+            }
+
+            if (id === 'adhkar') {
+                adhkarPath = [];
+                document.getElementById('adhkar-view').classList.add('active');
+                renderAdhkar();
+                return;
+            }
+
+            if (id === 'haram' || id === 'nabawi') {
+                currentMosque = id === 'haram'
+                    ? 'المسجد الحرام'
+                    : 'المسجد النبوي';
+
+                document.getElementById('mosque-title').textContent =
+                    currentMosque;
+
+                document.getElementById('mosque-view').classList.add('active');
+                loadRecs();
+                return;
+            }
+
+            const page = document.getElementById(id);
+
+            if (page) {
+                page.classList.add('active');
+            }
+        }
+
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+
+            document.getElementById('auth-title').textContent =
+                isLoginMode
+                    ? 'مرحبًا بك في يَقينُ'
+                    : 'إنشاء حساب جديد';
+
+            document.getElementById('auth-description').textContent =
+                isLoginMode
+                    ? 'سجّل الدخول للاستماع إلى تلاوات الحرمين'
+                    : 'أنشئ حسابًا جديدًا في يَقينُ';
+
+            document.getElementById('auth-main-btn').textContent =
+                isLoginMode ? 'دخول' : 'إنشاء حساب';
+
+            document.getElementById('auth-toggle').textContent =
+                isLoginMode
+                    ? 'إنشاء حساب جديد'
+                    : 'العودة إلى تسجيل الدخول';
+
+            document.getElementById('auth-password').autocomplete =
+                isLoginMode ? 'current-password' : 'new-password';
+        }
+
+        async function handleAuth() {
+            const email =
+                document.getElementById('auth-email').value.trim();
+
+            const password =
+                document.getElementById('auth-password').value;
+
+            const button =
+                document.getElementById('auth-main-btn');
+
+            if (!email || !password) {
+                alert('أدخل البريد الإلكتروني وكلمة المرور.');
+                return;
+            }
+
+            button.disabled = true;
+
+            try {
+                if (isLoginMode) {
+                    const { error } =
+                        await supabaseClient.auth.signInWithPassword({
+                            email,
+                            password
+                        });
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    await checkSession();
+                    showPage('home');
+                } else {
+                    const { data, error } =
+                        await supabaseClient.auth.signUp({
+                            email,
+                            password
+                        });
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    if (data.session) {
+                        await checkSession();
+                        showPage('home');
+                    } else {
+                        alert(
+                            'تم إنشاء الحساب. تحقق من بريدك الإلكتروني لتأكيده، ثم سجّل الدخول.'
+                        );
+                    }
+                }
+            } catch (error) {
+                alert(
+                    error.message ||
+                    'تعذّر إكمال العملية. حاول مرة أخرى.'
+                );
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        function continueAsGuest() {
+            currentUser = null;
+            updateUserStatus();
+            showPage('home');
+        }
+
+        async function checkSession() {
+            const { data, error } =
+                await supabaseClient.auth.getSession();
+
+            if (error) {
+                console.error(
+                    'تعذر التحقق من الجلسة:',
+                    error.message
+                );
+                return;
+            }
+
+            currentUser = data.session?.user || null;
+            updateUserStatus();
+        }
+
+        function updateUserStatus() {
+            const loginLink =
+                document.getElementById('sidebar-login');
+
+            const logoutButton =
+                document.getElementById('sidebar-logout');
+
+            loginLink.style.display =
+                currentUser ? 'none' : 'block';
+
+            logoutButton.style.display =
+                currentUser ? 'block' : 'none';
+        }
+
+        async function handleLogout() {
+            const { error } =
+                await supabaseClient.auth.signOut();
+
+            if (error) {
+                alert(error.message);
+                return;
+            }
+
+            currentUser = null;
+            updateUserStatus();
+            pageHistory.length = 0;
+            showPage('auth');
+        }
+
+        function applyTheme(theme) {
+            const isDark = theme === 'dark';
+
+            document.body.classList.toggle('dark-theme', isDark);
+
+            const themeButton =
+                document.getElementById('theme-toggle');
+
+            themeButton.textContent = isDark
+                ? 'التحويل إلى الفاتح'
+                : 'التحويل إلى الداكن';
+
+            document.querySelector(
+                'meta[name="theme-color"]'
+            ).content = isDark ? '#151411' : '#f4f2ed';
+        }
+
+        async function loadRecs() {
+            const container =
+                document.getElementById('recitations-list');
+
+            container.innerHTML =
+                '<p class="empty-message">جارٍ تحميل التلاوات...</p>';
+
+            const { data, error } = await supabaseClient
+                .from('recitations')
+                .select('*')
+                .eq('mosque', currentMosque)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error(
+                    'تعذر تحميل التلاوات:',
+                    error.message
+                );
+
+                container.innerHTML =
+                    '<p class="empty-message">تعذر تحميل التلاوات حاليًا.</p>';
+
+                return;
+            }
+
+            allRecs = data || [];
+            filterRecitations();
+        }
+
+        function filterRecitations() {
+            const prayer =
+                document.getElementById('prayer-filter').value;
+
+            const filtered = prayer === 'all'
+                ? allRecs
+                : allRecs.filter(item => item.prayer === prayer);
+
+            renderRecitations(
+                filtered,
+                document.getElementById('recitations-list')
+            );
+        }
+
+        function renderRecitations(items, container) {
+            container.replaceChildren();
+
+            if (!items.length) {
+                container.innerHTML =
+                    '<p class="empty-message">لا توجد تلاوات مطابقة حاليًا.</p>';
+
+                return;
+            }
+
+            items.forEach(item => {
+                const card = document.createElement('article');
+                card.className = 'recitation-card';
+
+                const info = document.createElement('div');
+                info.className = 'recitation-info';
+
+                const mosqueText = item.mosque
+                    ? ` — ${item.mosque}`
+                    : '';
+
+                info.textContent =
+                    `${item.reciter || ''} — ${item.surah || ''} ` +
+                    `(${item.prayer || ''})${mosqueText}`;
+
+                const audio = document.createElement('audio');
+                audio.controls = true;
+                audio.src = item.storage_path || '';
+
+                card.append(info, audio);
+                container.appendChild(card);
+            });
+        }
+
+        /*
+            شجرة الأذكار.
+            القسم الذي له children يعرض أقسامًا فرعية.
+            القسم الذي له items يعرض المحتوى، وكل عنصر بهذا الشكل:
+            { text: 'نص الذكر', count: 3, source: 'المصدر' }
+            (count و source اختياريان)
+        */
+        const MORNING_ADHKAR = [
+            { quran: true, count: 1, text: '﴿ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ٱلۡحَيُّ ٱلۡقَيُّومُۚ لَا تَأۡخُذُهُۥ سِنَةࣱ وَلَا نَوۡمࣱۚ لَّهُۥ مَا فِي ٱلسَّمَٰوَٰتِ وَمَا فِي ٱلۡأَرۡضِۗ مَن ذَا ٱلَّذِي يَشۡفَعُ عِندَهُۥٓ إِلَّا بِإِذۡنِهِۦۚ يَعۡلَمُ مَا بَيۡنَ أَيۡدِيهِمۡ وَمَا خَلۡفَهُمۡۖ وَلَا يُحِيطُونَ بِشَيۡءٖ مِّنۡ عِلۡمِهِۦٓ إِلَّا بِمَا شَآءَۚ وَسِعَ كُرۡسِيُّهُ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضَۖ وَلَا يَـُٔودُهُۥ حِفۡظُهُمَاۚ وَهُوَ ٱلۡعَلِيُّ ٱلۡعَظِيمُ﴾' },
+            { quran: true, count: 3, text: '﴿قُلۡ هُوَ ٱللَّهُ أَحَدٌ ١ ٱللَّهُ ٱلصَّمَدُ ٢ لَمۡ يَلِدۡ وَلَمۡ يُولَدۡ ٣ وَلَمۡ يَكُن لَّهُۥ كُفُوًا أَحَدُۢ ٤﴾' },
+            { quran: true, count: 3, text: '﴿قُلۡ أَعُوذُ بِرَبِّ ٱلۡفَلَقِ ١ مِن شَرِّ مَا خَلَقَ ٢ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ٣ وَمِن شَرِّ ٱلنَّفَّـٰثَٰتِ فِي ٱلۡعُقَدِ ٤ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ ٥﴾' },
+            { quran: true, count: 3, text: '﴿قُلۡ أَعُوذُ بِرَبِّ ٱلنَّاسِ ١ مَلِكِ ٱلنَّاسِ ٢ إِلَٰهِ ٱلنَّاسِ ٣ مِن شَرِّ ٱلۡوَسۡوَاسِ ٱلۡخَنَّاسِ ٤ ٱلَّذِي يُوَسۡوِسُ فِي صُدُورِ ٱلنَّاسِ ٥ مِنَ ٱلۡجِنَّةِ وَٱلنَّاسِ ٦﴾' },
+            { count: 1, text: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ' },
+            { count: 1, text: 'اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ' },
+            { count: 1, text: 'اللَّهُمَّ أَنْتَ رَبِّي، لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي، فَاغْفِرْ لِي؛ فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ' },
+            { count: 4, text: 'اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ، وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ، وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ' },
+            { count: 1, text: 'اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ' },
+            { count: 3, text: 'اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ. اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ' },
+            { count: 7, text: 'حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ' },
+            { count: 1, text: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ، وَمِنْ خَلْفِي، وَعَنْ يَمِينِي، وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي' },
+            { count: 1, text: 'اللَّهُمَّ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ، فَاطِرَ السَّمَاوَاتِ وَالْأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي، وَمِنْ شَرِّ الشَّيْطَانِ وَشِرْكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءًا أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ' },
+            { count: 3, text: 'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ' },
+            { count: 3, text: 'رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا' },
+            { count: 1, text: 'يَا حَيُّ يَا قَيُّومُ، بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ' },
+            { count: 1, text: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذَا الْيَوْمِ: فَتْحَهُ وَنَصْرَهُ وَنُورَهُ وَبَرَكَتَهُ وَهُدَاهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِيهِ وَشَرِّ مَا بَعْدَهُ' },
+            { count: 1, text: 'أَصْبَحْنَا عَلَى فِطْرَةِ الْإِسْلَامِ، وَعَلَى كَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا وَمَا كَانَ مِنَ الْمُشْرِكِينَ' },
+            { count: 100, text: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ' },
+            { count: 10, text: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ' },
+            { count: 100, text: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ' },
+            { count: 3, text: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ' },
+            { count: 1, text: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا' },
+            { count: 100, text: 'أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ' },
+            { count: 1, text: 'الْحَمْدُ لِلَّهِ وَحْدَهُ، وَالصَّلاَةُ وَالسَّلاَمُ عَلَى مَنْ لاَ نَبِيَّ بَعْدَهُ' },
+            { count: 10, text: 'اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ' }
+        ];
+
+        const ADHKAR_TREE = [
+            {
+                id: 'duas',
+                title: 'الأدعية',
+                children: [
+                    { id: 'duas-quran', title: 'أدعية من القرآن', items: [] },
+                    { id: 'duas-prophet', title: 'أدعية النبي ﷺ', items: [] },
+                    { id: 'duas-occasions', title: 'أدعية المناسبات', items: [] }
+                ]
+            },
+            {
+                id: 'adhkar',
+                title: 'الأذكار',
+                children: [
+                    { id: 'adhkar-morning', title: 'أذكار الصباح', items: MORNING_ADHKAR },
+                    { id: 'adhkar-evening', title: 'أذكار المساء', items: [] },
+                    { id: 'adhkar-prayer', title: 'أذكار الصلاة', items: [] },
+                    { id: 'adhkar-after-prayer', title: 'أذكار بعد الصلاة', items: [] },
+                    { id: 'adhkar-sleep', title: 'أذكار النوم', items: [] },
+                    { id: 'adhkar-wake', title: 'أذكار الاستيقاظ', items: [] }
+                ]
+            },
+            { id: 'categories', title: 'فئات الأذكار', items: [] },
+            { id: 'virtues', title: 'الفضائل', items: [] },
+            { id: 'ruqyah', title: 'الرقية الشرعية', items: [] }
+        ];
+
+        function findAdhkarNode(path) {
+            let node = { title: 'الأذكار', children: ADHKAR_TREE };
+
+            path.forEach(id => {
+                node = node.children.find(child => child.id === id);
+            });
+
+            return node;
+        }
+
+        function renderAdhkar() {
+            const node = findAdhkarNode(adhkarPath);
+            const list = document.getElementById('adhkar-list');
+
+            document.getElementById('adhkar-title').textContent = node.title;
+            list.replaceChildren();
+            window.scrollTo(0, 0);
+
+            if (node.children) {
+                node.children.forEach(child => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'menu-item';
+
+                    const label = document.createElement('span');
+                    label.textContent = child.title;
+
+                    const arrow = document.createElement('span');
+                    arrow.className = 'menu-item-arrow';
+                    arrow.textContent = '‹';
+
+                    button.append(label, arrow);
+
+                    button.addEventListener('click', () => {
+                        adhkarPath.push(child.id);
+                        renderAdhkar();
+                    });
+
+                    list.appendChild(button);
+                });
+
+                return;
+            }
+
+            const items = node.items || [];
+
+            if (!items.length) {
+                list.innerHTML =
+                    '<p class="empty-message">سيتم إضافة المحتوى قريبًا.</p>';
+                return;
+            }
+
+            const storeKey =
+                'yaqeen-adhkar-' + adhkarPath.join('/') + '-' +
+                new Date().toISOString().slice(0, 10);
+
+            let progress = [];
+
+            try {
+                progress = JSON.parse(
+                    localStorage.getItem(storeKey) || '[]'
+                );
+            } catch (error) {
+                progress = [];
+            }
+
+            const remaining = items.map((item, index) => {
+                const total = item.count || 1;
+                const done = Number(progress[index]) || 0;
+                return Math.max(total - done, 0);
+            });
+
+            function saveProgress() {
+                const done = items.map(
+                    (item, index) => (item.count || 1) - remaining[index]
+                );
+
+                try {
+                    localStorage.setItem(storeKey, JSON.stringify(done));
+                } catch (error) {
+                    /* التخزين غير متاح، يستمر العدّ دون حفظ */
+                }
+            }
+
+            const summary = document.createElement('div');
+            summary.className = 'adhkar-summary';
+
+            const summaryText = document.createElement('span');
+            const summaryBar = document.createElement('div');
+            summaryBar.className = 'adhkar-bar';
+            const summaryFill = document.createElement('div');
+            summaryBar.appendChild(summaryFill);
+
+            const resetButton = document.createElement('button');
+            resetButton.type = 'button';
+            resetButton.className = 'adhkar-reset';
+            resetButton.textContent = 'إعادة العدّ';
+
+            const summaryTop = document.createElement('div');
+            summaryTop.className = 'adhkar-summary-top';
+            summaryTop.append(summaryText, resetButton);
+            summary.append(summaryTop, summaryBar);
+            list.appendChild(summary);
+
+            const cards = [];
+
+            function refresh() {
+                const completed = remaining.filter(n => n === 0).length;
+
+                summaryText.textContent =
+                    `أتممت ${completed} من ${items.length}`;
+
+                summaryFill.style.width =
+                    `${(completed / items.length) * 100}%`;
+
+                cards.forEach((entry, index) => {
+                    const total = items[index].count || 1;
+                    const isDone = remaining[index] === 0;
+
+                    entry.card.classList.toggle('done', isDone);
+
+                    entry.counter.textContent = isDone
+                        ? '✓ تم'
+                        : (total === 1
+                            ? 'مرة واحدة'
+                            : `${remaining[index]} / ${total}`);
+
+                    entry.fill.style.width =
+                        `${((total - remaining[index]) / total) * 100}%`;
+                });
+            }
+
+            items.forEach((item, index) => {
+                const total = item.count || 1;
+
+                const card = document.createElement('article');
+                card.className = 'adhkar-card' +
+                    (item.quran ? ' quran' : '');
+
+                const text = document.createElement('div');
+                text.className = 'adhkar-text';
+                text.textContent = item.text || '';
+                card.appendChild(text);
+
+                if (item.source) {
+                    const source = document.createElement('div');
+                    source.className = 'adhkar-meta';
+                    source.textContent = item.source;
+                    card.appendChild(source);
+                }
+
+                const counter = document.createElement('button');
+                counter.type = 'button';
+                counter.className = 'adhkar-counter';
+
+                const fill = document.createElement('span');
+                fill.className = 'adhkar-counter-fill';
+
+                const label = document.createElement('span');
+                label.className = 'adhkar-counter-label';
+
+                counter.append(fill, label);
+                card.appendChild(counter);
+
+                counter.addEventListener('click', () => {
+                    if (remaining[index] > 0) {
+                        remaining[index] -= 1;
+
+                        if (remaining[index] === 0 && navigator.vibrate) {
+                            try { navigator.vibrate(40); } catch (error) { }
+                        }
+                    }
+
+                    saveProgress();
+                    refresh();
+                });
+
+                cards.push({ card, counter: label, fill });
+                list.appendChild(card);
+            });
+
+            resetButton.addEventListener('click', () => {
+                items.forEach((item, index) => {
+                    remaining[index] = item.count || 1;
+                });
+
+                saveProgress();
+                refresh();
+            });
+
+            refresh();
+        }
+
+        function adhkarBack() {
+            if (adhkarPath.length) {
+                adhkarPath.pop();
+                renderAdhkar();
+            } else {
+                goBack();
+            }
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('./service-worker.js', { scope: './' })
+                .catch(error => {
+                    console.error(
+                        'تعذر تسجيل خدمة العمل دون اتصال:',
+                        error.message
+                    );
+                });
+        }
+
+        /*
+            شجرة أحكام الصلاة.
+            القسم الذي له items يعرض قائمة مرقّمة.
+            القسم الذي له groups يعرض عدة قوائم، لكل منها عنوان.
+        */
+        const PRAYER_TREE = [
+            {
+                id: 'conditions',
+                title: 'شروط الصلاة',
+                items: [
+                    'الإسلام',
+                    'العقل',
+                    'التمييز',
+                    'إزالة النجاسة',
+                    'رفع الحدث',
+                    'ستر العورة',
+                    'دخول الوقت',
+                    'استقبال القبلة',
+                    'النية'
+                ]
+            },
+            {
+                id: 'pillars',
+                title: 'أركان الصلاة',
+                items: [
+                    'القيام مع القدرة',
+                    'تكبيرة الإحرام',
+                    'قراءة الفاتحة',
+                    'الركوع',
+                    'الرفع والاعتدال بعد الركوع',
+                    'السجود على الأعضاء السبعة',
+                    'الرفع من السجود',
+                    'الجلسة بين السجدتين',
+                    'الطمأنينة في الأركان',
+                    'الترتيب والموالاة',
+                    'التشهد الأخير',
+                    'الجلوس للتشهد الأخير',
+                    'الصلاة على النبي ﷺ',
+                    'التسليمتان'
+                ]
+            },
+            {
+                id: 'obligations',
+                title: 'واجبات الصلاة',
+                items: [
+                    'جميع التكبيرات ما عدا تكبيرة الإحرام',
+                    'قول سمع الله لمن حمده',
+                    'قول ربنا ولك الحمد',
+                    'سبحان ربي العظيم مرة في الركوع',
+                    'سبحان ربي الأعلى مرة في السجود',
+                    'ربي اغفر لي بين السجدتين',
+                    'التشهد الأول',
+                    'الجلوس للتشهد الأول'
+                ]
+            },
+            {
+                id: 'sunnahs',
+                title: 'سنن الصلاة',
+                groups: [
+                    {
+                        title: 'سنن الأقوال',
+                        items: [
+                            'دعاء الاستفتاح بعد تكبيرة الإحرام',
+                            'الاستعاذة قبل قراءة الفاتحة',
+                            'البسملة قبل قراءة الفاتحة',
+                            'قول آمين بعد الفاتحة',
+                            'قراءة سورة أو شيء من القرآن بعد الفاتحة في الركعتين الأوليين',
+                            'الجهر بالقراءة في مواضع الجهر والإسرار في مواضع الإسرار',
+                            'الزيادة في تسبيح الركوع والسجود عن المرة الواحدة',
+                            'الدعاء بين السجدتين بأكثر من رب اغفر لي'
+                        ]
+                    },
+                    {
+                        title: 'سنن الأفعال',
+                        items: [
+                            'رفع اليدين عند تكبيرة الإحرام',
+                            'رفع اليدين عند الركوع',
+                            'رفع اليدين عند الرفع من الركوع',
+                            'وضع اليد اليمنى على اليسرى في القيام',
+                            'النظر إلى موضع السجود',
+                            'وضع اليدين على الفخذين في الجلوس للتشهد',
+                            'الإشارة بالسبابة في التشهد',
+                            'الافتراش في الجلوس بين السجدتين والتشهد الأول',
+                            'التورك في التشهد الأخير في الصلاة الثلاثية والرباعية'
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'disliked',
+                title: 'مكروهات الصلاة',
+                items: [
+                    'كثرة الالتفات',
+                    'الحركة',
+                    'رفع البصر إلى السماء',
+                    'الدخول في الصلاة مع ما يمنع الخشوع فيها ( كحبس البول والعطش والجوع )'
+                ]
+            },
+            {
+                id: 'invalidators',
+                title: 'مبطلات الصلاة',
+                items: [
+                    'الكلام العمد مع الذكر والعلم',
+                    'الأكل والشرب',
+                    'الضحك',
+                    'انكشاف العورة',
+                    'الانحراف الكثير عن جهة القبلة',
+                    'العبث الكثير في الصلاة',
+                    'انتقاض الطهارة'
+                ]
+            }
+        ];
+
+        function toArabicDigits(value) {
+            return String(value).replace(
+                /\d/g,
+                digit => '٠١٢٣٤٥٦٧٨٩'[digit]
+            );
+        }
+
+        function findPrayerNode(path) {
+            let node = { title: 'أحكام الصلاة', children: PRAYER_TREE };
+
+            path.forEach(id => {
+                node = node.children.find(child => child.id === id);
+            });
+
+            return node;
+        }
+
+        function countPrayerItems(node) {
+            if (node.groups) {
+                return node.groups.reduce(
+                    (sum, group) => sum + group.items.length,
+                    0
+                );
+            }
+
+            return (node.items || []).length;
+        }
+
+        function renderPrayer() {
+            const node = findPrayerNode(prayerPath);
+            const list = document.getElementById('prayer-list');
+
+            document.getElementById('prayer-title').textContent = node.title;
+            list.replaceChildren();
+            window.scrollTo(0, 0);
+
+            if (node.children) {
+                node.children.forEach(child => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'menu-item';
+
+                    const label = document.createElement('span');
+                    label.textContent = child.title;
+
+                    const end = document.createElement('span');
+                    end.className = 'menu-item-end';
+
+                    const badge = document.createElement('span');
+                    badge.className = 'menu-item-count';
+                    badge.textContent =
+                        toArabicDigits(countPrayerItems(child));
+
+                    const arrow = document.createElement('span');
+                    arrow.className = 'menu-item-arrow';
+                    arrow.textContent = '‹';
+
+                    end.append(badge, arrow);
+                    button.append(label, end);
+
+                    button.addEventListener('click', () => {
+                        prayerPath.push(child.id);
+                        renderPrayer();
+                    });
+
+                    list.appendChild(button);
+                });
+
+                return;
+            }
+
+            const groups = node.groups || [{ items: node.items || [] }];
+
+            groups.forEach(group => {
+                if (group.title) {
+                    const heading = document.createElement('h3');
+                    heading.className = 'rules-group-title';
+                    heading.textContent = group.title;
+                    list.appendChild(heading);
+                }
+
+                const card = document.createElement('div');
+                card.className = 'rules-card';
+
+                group.items.forEach((text, index) => {
+                    const row = document.createElement('div');
+                    row.className = 'rule-row';
+
+                    const number = document.createElement('span');
+                    number.className = 'rule-num';
+                    number.textContent = toArabicDigits(index + 1);
+
+                    const content = document.createElement('span');
+                    content.className = 'rule-text';
+                    content.textContent = text;
+
+                    row.append(number, content);
+                    card.appendChild(row);
+                });
+
+                list.appendChild(card);
+            });
+        }
+
+        function prayerBack() {
+            if (prayerPath.length) {
+                prayerPath.pop();
+                renderPrayer();
+            } else {
+                goBack();
+            }
+        }
+
+        window.addEventListener('load', async () => {
+            document.getElementById('theme-toggle')
+                .addEventListener('click', () => {
+                    const isDark =
+                        document.body.classList.contains('dark-theme');
+
+                    const newTheme = isDark ? 'light' : 'dark';
+
+                    localStorage.setItem('yaqeen-theme', newTheme);
+                    applyTheme(newTheme);
+                });
+
+            const savedTheme =
+                localStorage.getItem('yaqeen-theme') || 'light';
+
+            applyTheme(savedTheme);
+
+            await checkSession();
+
+            pageHistory.length = 0;
+            currentPage = currentUser ? 'home' : 'auth';
+            showPage(currentPage);
+        });
+    </script>
+</body>
+</html>
