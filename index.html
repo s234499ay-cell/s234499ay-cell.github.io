@@ -741,100 +741,112 @@
         .qibla-wrap {
             position: relative;
             width: min(300px, 82vw);
-            margin: 18px auto 14px;
+            margin: 22px auto 16px;
         }
 
         .qibla-pointer {
             position: absolute;
-            top: -12px;
+            top: -13px;
             left: 50%;
-            z-index: 2;
+            z-index: 3;
             transform: translateX(-50%);
             width: 0;
             height: 0;
             border-left: 10px solid transparent;
             border-right: 10px solid transparent;
-            border-top: 16px solid var(--gold);
+            border-top: 17px solid var(--gold);
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .35));
         }
 
         .qibla-dial {
             position: relative;
             width: 100%;
             aspect-ratio: 1;
-            border: 3px solid var(--border);
+            border: 3px solid rgba(184, 148, 82, .55);
             border-radius: 50%;
-            background: radial-gradient(circle, var(--surface) 55%, var(--surface-soft));
-            box-shadow: var(--shadow);
+            background: radial-gradient(circle at 50% 40%, #2b2922, #11110f 72%);
+            box-shadow: var(--shadow), inset 0 0 28px rgba(0, 0, 0, .5);
             overflow: hidden;
             transition: border-color .25s, box-shadow .25s;
         }
 
         .qibla-dial.aligned {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 4px rgba(184, 148, 82, .25), var(--shadow);
+            border-color: #e4c982;
+            box-shadow: 0 0 0 4px rgba(228, 201, 130, .25),
+                0 0 30px rgba(228, 201, 130, .35),
+                inset 0 0 28px rgba(0, 0, 0, .5);
         }
 
-        .qibla-rose {
+        .qibla-ring {
             position: absolute;
             inset: 0;
             border-radius: 50%;
         }
 
-        .qibla-dir {
+        .qibla-ticks {
             position: absolute;
-            font-size: .78rem;
-            color: var(--muted);
+            inset: 0;
+            border-radius: 50%;
+            background: repeating-conic-gradient(
+                from -.6deg,
+                rgba(228, 201, 130, .6) 0 1.2deg,
+                transparent 1.2deg 15deg
+            );
+            -webkit-mask: radial-gradient(circle closest-side, transparent 91%, #000 92%);
+            mask: radial-gradient(circle closest-side, transparent 91%, #000 92%);
         }
 
-        .qibla-dir.n {
+        .qibla-n {
+            position: absolute;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 7px;
+            border-radius: 6px;
+            background: #b34a3c;
+            color: #fff;
+            font-size: .72rem;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+        .qibla-needle {
+            position: absolute;
+            inset: 0;
+            will-change: transform;
+        }
+
+        .qibla-kaaba {
+            position: absolute;
             top: 9%;
             left: 50%;
             transform: translateX(-50%);
-            color: #b34a3c;
-            font-weight: 700;
-        }
-
-        .qibla-dir.s {
-            bottom: 9%;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .qibla-dir.e {
-            right: 7%;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .qibla-dir.w {
-            left: 7%;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .qibla-marker {
-            position: absolute;
-            inset: 0;
-        }
-
-        .qibla-marker span {
-            position: absolute;
-            top: 22%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2rem;
+            font-size: 2.1rem;
             line-height: 1;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .6));
         }
 
-        .qibla-marker::after {
-            content: '';
+        .qibla-shaft {
             position: absolute;
-            top: 30%;
-            bottom: 50%;
+            top: 25%;
             left: 50%;
-            width: 2px;
+            width: 22px;
+            height: 25%;
             transform: translateX(-50%);
-            background: linear-gradient(var(--gold), transparent);
+            background: linear-gradient(#f1dba0, #b89452);
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
+        }
+
+        .qibla-hub {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 22px;
+            height: 22px;
+            transform: translate(-50%, -50%);
+            border: 3px solid #b89452;
+            border-radius: 50%;
+            background: #11110f;
         }
 
         .qibla-info {
@@ -842,8 +854,21 @@
             margin-bottom: 14px;
         }
 
+        .qibla-hint {
+            min-height: 1.4em;
+            margin-bottom: 6px;
+            color: var(--muted);
+            font-size: .88rem;
+            transition: color .2s;
+        }
+
+        .qibla-hint.ok {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
         .qibla-angle {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 700;
         }
 
@@ -1185,19 +1210,20 @@
             <div class="qibla-wrap" id="qibla-wrap">
                 <div class="qibla-pointer"></div>
                 <div class="qibla-dial" id="qibla-dial">
-                    <div class="qibla-rose" id="qibla-rose">
-                        <span class="qibla-dir n">شمال</span>
-                        <span class="qibla-dir e">شرق</span>
-                        <span class="qibla-dir s">جنوب</span>
-                        <span class="qibla-dir w">غرب</span>
-                        <div class="qibla-marker" id="qibla-marker">
-                            <span>🕋</span>
-                        </div>
+                    <div class="qibla-ring" id="qibla-ring">
+                        <div class="qibla-ticks"></div>
+                        <span class="qibla-n">ش</span>
                     </div>
+                    <div class="qibla-needle" id="qibla-needle">
+                        <span class="qibla-kaaba">🕋</span>
+                        <i class="qibla-shaft"></i>
+                    </div>
+                    <div class="qibla-hub"></div>
                 </div>
             </div>
 
             <div class="qibla-info">
+                <div class="qibla-hint" id="qibla-hint">حرّك جوالك حتى يستقيم السهم للأعلى</div>
                 <div class="qibla-angle" id="qibla-angle">--</div>
                 <div class="qibla-sub" id="qibla-sub"></div>
             </div>
@@ -2751,10 +2777,11 @@
             return { bearing, km };
         }
 
+        let qiblaTarget = null;
+        let qiblaShown = null;
+        let qiblaRaf = null;
+
         function qiblaRender() {
-            const rose = document.getElementById('qibla-rose');
-            const marker = document.getElementById('qibla-marker');
-            const dial = document.getElementById('qibla-dial');
             const angle = document.getElementById('qibla-angle');
             const sub = document.getElementById('qibla-sub');
 
@@ -2766,32 +2793,112 @@
 
             const result = qiblaCalc(qiblaLoc.lat, qiblaLoc.lng);
 
-            marker.style.transform = 'rotate(' + qiblaBearing + 'deg)';
             angle.textContent =
                 toArabicDigits(Math.round(qiblaBearing)) + '° من الشمال';
             sub.textContent = 'المسافة إلى الكعبة: ' +
                 toArabicDigits(Math.round(result.km).toLocaleString('en')) +
                 ' كم';
 
-            if (qiblaHeading === null) {
-                rose.style.transform = 'rotate(0deg)';
-                dial.classList.remove('aligned');
+            qiblaDraw();
+            qiblaLoop();
+        }
+
+        function qiblaDraw() {
+            if (qiblaBearing === null) {
                 return;
             }
 
-            rose.style.transform = 'rotate(' + (-qiblaHeading) + 'deg)';
+            const heading = qiblaShown === null ? 0 : qiblaShown;
 
-            let diff = Math.abs(qiblaBearing - qiblaHeading) % 360;
+            document.getElementById('qibla-ring').style.transform =
+                'rotate(' + (-heading) + 'deg)';
+            document.getElementById('qibla-needle').style.transform =
+                'rotate(' + (qiblaBearing - heading) + 'deg)';
+
+            if (qiblaShown === null) {
+                return;
+            }
+
+            let diff = Math.abs(qiblaBearing - heading) % 360;
             diff = diff > 180 ? 360 - diff : diff;
 
             const aligned = diff <= 4;
-            dial.classList.toggle('aligned', aligned);
+            const hint = document.getElementById('qibla-hint');
+
+            document.getElementById('qibla-dial')
+                .classList.toggle('aligned', aligned);
+            hint.classList.toggle('ok', aligned);
+            hint.textContent = aligned
+                ? 'أنت متجه نحو القبلة ✓'
+                : 'حرّك جوالك حتى يستقيم السهم للأعلى';
 
             if (aligned && !qiblaWasAligned && navigator.vibrate) {
                 navigator.vibrate(60);
             }
 
             qiblaWasAligned = aligned;
+        }
+
+        function qiblaLoop() {
+            if (qiblaRaf !== null) {
+                return;
+            }
+
+            const step = () => {
+                qiblaRaf = null;
+
+                if (currentPage !== 'qibla') {
+                    return;
+                }
+
+                if (qiblaTarget !== null) {
+                    if (qiblaShown === null) {
+                        qiblaShown = qiblaTarget;
+                    } else {
+                        let delta = qiblaTarget - qiblaShown;
+
+                        if (delta > 180) delta -= 360;
+                        if (delta < -180) delta += 360;
+
+                        if (Math.abs(delta) > 0.15) {
+                            qiblaShown =
+                                (qiblaShown + delta * 0.15 + 360) % 360;
+                            qiblaDraw();
+                        }
+                    }
+                }
+
+                qiblaRaf = requestAnimationFrame(step);
+            };
+
+            qiblaRaf = requestAnimationFrame(step);
+        }
+
+        // اتجاه الجوال بالنسبة للشمال مع تعويض الميل
+        function qiblaHeadingFrom(alpha, beta, gamma) {
+            const d = Math.PI / 180;
+            const a = alpha * d;
+            const b = beta * d;
+            const g = gamma * d;
+
+            const cA = Math.cos(a), sA = Math.sin(a);
+            const cB = Math.cos(b), sB = Math.sin(b);
+            const cG = Math.cos(g), sG = Math.sin(g);
+
+            let east;
+            let north;
+
+            if (cB * cG > 0.7) {
+                // الجوال شبه أفقي: نستخدم اتجاه رأس الجوال
+                east = -cB * sA;
+                north = cA * cB;
+            } else {
+                // الجوال مائل أو واقف: نستخدم الاتجاه الذي يواجهه ظهر الجوال
+                east = -(cA * sG + cG * sA * sB);
+                north = -(sA * sG - cA * cG * sB);
+            }
+
+            return (Math.atan2(east, north) / d + 360) % 360;
         }
 
         function qiblaOnOrientation(event) {
@@ -2802,25 +2909,34 @@
 
             let heading = null;
 
-            if (typeof event.webkitCompassHeading === 'number') {
+            if (typeof event.webkitCompassHeading === 'number' &&
+                event.webkitCompassHeading >= 0) {
                 heading = event.webkitCompassHeading;
             } else if (typeof event.alpha === 'number') {
-                // على أندرويد نستخدم الحدث المطلق فقط، أو النسبي إن كان مطلقًا
                 if (event.type !== 'deviceorientationabsolute' &&
                     event.absolute !== true) {
                     return;
                 }
 
+                if (typeof event.beta !== 'number' ||
+                    typeof event.gamma !== 'number') {
+                    heading = (360 - event.alpha) % 360;
+                } else {
+                    heading = qiblaHeadingFrom(
+                        event.alpha, event.beta, event.gamma);
+                }
+
                 const screenAngle =
                     (screen.orientation && screen.orientation.angle) || 0;
 
-                heading = (360 - event.alpha + screenAngle) % 360;
+                heading = (heading + screenAngle) % 360;
             }
 
             if (heading === null || Number.isNaN(heading)) {
                 return;
             }
 
+            // تنعيم أولي للقراءة الخام
             if (qiblaHeading === null) {
                 qiblaHeading = heading;
             } else {
@@ -2829,8 +2945,10 @@
                 if (delta > 180) delta -= 360;
                 if (delta < -180) delta += 360;
 
-                qiblaHeading = (qiblaHeading + delta * 0.25 + 360) % 360;
+                qiblaHeading = (qiblaHeading + delta * 0.3 + 360) % 360;
             }
+
+            qiblaTarget = qiblaHeading;
 
             if (!qiblaGotSensor) {
                 qiblaGotSensor = true;
@@ -2838,7 +2956,7 @@
                 document.getElementById('qibla-start').hidden = true;
             }
 
-            qiblaRender();
+            qiblaLoop();
         }
 
         function qiblaStop() {
@@ -2985,6 +3103,8 @@
             }
 
             qiblaHeading = null;
+            qiblaTarget = null;
+            qiblaShown = null;
             qiblaGotSensor = false;
             qiblaWasAligned = false;
             document.getElementById('qibla-start').hidden = false;
