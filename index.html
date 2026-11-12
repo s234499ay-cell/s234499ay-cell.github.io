@@ -616,6 +616,128 @@
             overflow: hidden;
         }
 
+        .times-place {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .times-place-name {
+            font-weight: 700;
+            font-size: 1.02rem;
+        }
+
+        .times-place-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .times-btn,
+        .times-select {
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--surface);
+            color: var(--text);
+            font: inherit;
+            font-size: .85rem;
+        }
+
+        .times-select {
+            max-width: 150px;
+        }
+
+        .times-dates {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            color: var(--muted);
+            font-size: .85rem;
+        }
+
+        .times-next {
+            margin-bottom: 14px;
+            padding: 18px 16px;
+            border: 1px solid rgba(184, 148, 82, .35);
+            border-radius: 15px;
+            background: linear-gradient(135deg, #24221d, #11110f);
+            color: #f5f0e5;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .times-next[hidden] {
+            display: none;
+        }
+
+        .times-next-label {
+            color: #e4c982;
+            font-size: .85rem;
+        }
+
+        .times-next-name {
+            margin-top: 4px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .times-next-time {
+            margin-top: 2px;
+            font-size: 1.05rem;
+            color: #e7e2d8;
+        }
+
+        .times-next-count {
+            margin-top: 10px;
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 999px;
+            background: rgba(228, 201, 130, .14);
+            color: #e4c982;
+            font-size: .95rem;
+            direction: rtl;
+        }
+
+        .times-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .times-row:last-child {
+            border-bottom: 0;
+        }
+
+        .times-row.sunrise {
+            color: var(--muted);
+        }
+
+        .times-row.next {
+            background: var(--surface-soft);
+            font-weight: 700;
+            box-shadow: inset -4px 0 0 var(--gold);
+        }
+
+        .times-row-time {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .times-status {
+            min-height: 1.2em;
+            margin: 10px 2px 0;
+            color: var(--muted);
+            font-size: .82rem;
+            line-height: 1.8;
+        }
+
         .rules-note ol {
         margin: 0;
         padding: 0 1.4rem 0 0;
@@ -787,6 +909,7 @@
         <a onclick="showPage('home')">الرئيسية</a>
         <a onclick="showPage('haram')">المسجد الحرام</a>
         <a onclick="showPage('nabawi')">المسجد النبوي</a>
+        <a onclick="showPage('times')">مواقيت الصلاة</a>
         <a onclick="showPage('adhkar')">الأذكار</a>
         <a onclick="showPage('prayer')">أحكام الصلاة</a>
         <a onclick="showPage('settings')">الإعدادات</a>
@@ -855,6 +978,14 @@
                 </article>
 
                 <article class="mosque-card">
+                    <div class="mosque-icon">🕋</div>
+                    <h2>مواقيت الصلاة</h2>
+                    <button class="primary-button small"
+                            type="button"
+                            onclick="showPage('times')">عرض المواقيت</button>
+                </article>
+
+                <article class="mosque-card">
                     <div class="mosque-icon">🤲</div>
                     <h2>الأذكار</h2>
                     <button class="primary-button small"
@@ -870,6 +1001,42 @@
                             onclick="showPage('prayer')">عرض الأحكام</button>
                 </article>
             </div>
+        </section>
+
+        <section id="times" class="page">
+            <div class="subpage-back-row">
+                <button class="back-button"
+                        type="button"
+                        onclick="goBack()">← رجوع</button>
+            </div>
+
+            <h2 class="mosque-heading">مواقيت الصلاة</h2>
+
+            <div class="times-place">
+                <div class="times-place-name" id="times-place">...</div>
+                <div class="times-place-actions">
+                    <button type="button" class="times-btn"
+                            id="times-locate">📍 موقعي</button>
+                    <select id="times-city" class="times-select"
+                            aria-label="اختيار المدينة"></select>
+                </div>
+            </div>
+
+            <div class="times-dates">
+                <span id="times-hijri"></span>
+                <span id="times-greg"></span>
+            </div>
+
+            <div class="times-next" id="times-next" hidden>
+                <div class="times-next-label">الصلاة القادمة</div>
+                <div class="times-next-name" id="times-next-name"></div>
+                <div class="times-next-time" id="times-next-time"></div>
+                <div class="times-next-count" id="times-next-count"></div>
+            </div>
+
+            <div class="rules-card" id="times-list"></div>
+
+            <p class="times-status" id="times-status"></p>
         </section>
 
         <section id="adhkar-view" class="page">
@@ -986,6 +1153,12 @@
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
+
+            if (id === 'times') {
+                document.getElementById('times').classList.add('active');
+                openTimes();
+                return;
+            }
 
             if (id === 'prayer') {
                 prayerPath = [];
@@ -1924,6 +2097,447 @@
             });
 
             renderPrayerNote(list, node.note);
+        }
+
+
+        /* ===== مواقيت الصلاة ===== */
+        const TIMES_CITIES = [
+            ['مكة المكرمة', 21.3891, 39.8579], ['المدينة المنورة', 24.4672, 39.6111],
+            ['الرياض', 24.7136, 46.6753], ['جدة', 21.4858, 39.1925],
+            ['الدمام', 26.4207, 50.0888], ['الخبر', 26.2172, 50.1971],
+            ['الجبيل', 27.0046, 49.6460], ['الهفوف', 25.3647, 49.5870],
+            ['الطائف', 21.2703, 40.4158], ['تبوك', 28.3835, 36.5662],
+            ['أبها', 18.2164, 42.5053], ['خميس مشيط', 18.3093, 42.7292],
+            ['بريدة', 26.3260, 43.9750], ['حائل', 27.5114, 41.7208],
+            ['جازان', 16.8892, 42.5511], ['نجران', 17.4917, 44.1322],
+            ['الباحة', 20.0129, 41.4677], ['سكاكا', 29.9697, 40.2064],
+            ['عرعر', 30.9753, 41.0381], ['ينبع', 24.0895, 38.0618],
+            ['الكويت', 29.3759, 47.9774], ['المنامة', 26.2285, 50.5860],
+            ['الدوحة', 25.2854, 51.5310], ['أبوظبي', 24.4539, 54.3773],
+            ['دبي', 25.2048, 55.2708], ['مسقط', 23.5880, 58.3829],
+            ['صنعاء', 15.3694, 44.1910], ['عمّان', 31.9454, 35.9284],
+            ['القدس', 31.7683, 35.2137], ['دمشق', 33.5138, 36.2765],
+            ['بيروت', 33.8938, 35.5018], ['بغداد', 33.3152, 44.3661],
+            ['القاهرة', 30.0444, 31.2357], ['الإسكندرية', 31.2001, 29.9187],
+            ['الخرطوم', 15.5007, 32.5599], ['طرابلس', 32.8872, 13.1913],
+            ['تونس', 36.8065, 10.1815], ['الجزائر', 36.7538, 3.0588],
+            ['الرباط', 34.0209, -6.8416], ['الدار البيضاء', 33.5731, -7.5898],
+            ['إسطنبول', 41.0082, 28.9784]
+        ];
+
+        const TIMES_NAMES = [
+            ['Fajr', 'الفجر'], ['Sunrise', 'الشروق'], ['Dhuhr', 'الظهر'],
+            ['Asr', 'العصر'], ['Maghrib', 'المغرب'], ['Isha', 'العشاء']
+        ];
+
+        const TIMES_LOC_KEY = 'yaqeen-times-loc';
+        const TIMES_CACHE_KEY = 'yaqeen-times-cache';
+
+        let timesLoc = null;
+        let timesDay = null;      // { timings, hijri, tz, date }
+        let timesTomorrow = null; // fajr of next day
+        let timesTimer = null;
+        let timesInit = false;
+        let timesReq = 0;
+
+        function timesStore(key, value) {
+            try {
+                if (value === undefined) {
+                    return JSON.parse(localStorage.getItem(key));
+                }
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function timesNow(tz) {
+            const now = new Date();
+            let parts;
+
+            try {
+                parts = new Intl.DateTimeFormat('en-GB', {
+                    timeZone: tz || undefined,
+                    year: 'numeric', month: '2-digit', day: '2-digit',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    hourCycle: 'h23'
+                }).formatToParts(now);
+            } catch (error) {
+                parts = new Intl.DateTimeFormat('en-GB', {
+                    year: 'numeric', month: '2-digit', day: '2-digit',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    hourCycle: 'h23'
+                }).formatToParts(now);
+            }
+
+            const get = type =>
+                Number(parts.find(part => part.type === type).value);
+
+            return {
+                y: get('year'), m: get('month'), d: get('day'),
+                secs: get('hour') * 3600 + get('minute') * 60 + get('second')
+            };
+        }
+
+        function timesDateStr(y, m, d) {
+            return String(d).padStart(2, '0') + '-' +
+                String(m).padStart(2, '0') + '-' + y;
+        }
+
+        function timesToSecs(value) {
+            const match = String(value).match(/(\d{1,2}):(\d{2})/);
+            return match ? Number(match[1]) * 3600 + Number(match[2]) * 60 : 0;
+        }
+
+        function timesFormat(value) {
+            const total = timesToSecs(value);
+            const h24 = Math.floor(total / 3600);
+            const min = Math.floor((total % 3600) / 60);
+            const h12 = h24 % 12 || 12;
+
+            return toArabicDigits(h12 + ':' + String(min).padStart(2, '0')) +
+                (h24 < 12 ? ' ص' : ' م');
+        }
+
+        function timesCountdown(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            const two = n => String(n).padStart(2, '0');
+
+            return toArabicDigits(two(h) + ':' + two(m) + ':' + two(s));
+        }
+
+        async function timesFetchDay(loc, dateStr) {
+            const cache = timesStore(TIMES_CACHE_KEY) || {};
+            const key = loc.lat.toFixed(2) + ',' + loc.lng.toFixed(2) +
+                '|' + dateStr;
+
+            try {
+                const url = 'https://api.aladhan.com/v1/timings/' + dateStr +
+                    '?latitude=' + loc.lat + '&longitude=' + loc.lng +
+                    '&method=4';
+
+                const response = await fetch(url);
+                const json = await response.json();
+
+                if (!json || json.code !== 200) {
+                    throw new Error('bad response');
+                }
+
+                const data = json.data;
+                const entry = {
+                    timings: data.timings,
+                    hijri: data.date && data.date.hijri
+                        ? {
+                            day: data.date.hijri.day,
+                            month: data.date.hijri.month.ar,
+                            year: data.date.hijri.year
+                        }
+                        : null,
+                    tz: data.meta && data.meta.timezone
+                };
+
+                const next = {};
+                Object.keys(cache).slice(-12).forEach(k => {
+                    next[k] = cache[k];
+                });
+                next[key] = entry;
+                timesStore(TIMES_CACHE_KEY, next);
+
+                return { entry, fromCache: false };
+            } catch (error) {
+                if (cache[key]) {
+                    return { entry: cache[key], fromCache: true };
+                }
+
+                return null;
+            }
+        }
+
+        function timesRenderPlace() {
+            document.getElementById('times-place').textContent =
+                timesLoc.name;
+        }
+
+        function timesRenderStatic() {
+            const list = document.getElementById('times-list');
+            list.replaceChildren();
+
+            TIMES_NAMES.forEach(([key, label]) => {
+                const row = document.createElement('div');
+                row.className = 'times-row' +
+                    (key === 'Sunrise' ? ' sunrise' : '');
+                row.dataset.key = key;
+
+                const name = document.createElement('span');
+                name.textContent = label;
+
+                const time = document.createElement('span');
+                time.className = 'times-row-time';
+                time.textContent = timesFormat(timesDay.timings[key]);
+
+                row.append(name, time);
+                list.appendChild(row);
+            });
+
+            const hijri = document.getElementById('times-hijri');
+            hijri.textContent = timesDay.hijri
+                ? toArabicDigits(timesDay.hijri.day) + ' ' +
+                  timesDay.hijri.month + ' ' +
+                  toArabicDigits(timesDay.hijri.year) + ' هـ'
+                : '';
+
+            document.getElementById('times-greg').textContent =
+                new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-arab', {
+                    weekday: 'long', day: 'numeric', month: 'long',
+                    year: 'numeric'
+                }).format(new Date());
+        }
+
+        function timesTick() {
+            if (currentPage !== 'times' || !timesDay) {
+                clearInterval(timesTimer);
+                timesTimer = null;
+                return;
+            }
+
+            const now = timesNow(timesDay.tz);
+            const todayStr = timesDateStr(now.y, now.m, now.d);
+
+            if (timesDay.date !== todayStr) {
+                loadTimes();
+                return;
+            }
+
+            const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+            let nextKey = null;
+            let remain = 0;
+
+            for (const key of prayers) {
+                const at = timesToSecs(timesDay.timings[key]);
+
+                if (at > now.secs) {
+                    nextKey = key;
+                    remain = at - now.secs;
+                    break;
+                }
+            }
+
+            let nextTime;
+
+            if (!nextKey) {
+                nextKey = 'Fajr';
+                nextTime = timesTomorrow;
+                remain = nextTime
+                    ? 86400 - now.secs + timesToSecs(nextTime)
+                    : 0;
+                nextTime = nextTime || timesDay.timings.Fajr;
+            } else {
+                nextTime = timesDay.timings[nextKey];
+            }
+
+            const label = TIMES_NAMES.find(item => item[0] === nextKey)[1];
+
+            document.getElementById('times-next').hidden = false;
+            document.getElementById('times-next-name').textContent = label;
+            document.getElementById('times-next-time').textContent =
+                timesFormat(nextTime);
+            document.getElementById('times-next-count').textContent =
+                remain > 0 ? 'بعد ' + timesCountdown(remain) : '';
+
+            document.querySelectorAll('#times-list .times-row')
+                .forEach(row => {
+                    row.classList.toggle(
+                        'next',
+                        row.dataset.key === nextKey
+                    );
+                });
+        }
+
+        async function loadTimes() {
+            const request = ++timesReq;
+            const status = document.getElementById('times-status');
+
+            timesRenderPlace();
+            status.textContent = 'جارٍ تحميل المواقيت...';
+
+            const localNow = timesNow(timesStore(TIMES_CACHE_KEY + '-tz'));
+            let todayStr = timesDateStr(localNow.y, localNow.m, localNow.d);
+
+            const result = await timesFetchDay(timesLoc, todayStr);
+
+            if (request !== timesReq) {
+                return;
+            }
+
+            if (!result) {
+                status.textContent =
+                    'تعذر تحميل المواقيت. تأكد من الاتصال بالإنترنت ثم حاول مرة أخرى.';
+                return;
+            }
+
+            const entry = result.entry;
+
+            if (entry.tz) {
+                timesStore(TIMES_CACHE_KEY + '-tz', entry.tz);
+
+                const real = timesNow(entry.tz);
+                const realStr = timesDateStr(real.y, real.m, real.d);
+
+                if (realStr !== todayStr) {
+                    todayStr = realStr;
+
+                    const again = await timesFetchDay(timesLoc, todayStr);
+
+                    if (request !== timesReq) {
+                        return;
+                    }
+
+                    if (again) {
+                        timesDay = Object.assign({}, again.entry,
+                            { date: todayStr });
+                        timesRenderStatic();
+                        status.textContent = again.fromCache
+                            ? 'تعرض آخر مواقيت محفوظة (بدون اتصال).'
+                            : 'التقويم: أم القرى (مكة المكرمة).';
+                        timesTomorrow = null;
+                        timesTick();
+                        return;
+                    }
+                }
+            }
+
+            timesDay = Object.assign({}, entry, { date: todayStr });
+            timesTomorrow = null;
+            timesRenderStatic();
+
+            status.textContent = result.fromCache
+                ? 'تعرض آخر مواقيت محفوظة (بدون اتصال).'
+                : 'التقويم: أم القرى (مكة المكرمة).';
+
+            timesTick();
+
+            clearInterval(timesTimer);
+            timesTimer = setInterval(timesTick, 1000);
+
+            // فجر الغد، لعرض العدّ التنازلي بعد العشاء
+            const now = timesNow(timesDay.tz);
+            const tomorrow = new Date(
+                Date.UTC(now.y, now.m - 1, now.d + 1)
+            );
+            const tomorrowStr = timesDateStr(
+                tomorrow.getUTCFullYear(),
+                tomorrow.getUTCMonth() + 1,
+                tomorrow.getUTCDate()
+            );
+
+            const next = await timesFetchDay(timesLoc, tomorrowStr);
+
+            if (request === timesReq && next) {
+                timesTomorrow = next.entry.timings.Fajr;
+                timesTick();
+            }
+        }
+
+        function timesSetLocation(loc, save) {
+            timesLoc = loc;
+
+            if (save) {
+                timesStore(TIMES_LOC_KEY, loc);
+            }
+
+            const select = document.getElementById('times-city');
+            const index = TIMES_CITIES.findIndex(
+                city => city[0] === loc.name && !loc.auto
+            );
+            select.value = index >= 0 ? String(index) : '';
+
+            loadTimes();
+        }
+
+        function timesLocate(silent) {
+            const status = document.getElementById('times-status');
+
+            if (!navigator.geolocation) {
+                if (!silent) {
+                    status.textContent = 'المتصفح لا يدعم تحديد الموقع.';
+                }
+                return;
+            }
+
+            status.textContent = 'جارٍ تحديد موقعك...';
+
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    timesSetLocation({
+                        name: 'موقعي الحالي',
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        auto: true
+                    }, true);
+                },
+                () => {
+                    status.textContent = silent
+                        ? ''
+                        : 'تعذر تحديد موقعك. اسمح بالوصول للموقع أو اختر مدينتك من القائمة.';
+
+                    if (!timesLoc) {
+                        timesSetLocation({
+                            name: TIMES_CITIES[0][0],
+                            lat: TIMES_CITIES[0][1],
+                            lng: TIMES_CITIES[0][2]
+                        }, false);
+                    }
+                },
+                { timeout: 10000, maximumAge: 600000 }
+            );
+        }
+
+        function openTimes() {
+            if (!timesInit) {
+                timesInit = true;
+
+                const select = document.getElementById('times-city');
+                const blank = document.createElement('option');
+                blank.value = '';
+                blank.textContent = 'اختر المدينة';
+                select.appendChild(blank);
+
+                TIMES_CITIES.forEach((city, index) => {
+                    const option = document.createElement('option');
+                    option.value = String(index);
+                    option.textContent = city[0];
+                    select.appendChild(option);
+                });
+
+                select.addEventListener('change', () => {
+                    if (select.value === '') {
+                        return;
+                    }
+
+                    const city = TIMES_CITIES[Number(select.value)];
+
+                    timesSetLocation({
+                        name: city[0], lat: city[1], lng: city[2]
+                    }, true);
+                });
+
+                document.getElementById('times-locate')
+                    .addEventListener('click', () => timesLocate(false));
+            }
+
+            if (!timesLoc) {
+                timesLoc = timesStore(TIMES_LOC_KEY);
+            }
+
+            if (timesLoc) {
+                timesSetLocation(timesLoc, false);
+            } else {
+                document.getElementById('times-place').textContent =
+                    'جارٍ تحديد الموقع...';
+                timesLocate(true);
+            }
         }
 
         function prayerBack() {
