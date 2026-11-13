@@ -832,15 +832,91 @@
             opacity: .5;
         }
 
+        .home-verse {
+            margin: 2px 6px 18px;
+            color: var(--text);
+            font-family: 'AmiriQuranLocal', 'Amiri Quran', 'Traditional Arabic', serif;
+            font-size: 1.15rem;
+            line-height: 2;
+            text-align: center;
+        }
+
+        .home-verse span {
+            display: block;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: .8rem;
+        }
+
+        .home-date-card {
+            margin-bottom: 22px;
+            padding: 20px 16px 18px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background:
+                radial-gradient(circle at 85% 0%, rgba(228, 201, 130, .12), transparent 55%),
+                var(--surface);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .hd-weekday {
+            color: #e4c982;
+            font-family: 'AmiriQuranLocal', 'Amiri Quran', 'Traditional Arabic', serif;
+            font-size: 2.6rem;
+            line-height: 1.5;
+        }
+
+        .hd-day {
+            color: var(--gold);
+            font-size: 2.2rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .hd-month {
+            margin-top: 2px;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .hd-greg {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: .92rem;
+        }
+
+        .home-times-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin: 0 2px 10px;
+        }
+
+        .home-times-title {
+            padding-right: 10px;
+            border-right: 4px solid var(--gold);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .home-city {
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: var(--surface-soft);
+            color: var(--muted);
+            font-size: .78rem;
+        }
+
         .home-hero {
             display: block;
             width: 100%;
-            margin: 0 0 14px;
-            padding: 18px 18px 16px;
+            padding: 22px 18px 16px;
             border: 1px solid rgba(184, 148, 82, .45);
             border-radius: 20px;
             background:
-                radial-gradient(circle at 15% 0%, rgba(228, 201, 130, .16), transparent 55%),
+                radial-gradient(circle at 15% 0%, rgba(228, 201, 130, .14), transparent 55%),
                 linear-gradient(145deg, #2a2720, #12110f);
             color: #f5f0e5;
             font: inherit;
@@ -849,143 +925,65 @@
             cursor: pointer;
         }
 
-        .home-hero-top {
+        .hh-label {
+            font-size: 1.15rem;
+        }
+
+        .hh-count {
+            margin: 6px 0 18px;
+            color: #e4c982;
+            font-size: 2.7rem;
+            font-weight: 700;
+            line-height: 1.3;
+            direction: ltr;
+            letter-spacing: 1px;
+        }
+
+        .hh-bar {
+            position: relative;
+            height: 10px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .1);
+        }
+
+        .hh-fill {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 0;
+            border-radius: 999px;
+            background: linear-gradient(270deg, #b89452, #e4c982);
+            transition: width 1s linear;
+        }
+
+        .hh-ends {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .hh-end {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: start;
+        }
+
+        .hh-end b {
+            font-size: 1rem;
+        }
+
+        .hh-end small {
+            color: #cfc8b8;
             font-size: .82rem;
         }
 
-        .home-hero-label {
-            color: #e4c982;
-        }
-
-        .home-city {
-            padding: 3px 10px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, .08);
-            color: #e7e2d8;
-            font-size: .76rem;
-        }
-
-        .home-hero-name {
-            margin-top: 10px;
-            font-size: 1.9rem;
-            font-weight: 700;
-            line-height: 1.4;
-        }
-
-        .home-hero-time {
-            margin-top: 2px;
-            color: #e7e2d8;
-            font-size: 1.05rem;
-        }
-
-        .home-hero-swap {
-            display: grid;
-            align-items: center;
-            justify-items: center;
-            min-height: 3.2rem;
-            margin-top: 14px;
-        }
-
-        .home-hero-swap > * {
-            grid-area: 1 / 1;
-            transition: opacity .6s ease;
-        }
-
-        .home-hero[data-phase="count"] .home-hero-date,
-        .home-hero[data-phase="date"] .home-hero-count {
-            opacity: 0;
-        }
-
-        .home-hero-count {
-            display: inline-block;
-            margin: 0;
-            padding: 6px 18px;
-            border-radius: 999px;
-            background: rgba(228, 201, 130, .14);
-            color: #e4c982;
-            font-size: 1.05rem;
-            direction: rtl;
-        }
-
-
-        .home-hero-date {
-            margin: 0;
-            padding: 0;
-            color: #e7e2d8;
-            font-size: .8rem;
-            line-height: 1.8;
-        }
-
-
-        .home-verse {
-            margin: 4px 6px 18px;
-            color: var(--muted);
-            font-family: 'AmiriQuranLocal', 'Amiri Quran', 'Traditional Arabic', serif;
-            font-size: 1.02rem;
-            line-height: 2;
-            text-align: center;
-        }
-
-        .home-verse span {
-            display: block;
-            font-family: inherit;
-            font-size: .78rem;
-        }
-
-        .home-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .home-tile {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            padding: 18px 10px 16px;
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            background: var(--surface);
-            color: var(--text);
-            font: inherit;
-            text-align: center;
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: transform .15s, border-color .15s;
-        }
-
-        .home-tile:active {
-            transform: scale(.97);
-            border-color: var(--gold);
-        }
-
-        .home-tile-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 54px;
-            height: 54px;
-            margin-bottom: 6px;
-            border: 1px solid rgba(184, 148, 82, .4);
-            border-radius: 50%;
-            background: var(--surface-soft);
-            font-size: 1.6rem;
-        }
-
-        .home-tile-title {
-            font-size: .98rem;
-            font-weight: 700;
-        }
-
-        .home-tile-sub {
-            color: var(--muted);
-            font-size: .72rem;
-            line-height: 1.6;
+        .home-hero.empty .hh-count,
+        .home-hero.empty .hh-bar,
+        .home-hero.empty .hh-ends {
+            display: none;
         }
 
         .rules-note ol {
@@ -1208,24 +1206,41 @@
         </section>
 
         <section id="home" class="page">
-            <button class="home-hero" id="home-hero" type="button"
-                    onclick="showPage('times')">
-                <div class="home-hero-top">
-                    <span class="home-hero-label">الصلاة القادمة</span>
-                    <span class="home-city" id="home-city">📍 حدّد موقعك</span>
-                </div>
-                <div class="home-hero-name" id="home-next-name">...</div>
-                <div class="home-hero-time" id="home-next-time"></div>
-                <div class="home-hero-swap">
-                    <div class="home-hero-count" id="home-next-count"></div>
-                    <div class="home-hero-date" id="home-date"></div>
-                </div>
-            </button>
-
             <p class="home-verse">
                 ﴿إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا﴾
                 <span>[النساء: ١٠٣]</span>
             </p>
+
+            <div class="home-date-card">
+                <div class="hd-weekday" id="hd-weekday"></div>
+                <div class="hd-day" id="hd-day"></div>
+                <div class="hd-month" id="hd-month"></div>
+                <div class="hd-greg" id="hd-greg"></div>
+            </div>
+
+            <div class="home-times-head">
+                <span class="home-times-title">أوقات الصلاة</span>
+                <span class="home-city" id="home-city">📍 حدّد موقعك</span>
+            </div>
+
+            <button class="home-hero" id="home-hero" type="button"
+                    onclick="showPage('times')">
+                <div class="hh-label" id="home-next-label">...</div>
+                <div class="hh-count" id="home-next-count"></div>
+                <div class="hh-bar">
+                    <div class="hh-fill" id="home-fill"></div>
+                </div>
+                <div class="hh-ends">
+                    <div class="hh-end">
+                        <b id="home-prev-name"></b>
+                        <small id="home-prev-time"></small>
+                    </div>
+                    <div class="hh-end">
+                        <b id="home-next-name"></b>
+                        <small id="home-next-time"></small>
+                    </div>
+                </div>
+            </button>
         </section>
 
         <section id="times" class="page">
@@ -2900,53 +2915,54 @@
         let homeTimer = null;
         let homeReq = 0;
 
-        let homePhase = 'count';
-        let homePhaseTimer = null;
-
-        function homeApplyPhase() {
+        function homeMsg(text) {
             const hero = document.getElementById('home-hero');
-            const hasCount = document.getElementById('home-next-count')
-                .textContent !== '';
-            const hasDate = document.getElementById('home-date')
-                .textContent !== '';
-
-            hero.dataset.phase = !hasCount ? 'date'
-                : (!hasDate ? 'count' : homePhase);
+            hero.classList.add('empty');
+            document.getElementById('home-next-label').textContent = text;
         }
 
-        function homeShow(name, time, count, date) {
-            document.getElementById('home-next-name').textContent = name;
-            document.getElementById('home-next-time').textContent = time;
-            document.getElementById('home-next-count').textContent = count;
-            document.getElementById('home-date').textContent = date;
-            homeApplyPhase();
-        }
+        function homeRenderDate() {
+            const tz = homeDay && homeDay.tz ? homeDay.tz : undefined;
+            const opts = tz ? { timeZone: tz } : {};
+            const now = new Date();
 
-        function homeDateLine() {
-            if (!homeDay) {
-                return '';
-            }
+            const weekday = new Intl.DateTimeFormat(
+                'ar-SA', Object.assign({ weekday: 'long' }, opts)
+            ).format(now);
 
             const greg = new Intl.DateTimeFormat(
                 'ar-SA-u-ca-gregory-nu-arab',
-                { weekday: 'long', day: 'numeric', month: 'long' }
-            ).format(new Date());
+                Object.assign(
+                    { day: 'numeric', month: 'long', year: 'numeric' }, opts)
+            ).format(now);
 
-            const hijri = homeDay.hijri
-                ? toArabicDigits(homeDay.hijri.day) + ' ' +
-                  homeDay.hijri.month + ' ' +
-                  toArabicDigits(homeDay.hijri.year) + ' هـ'
-                : '';
+            let day;
+            let month;
 
-            return hijri ? greg + ' • ' + hijri : greg;
+            if (homeDay && homeDay.hijri) {
+                day = toArabicDigits(homeDay.hijri.day);
+                month = homeDay.hijri.month;
+            } else {
+                const parts = new Intl.DateTimeFormat(
+                    'ar-SA-u-ca-islamic-umalqura-nu-arab',
+                    Object.assign({ day: 'numeric', month: 'long' }, opts)
+                ).formatToParts(now);
+                const get = type => (parts.find(x => x.type === type) || {})
+                    .value || '';
+                day = get('day');
+                month = get('month');
+            }
+
+            document.getElementById('hd-weekday').textContent = weekday;
+            document.getElementById('hd-day').textContent = day;
+            document.getElementById('hd-month').textContent = month;
+            document.getElementById('hd-greg').textContent = greg;
         }
 
         function homeTick() {
             if (currentPage !== 'home' || !homeDay) {
                 clearInterval(homeTimer);
-                clearInterval(homePhaseTimer);
                 homeTimer = null;
-                homePhaseTimer = null;
                 return;
             }
 
@@ -2958,17 +2974,23 @@
             }
 
             const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+            const secs = key => timesToSecs(homeDay.timings[key]);
             let nextKey = null;
-            let remain = 0;
+            let prevKey = null;
+            let prevAt = secs('Isha') - 86400;
+            let nextAt = 0;
 
             for (const key of prayers) {
-                const at = timesToSecs(homeDay.timings[key]);
+                const at = secs(key);
 
                 if (at > now.secs) {
                     nextKey = key;
-                    remain = at - now.secs;
+                    nextAt = at;
                     break;
                 }
+
+                prevKey = key;
+                prevAt = at;
             }
 
             let nextTime;
@@ -2976,21 +2998,38 @@
             if (!nextKey) {
                 nextKey = 'Fajr';
                 nextTime = homeTomorrow || homeDay.timings.Fajr;
-                remain = homeTomorrow
-                    ? 86400 - now.secs + timesToSecs(homeTomorrow)
-                    : 0;
+                nextAt = homeTomorrow
+                    ? 86400 + timesToSecs(homeTomorrow)
+                    : now.secs;
             } else {
                 nextTime = homeDay.timings[nextKey];
             }
 
-            const label = TIMES_NAMES.find(item => item[0] === nextKey)[1];
+            if (!prevKey) {
+                prevKey = 'Isha';
+            }
 
-            homeShow(
-                label,
-                timesFormat(nextTime),
-                remain > 0 ? 'بعد ' + timesCountdown(remain) : '',
-                homeDateLine()
-            );
+            const nameOf = key => TIMES_NAMES.find(item => item[0] === key)[1];
+            const remain = Math.max(nextAt - now.secs, 0);
+            const span = nextAt - prevAt;
+            const done = span > 0 ? (now.secs - prevAt) / span : 0;
+
+            document.getElementById('home-hero').classList.remove('empty');
+            document.getElementById('home-next-label').textContent =
+                'باقي على ' + nameOf(nextKey);
+            document.getElementById('home-next-count').textContent =
+                remain > 0 ? timesCountdown(remain) : '';
+            document.getElementById('home-fill').style.width =
+                Math.min(Math.max(done, 0), 1) * 100 + '%';
+            document.getElementById('home-prev-name').textContent =
+                nameOf(prevKey);
+            document.getElementById('home-prev-time').textContent =
+                timesFormat(homeDay.timings[prevKey]);
+            document.getElementById('home-next-name').textContent =
+                nameOf(nextKey);
+            document.getElementById('home-next-time').textContent =
+                timesFormat(nextTime);
+            homeRenderDate();
         }
 
         async function homeRefresh() {
@@ -3001,12 +3040,8 @@
                 homeDay = null;
                 document.getElementById('home-city').textContent =
                     '📍 حدّد موقعك';
-                homeShow(
-                    'مواقيت الصلاة',
-                    'اضغط هنا لاختيار مدينتك',
-                    '',
-                    ''
-                );
+                homeMsg('اضغط هنا لاختيار مدينتك');
+                homeRenderDate();
                 return;
             }
 
@@ -3024,7 +3059,8 @@
 
             if (!result) {
                 homeDay = null;
-                homeShow('مواقيت الصلاة', 'تعذر تحميل المواقيت', '', '');
+                homeMsg('تعذر تحميل المواقيت');
+                homeRenderDate();
                 return;
             }
 
@@ -3053,15 +3089,6 @@
 
             clearInterval(homeTimer);
             homeTimer = setInterval(homeTick, 1000);
-
-            // كل ١٠ ثوانٍ يتبدّل العرض بين الوقت المتبقي والتاريخ
-            clearInterval(homePhaseTimer);
-            homePhase = 'count';
-            homeApplyPhase();
-            homePhaseTimer = setInterval(() => {
-                homePhase = homePhase === 'count' ? 'date' : 'count';
-                homeApplyPhase();
-            }, 10000);
 
             const tomorrow = new Date(
                 Date.UTC(now.y, now.m - 1, now.d + 1)

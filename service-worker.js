@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yaqeen-v2';
+const CACHE_NAME = 'yaqeen-v4';
 
 const APP_SHELL = [
     './',
@@ -40,7 +40,7 @@ self.addEventListener('fetch', event => {
     // ملفات التطبيق: الشبكة أولًا (لتصل التحديثات)، ثم النسخة المحفوظة عند انقطاع الإنترنت
     if (url.origin === self.location.origin) {
         event.respondWith(
-            fetch(request)
+            fetch(request, { cache: 'no-store' })
                 .then(response => {
                     const copy = response.clone();
                     caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
