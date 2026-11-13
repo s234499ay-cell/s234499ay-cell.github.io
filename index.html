@@ -114,32 +114,67 @@
 
         .sidebar {
             position: fixed;
-            top: 0;
-            right: -280px;
+            top: 58px;
+            right: -300px;
             z-index: 1002;
-            width: 265px;
-            height: 100%;
-            padding-top: 68px;
+            width: min(280px, 82vw);
+            height: calc(100% - 58px);
+            padding: 16px 14px 20px;
+            overflow-y: auto;
             background: var(--surface);
-            box-shadow: var(--shadow);
-            transition: right .25s ease;
+            border-left: 1px solid var(--border);
+            box-shadow: -8px 0 28px rgba(0, 0, 0, .35);
+            visibility: hidden;
+            transition: right .25s ease, visibility 0s linear .25s;
         }
 
         .sidebar.active {
             right: 0;
+            visibility: visible;
+            transition: right .25s ease, visibility 0s;
+        }
+
+        .sidebar-title {
+            padding: 0 12px 10px;
+            color: var(--muted);
+            font-size: .78rem;
+            font-weight: 700;
         }
 
         .sidebar a {
-            display: block;
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+            padding: 13px 12px;
+            border-radius: 12px;
+            color: var(--muted);
             text-decoration: none;
             cursor: pointer;
+            transition: background .15s, color .15s;
         }
 
         .sidebar a:hover {
             background: var(--surface-soft);
+            color: var(--text);
+        }
+
+        .sidebar a.current {
+            background: var(--surface-soft);
+            color: var(--text);
+            font-weight: 700;
+            box-shadow: inset -3px 0 0 var(--gold);
+        }
+
+        .sidebar-icon {
+            width: 1.5em;
+            text-align: center;
+        }
+
+        .sidebar-sep {
+            height: 1px;
+            margin: 10px 8px;
+            background: var(--border);
         }
 
         .overlay {
@@ -797,6 +832,162 @@
             opacity: .5;
         }
 
+        .home-hero {
+            display: block;
+            width: 100%;
+            margin: 0 0 14px;
+            padding: 18px 18px 16px;
+            border: 1px solid rgba(184, 148, 82, .45);
+            border-radius: 20px;
+            background:
+                radial-gradient(circle at 15% 0%, rgba(228, 201, 130, .16), transparent 55%),
+                linear-gradient(145deg, #2a2720, #12110f);
+            color: #f5f0e5;
+            font: inherit;
+            text-align: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        .home-hero-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: .82rem;
+        }
+
+        .home-hero-label {
+            color: #e4c982;
+        }
+
+        .home-city {
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .08);
+            color: #e7e2d8;
+            font-size: .76rem;
+        }
+
+        .home-hero-name {
+            margin-top: 10px;
+            font-size: 1.9rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .home-hero-time {
+            margin-top: 2px;
+            color: #e7e2d8;
+            font-size: 1.05rem;
+        }
+
+        .home-hero-swap {
+            display: grid;
+            align-items: center;
+            justify-items: center;
+            min-height: 3.2rem;
+            margin-top: 14px;
+        }
+
+        .home-hero-swap > * {
+            grid-area: 1 / 1;
+            transition: opacity .6s ease;
+        }
+
+        .home-hero[data-phase="count"] .home-hero-date,
+        .home-hero[data-phase="date"] .home-hero-count {
+            opacity: 0;
+        }
+
+        .home-hero-count {
+            display: inline-block;
+            margin: 0;
+            padding: 6px 18px;
+            border-radius: 999px;
+            background: rgba(228, 201, 130, .14);
+            color: #e4c982;
+            font-size: 1.05rem;
+            direction: rtl;
+        }
+
+
+        .home-hero-date {
+            margin: 0;
+            padding: 0;
+            color: #e7e2d8;
+            font-size: .8rem;
+            line-height: 1.8;
+        }
+
+
+        .home-verse {
+            margin: 4px 6px 18px;
+            color: var(--muted);
+            font-family: 'AmiriQuranLocal', 'Amiri Quran', 'Traditional Arabic', serif;
+            font-size: 1.02rem;
+            line-height: 2;
+            text-align: center;
+        }
+
+        .home-verse span {
+            display: block;
+            font-family: inherit;
+            font-size: .78rem;
+        }
+
+        .home-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .home-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 18px 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: var(--surface);
+            color: var(--text);
+            font: inherit;
+            text-align: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform .15s, border-color .15s;
+        }
+
+        .home-tile:active {
+            transform: scale(.97);
+            border-color: var(--gold);
+        }
+
+        .home-tile-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 54px;
+            height: 54px;
+            margin-bottom: 6px;
+            border: 1px solid rgba(184, 148, 82, .4);
+            border-radius: 50%;
+            background: var(--surface-soft);
+            font-size: 1.6rem;
+        }
+
+        .home-tile-title {
+            font-size: .98rem;
+            font-weight: 700;
+        }
+
+        .home-tile-sub {
+            color: var(--muted);
+            font-size: .72rem;
+            line-height: 1.6;
+        }
+
         .rules-note ol {
         margin: 0;
         padding: 0 1.4rem 0 0;
@@ -955,8 +1146,11 @@
     <nav class="top-nav">
         <div class="nav-group">
             <button class="hamburger"
+                    id="hamburger"
                     type="button"
                     aria-label="فتح القائمة"
+                    aria-expanded="false"
+                    aria-controls="sidebar"
                     onclick="toggleSidebar()">☰</button>
             <span class="brand">يَقينُ</span>
         </div>
@@ -964,18 +1158,18 @@
 
     <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
-    <aside class="sidebar" id="sidebar">
-        <a onclick="showPage('home')">الرئيسية</a>
-        <a onclick="showPage('haram')">المسجد الحرام</a>
-        <a onclick="showPage('nabawi')">المسجد النبوي</a>
-        <a onclick="showPage('times')">مواقيت الصلاة</a>
-        <a onclick="showPage('adhkar')">الأذكار</a>
-        <a onclick="showPage('prayer')">أحكام الصلاة</a>
-        <a onclick="showPage('settings')">الإعدادات</a>
-        <a id="sidebar-login" onclick="showPage('auth')">دخول / حساب</a>
+    <aside class="sidebar" id="sidebar" aria-label="القائمة الرئيسية">
+        <div class="sidebar-title">القائمة</div>
+        <a data-page="home" onclick="showPage('home')"><span class="sidebar-icon">🏠</span>الرئيسية</a>
+        <a data-page="times" onclick="showPage('times')"><span class="sidebar-icon">🕋</span>مواقيت الصلاة</a>
+        <a data-page="adhkar" onclick="showPage('adhkar')"><span class="sidebar-icon">🤲</span>الأذكار</a>
+        <a data-page="prayer" onclick="showPage('prayer')"><span class="sidebar-icon">📿</span>أحكام الصلاة</a>
+        <a data-page="settings" onclick="showPage('settings')"><span class="sidebar-icon">⚙️</span>الإعدادات</a>
+        <div class="sidebar-sep"></div>
+        <a id="sidebar-login" data-page="auth" onclick="showPage('auth')"><span class="sidebar-icon">👤</span>دخول / حساب</a>
         <a id="sidebar-logout"
            onclick="handleLogout()"
-           style="display:none">خروج</a>
+           style="display:none"><span class="sidebar-icon">🚪</span>خروج</a>
     </aside>
 
     <main>
@@ -984,7 +1178,7 @@
                 <div class="auth-mark">۞</div>
                 <h1 id="auth-title">مرحبًا بك في يَقينُ</h1>
                 <p class="auth-description" id="auth-description">
-                    سجّل الدخول للاستماع إلى تلاوات الحرمين
+                    سجّل الدخول للمتابعة
                 </p>
 
                 <input type="email"
@@ -1014,52 +1208,24 @@
         </section>
 
         <section id="home" class="page">
-            <div class="welcome-card">
-                <h1>أصغِ إلى تلاوات الحرمين</h1>
-                <p>استمع إلى تلاوات مختارة من المسجد الحرام والمسجد النبوي.</p>
-            </div>
+            <button class="home-hero" id="home-hero" type="button"
+                    onclick="showPage('times')">
+                <div class="home-hero-top">
+                    <span class="home-hero-label">الصلاة القادمة</span>
+                    <span class="home-city" id="home-city">📍 حدّد موقعك</span>
+                </div>
+                <div class="home-hero-name" id="home-next-name">...</div>
+                <div class="home-hero-time" id="home-next-time"></div>
+                <div class="home-hero-swap">
+                    <div class="home-hero-count" id="home-next-count"></div>
+                    <div class="home-hero-date" id="home-date"></div>
+                </div>
+            </button>
 
-            <div class="mosque-cards">
-                <article class="mosque-card">
-                    <div class="mosque-icon">🕋</div>
-                    <h2>المسجد الحرام</h2>
-                    <button class="primary-button small"
-                            type="button"
-                            onclick="showPage('haram')">عرض التلاوات</button>
-                </article>
-
-                <article class="mosque-card">
-                    <div class="mosque-icon">🕌</div>
-                    <h2>المسجد النبوي</h2>
-                    <button class="primary-button small"
-                            type="button"
-                            onclick="showPage('nabawi')">عرض التلاوات</button>
-                </article>
-
-                <article class="mosque-card">
-                    <div class="mosque-icon">🕋</div>
-                    <h2>مواقيت الصلاة</h2>
-                    <button class="primary-button small"
-                            type="button"
-                            onclick="showPage('times')">عرض المواقيت</button>
-                </article>
-
-                <article class="mosque-card">
-                    <div class="mosque-icon">🤲</div>
-                    <h2>الأذكار</h2>
-                    <button class="primary-button small"
-                            type="button"
-                            onclick="showPage('adhkar')">عرض الأذكار</button>
-                </article>
-
-                <article class="mosque-card">
-                    <div class="mosque-icon">📿</div>
-                    <h2>أحكام الصلاة</h2>
-                    <button class="primary-button small"
-                            type="button"
-                            onclick="showPage('prayer')">عرض الأحكام</button>
-                </article>
-            </div>
+            <p class="home-verse">
+                ﴿إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا﴾
+                <span>[النساء: ١٠٣]</span>
+            </p>
         </section>
 
         <section id="times" class="page">
@@ -1229,15 +1395,40 @@
         let currentPage = 'auth';
         const pageHistory = [];
 
+        function setSidebar(open) {
+            document.getElementById('sidebar')
+                .classList.toggle('active', open);
+            document.getElementById('overlay')
+                .classList.toggle('active', open);
+
+            const button = document.getElementById('hamburger');
+            button.setAttribute('aria-expanded', String(open));
+            button.setAttribute(
+                'aria-label', open ? 'إغلاق القائمة' : 'فتح القائمة');
+            button.textContent = open ? '✕' : '☰';
+        }
+
         function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
+            setSidebar(
+                !document.getElementById('sidebar').classList.contains('active')
+            );
         }
 
         function closeSidebar() {
-            document.getElementById('sidebar').classList.remove('active');
-            document.getElementById('overlay').classList.remove('active');
+            setSidebar(false);
         }
+
+        function markSidebar(id) {
+            document.querySelectorAll('#sidebar a[data-page]').forEach(link => {
+                link.classList.toggle('current', link.dataset.page === id);
+            });
+        }
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                closeSidebar();
+            }
+        });
 
         function goBack() {
             const previousPage = pageHistory.pop() || 'home';
@@ -1246,6 +1437,7 @@
 
         function showPage(id, isGoingBack = false) {
             closeSidebar();
+            markSidebar(id);
 
             if (!isGoingBack && id !== currentPage) {
                 pageHistory.push(currentPage);
@@ -1256,6 +1448,12 @@
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
+
+            if (id === 'home') {
+                document.getElementById('home').classList.add('active');
+                homeRefresh();
+                return;
+            }
 
             if (id === 'times') {
                 document.getElementById('times').classList.add('active');
@@ -1413,10 +1611,10 @@
                 document.getElementById('sidebar-logout');
 
             loginLink.style.display =
-                currentUser ? 'none' : 'block';
+                currentUser ? 'none' : 'flex';
 
             logoutButton.style.display =
-                currentUser ? 'block' : 'none';
+                currentUser ? 'flex' : 'none';
         }
 
         async function handleLogout() {
@@ -2696,6 +2894,190 @@
 
 
 
+        /* ===== بطاقة الصلاة القادمة في الرئيسية ===== */
+        let homeDay = null;
+        let homeTomorrow = null;
+        let homeTimer = null;
+        let homeReq = 0;
+
+        let homePhase = 'count';
+        let homePhaseTimer = null;
+
+        function homeApplyPhase() {
+            const hero = document.getElementById('home-hero');
+            const hasCount = document.getElementById('home-next-count')
+                .textContent !== '';
+            const hasDate = document.getElementById('home-date')
+                .textContent !== '';
+
+            hero.dataset.phase = !hasCount ? 'date'
+                : (!hasDate ? 'count' : homePhase);
+        }
+
+        function homeShow(name, time, count, date) {
+            document.getElementById('home-next-name').textContent = name;
+            document.getElementById('home-next-time').textContent = time;
+            document.getElementById('home-next-count').textContent = count;
+            document.getElementById('home-date').textContent = date;
+            homeApplyPhase();
+        }
+
+        function homeDateLine() {
+            if (!homeDay) {
+                return '';
+            }
+
+            const greg = new Intl.DateTimeFormat(
+                'ar-SA-u-ca-gregory-nu-arab',
+                { weekday: 'long', day: 'numeric', month: 'long' }
+            ).format(new Date());
+
+            const hijri = homeDay.hijri
+                ? toArabicDigits(homeDay.hijri.day) + ' ' +
+                  homeDay.hijri.month + ' ' +
+                  toArabicDigits(homeDay.hijri.year) + ' هـ'
+                : '';
+
+            return hijri ? greg + ' • ' + hijri : greg;
+        }
+
+        function homeTick() {
+            if (currentPage !== 'home' || !homeDay) {
+                clearInterval(homeTimer);
+                clearInterval(homePhaseTimer);
+                homeTimer = null;
+                homePhaseTimer = null;
+                return;
+            }
+
+            const now = timesNow(homeDay.tz);
+
+            if (homeDay.date !== timesDateStr(now.y, now.m, now.d)) {
+                homeRefresh();
+                return;
+            }
+
+            const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+            let nextKey = null;
+            let remain = 0;
+
+            for (const key of prayers) {
+                const at = timesToSecs(homeDay.timings[key]);
+
+                if (at > now.secs) {
+                    nextKey = key;
+                    remain = at - now.secs;
+                    break;
+                }
+            }
+
+            let nextTime;
+
+            if (!nextKey) {
+                nextKey = 'Fajr';
+                nextTime = homeTomorrow || homeDay.timings.Fajr;
+                remain = homeTomorrow
+                    ? 86400 - now.secs + timesToSecs(homeTomorrow)
+                    : 0;
+            } else {
+                nextTime = homeDay.timings[nextKey];
+            }
+
+            const label = TIMES_NAMES.find(item => item[0] === nextKey)[1];
+
+            homeShow(
+                label,
+                timesFormat(nextTime),
+                remain > 0 ? 'بعد ' + timesCountdown(remain) : '',
+                homeDateLine()
+            );
+        }
+
+        async function homeRefresh() {
+            const request = ++homeReq;
+            const loc = timesStore(TIMES_LOC_KEY);
+
+            if (!loc) {
+                homeDay = null;
+                document.getElementById('home-city').textContent =
+                    '📍 حدّد موقعك';
+                homeShow(
+                    'مواقيت الصلاة',
+                    'اضغط هنا لاختيار مدينتك',
+                    '',
+                    ''
+                );
+                return;
+            }
+
+            document.getElementById('home-city').textContent =
+                '📍 ' + loc.name;
+
+            const cachedTz = timesStore(TIMES_CACHE_KEY + '-tz') || undefined;
+            let now = timesNow(cachedTz);
+            let todayStr = timesDateStr(now.y, now.m, now.d);
+            let result = await timesFetchDay(loc, todayStr);
+
+            if (request !== homeReq) {
+                return;
+            }
+
+            if (!result) {
+                homeDay = null;
+                homeShow('مواقيت الصلاة', 'تعذر تحميل المواقيت', '', '');
+                return;
+            }
+
+            if (result.entry.tz) {
+                timesStore(TIMES_CACHE_KEY + '-tz', result.entry.tz);
+                now = timesNow(result.entry.tz);
+                const realStr = timesDateStr(now.y, now.m, now.d);
+
+                if (realStr !== todayStr) {
+                    todayStr = realStr;
+                    const again = await timesFetchDay(loc, todayStr);
+
+                    if (request !== homeReq) {
+                        return;
+                    }
+
+                    if (again) {
+                        result = again;
+                    }
+                }
+            }
+
+            homeDay = Object.assign({}, result.entry, { date: todayStr });
+            homeTomorrow = null;
+            homeTick();
+
+            clearInterval(homeTimer);
+            homeTimer = setInterval(homeTick, 1000);
+
+            // كل ١٠ ثوانٍ يتبدّل العرض بين الوقت المتبقي والتاريخ
+            clearInterval(homePhaseTimer);
+            homePhase = 'count';
+            homeApplyPhase();
+            homePhaseTimer = setInterval(() => {
+                homePhase = homePhase === 'count' ? 'date' : 'count';
+                homeApplyPhase();
+            }, 10000);
+
+            const tomorrow = new Date(
+                Date.UTC(now.y, now.m - 1, now.d + 1)
+            );
+            const next = await timesFetchDay(loc, timesDateStr(
+                tomorrow.getUTCFullYear(),
+                tomorrow.getUTCMonth() + 1,
+                tomorrow.getUTCDate()
+            ));
+
+            if (request === homeReq && next) {
+                homeTomorrow = next.entry.timings.Fajr;
+                homeTick();
+            }
+        }
+
         /* ===== إشعارات الصلاة (تعمل داخل تطبيق أندرويد) ===== */
         const NOTIF_KEY = 'yaqeen-notif';
         const NOTIF_CAL_KEY = 'yaqeen-notif-cal';
@@ -3088,6 +3470,32 @@
             }
         }
 
+        function notifLocate() {
+            return new Promise(resolve => {
+                if (!navigator.geolocation) {
+                    resolve(null);
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const loc = {
+                            name: 'موقعي الحالي',
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            auto: true
+                        };
+
+                        timesStore(TIMES_LOC_KEY, loc);
+                        timesLoc = loc;
+                        resolve(loc);
+                    },
+                    () => resolve(null),
+                    { timeout: 10000, maximumAge: 600000 }
+                );
+            });
+        }
+
         async function notifEnable() {
             const LN = notifPlugin();
 
@@ -3127,6 +3535,11 @@
                     }
                 } catch (error) {
                     // أجهزة لا تحتاج هذا الإذن
+                }
+
+                if (!timesStore(TIMES_LOC_KEY)) {
+                    notifSetState('جارٍ تحديد موقعك...');
+                    await notifLocate();
                 }
 
                 return true;
