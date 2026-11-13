@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#f4f2ed">
+    <meta name="theme-color" content="#151411">
     <title>يَقينُ</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -537,6 +537,7 @@
         }
 
         .adhkar-text {
+            white-space: pre-line;
             font-size: 1rem;
             line-height: 2.2;
             text-align: justify;
@@ -738,144 +739,62 @@
             line-height: 1.8;
         }
 
-        .qibla-wrap {
-            position: relative;
-            width: min(300px, 82vw);
-            margin: 22px auto 16px;
+        .notif-card {
+            margin-top: 14px;
         }
 
-        .qibla-pointer {
-            position: absolute;
-            top: -13px;
-            left: 50%;
-            z-index: 3;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 17px solid var(--gold);
-            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .35));
+        .notif-block-title {
+            margin: 14px 0 8px;
+            font-size: .9rem;
+            color: var(--muted);
         }
 
-        .qibla-dial {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1;
-            border: 3px solid rgba(184, 148, 82, .55);
-            border-radius: 50%;
-            background: radial-gradient(circle at 50% 40%, #2b2922, #11110f 72%);
-            box-shadow: var(--shadow), inset 0 0 28px rgba(0, 0, 0, .5);
-            overflow: hidden;
-            transition: border-color .25s, box-shadow .25s;
-        }
-
-        .qibla-dial.aligned {
-            border-color: #e4c982;
-            box-shadow: 0 0 0 4px rgba(228, 201, 130, .25),
-                0 0 30px rgba(228, 201, 130, .35),
-                inset 0 0 28px rgba(0, 0, 0, .5);
-        }
-
-        .qibla-ring {
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-        }
-
-        .qibla-ticks {
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            background: repeating-conic-gradient(
-                from -.6deg,
-                rgba(228, 201, 130, .6) 0 1.2deg,
-                transparent 1.2deg 15deg
-            );
-            -webkit-mask: radial-gradient(circle closest-side, transparent 91%, #000 92%);
-            mask: radial-gradient(circle closest-side, transparent 91%, #000 92%);
-        }
-
-        .qibla-n {
-            position: absolute;
-            top: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0 7px;
-            border-radius: 6px;
-            background: #b34a3c;
-            color: #fff;
-            font-size: .72rem;
-            font-weight: 700;
-            line-height: 1.6;
-        }
-
-        .qibla-needle {
-            position: absolute;
-            inset: 0;
-            will-change: transform;
-        }
-
-        .qibla-kaaba {
-            position: absolute;
-            top: 9%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2.1rem;
-            line-height: 1;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .6));
-        }
-
-        .qibla-shaft {
-            position: absolute;
-            top: 25%;
-            left: 50%;
-            width: 22px;
-            height: 25%;
-            transform: translateX(-50%);
-            background: linear-gradient(#f1dba0, #b89452);
-            clip-path: polygon(50% 0, 100% 100%, 0 100%);
-        }
-
-        .qibla-hub {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 22px;
-            height: 22px;
-            transform: translate(-50%, -50%);
-            border: 3px solid #b89452;
-            border-radius: 50%;
-            background: #11110f;
-        }
-
-        .qibla-info {
-            text-align: center;
+        .notif-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
             margin-bottom: 14px;
         }
 
-        .qibla-hint {
-            min-height: 1.4em;
-            margin-bottom: 6px;
+        .notif-chip {
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: var(--surface);
             color: var(--muted);
+            font: inherit;
             font-size: .88rem;
-            transition: color .2s;
         }
 
-        .qibla-hint.ok {
+        .notif-chip.on {
+            border-color: var(--gold);
+            background: var(--surface-soft);
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .notif-test {
+            margin-top: 12px;
+        }
+
+        .notif-help {
+            margin-top: 16px;
+            font-size: .88rem;
+            line-height: 1.9;
+        }
+
+        .notif-help summary {
+            cursor: pointer;
             color: var(--gold);
             font-weight: 700;
         }
 
-        .qibla-angle {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .notif-help p {
+            margin: 6px 0;
         }
 
-        .qibla-sub {
-            color: var(--muted);
-            font-size: .85rem;
-            margin-top: 2px;
+        .theme-toggle:disabled {
+            opacity: .5;
         }
 
         .rules-note ol {
@@ -1032,7 +951,7 @@
     </style>
 </head>
 
-<body>
+<body class="dark-theme">
     <nav class="top-nav">
         <div class="nav-group">
             <button class="hamburger"
@@ -1050,7 +969,6 @@
         <a onclick="showPage('haram')">المسجد الحرام</a>
         <a onclick="showPage('nabawi')">المسجد النبوي</a>
         <a onclick="showPage('times')">مواقيت الصلاة</a>
-        <a onclick="showPage('qibla')">اتجاه القبلة</a>
         <a onclick="showPage('adhkar')">الأذكار</a>
         <a onclick="showPage('prayer')">أحكام الصلاة</a>
         <a onclick="showPage('settings')">الإعدادات</a>
@@ -1127,14 +1045,6 @@
                 </article>
 
                 <article class="mosque-card">
-                    <div class="mosque-icon">🧭</div>
-                    <h2>اتجاه القبلة</h2>
-                    <button class="primary-button small"
-                            type="button"
-                            onclick="showPage('qibla')">عرض البوصلة</button>
-                </article>
-
-                <article class="mosque-card">
                     <div class="mosque-icon">🤲</div>
                     <h2>الأذكار</h2>
                     <button class="primary-button small"
@@ -1186,57 +1096,6 @@
             <div class="rules-card" id="times-list"></div>
 
             <p class="times-status" id="times-status"></p>
-        </section>
-
-        <section id="qibla" class="page">
-            <div class="subpage-back-row">
-                <button class="back-button"
-                        type="button"
-                        onclick="goBack()">← رجوع</button>
-            </div>
-
-            <h2 class="mosque-heading">اتجاه القبلة</h2>
-
-            <div class="times-place">
-                <div class="times-place-name" id="qibla-place">...</div>
-                <div class="times-place-actions">
-                    <button type="button" class="times-btn"
-                            id="qibla-locate">📍 موقعي</button>
-                    <select id="qibla-city" class="times-select"
-                            aria-label="اختيار المدينة"></select>
-                </div>
-            </div>
-
-            <div class="qibla-wrap" id="qibla-wrap">
-                <div class="qibla-pointer"></div>
-                <div class="qibla-dial" id="qibla-dial">
-                    <div class="qibla-ring" id="qibla-ring">
-                        <div class="qibla-ticks"></div>
-                        <span class="qibla-n">ش</span>
-                    </div>
-                    <div class="qibla-needle" id="qibla-needle">
-                        <span class="qibla-kaaba">🕋</span>
-                        <i class="qibla-shaft"></i>
-                    </div>
-                    <div class="qibla-hub"></div>
-                </div>
-            </div>
-
-            <div class="qibla-info">
-                <div class="qibla-hint" id="qibla-hint">حرّك جوالك حتى يستقيم السهم للأعلى</div>
-                <div class="qibla-angle" id="qibla-angle">--</div>
-                <div class="qibla-sub" id="qibla-sub"></div>
-            </div>
-
-            <button type="button" class="primary-button"
-                    id="qibla-start">تفعيل البوصلة</button>
-
-            <p class="times-status" id="qibla-status"></p>
-            <p class="times-status">
-                لتحسين الدقة: حرّك جوالك في الهواء على شكل ٨ عدة مرات،
-                وأمسكه أفقيًا، وابتعد عن المعادن والمغناطيس والأجهزة
-                الكهربائية.
-            </p>
         </section>
 
         <section id="adhkar-view" class="page">
@@ -1291,16 +1150,59 @@
                         onclick="goBack()">← رجوع</button>
             </div>
 
-            <div class="settings-card">
-                <h2>الإعدادات</h2>
-                <p class="settings-description">خصّص مظهر تطبيق يَقينُ.</p>
+            <h2 class="mosque-heading">الإعدادات</h2>
+
+            <div class="settings-card notif-card">
+                <h2>إشعارات الصلاة</h2>
+                <p class="settings-description" id="notif-state"></p>
 
                 <div class="theme-setting">
-                    <span class="theme-setting-label">المظهر</span>
+                    <span class="theme-setting-label">الإشعارات</span>
                     <button class="theme-toggle"
-                            id="theme-toggle"
-                            type="button">داكن</button>
+                            id="notif-toggle"
+                            type="button">تفعيل</button>
                 </div>
+
+                <div class="theme-setting">
+                    <span class="theme-setting-label">الإشعار الدائم (الوقت المتبقي)</span>
+                    <button class="theme-toggle"
+                            id="notif-persist"
+                            type="button">تفعيل</button>
+                </div>
+
+                <div id="notif-options" hidden>
+                    <div class="notif-block-title">الصلوات التي تريد التنبيه لها</div>
+                    <div class="notif-chips" id="notif-prayers"></div>
+
+                    <div class="theme-setting">
+                        <span class="theme-setting-label">التنبيه قبل الأذان</span>
+                        <select id="notif-before" class="times-select">
+                            <option value="0">بدون</option>
+                            <option value="5">٥ دقائق</option>
+                            <option value="10">١٠ دقائق</option>
+                            <option value="15">١٥ دقيقة</option>
+                            <option value="20">٢٠ دقيقة</option>
+                            <option value="30">٣٠ دقيقة</option>
+                        </select>
+                    </div>
+
+                    <button class="theme-toggle notif-test"
+                            id="notif-test"
+                            type="button">تجربة إشعار</button>
+                </div>
+
+                <details class="notif-help">
+                    <summary>كيف أتحكم بالإشعارات؟</summary>
+                    <div>
+                        <p>• <b>إيقافها كلها:</b> اضغط زر «الإشعارات» أعلاه لتصبح «تفعيل»، فتُلغى كل التنبيهات المجدولة.</p>
+                        <p>• <b>الإشعار الدائم:</b> يبقى مثبتًا في الإشعارات ويعدّ الوقت المتبقي للصلاة التالية مع التاريخ. اضغط زره لإظهاره أو إخفائه. في أندرويد ١٤ وما فوق قد يسمح لك النظام بإخفائه بالسحب.</p>
+                        <p>• <b>اختيار الصلوات:</b> فعّل الإشعارات ثم اضغط على اسم الصلاة لتشغيلها أو إيقافها.</p>
+                        <p>• <b>التنبيه قبل الأذان:</b> اختر عدد الدقائق من القائمة، أو «بدون» لإيقافه.</p>
+                        <p>• <b>من إعدادات الجوال:</b> الإعدادات ← التطبيقات ← يَقينُ ← الإشعارات، ومنها تغيير الصوت أو إيقاف الإشعارات تمامًا.</p>
+                        <p>• <b>إذا لم تصلك في وقتها:</b> اسمح للتطبيق بـ«المنبهات والتذكيرات»، وأوقف توفير البطارية للتطبيق.</p>
+                        <p>• <b>الموقع:</b> المواقيت تُحسب حسب مدينتك المختارة في صفحة «مواقيت الصلاة».</p>
+                    </div>
+                </details>
             </div>
         </section>
     </main>
@@ -1321,6 +1223,7 @@
         let currentUser = null;
         let allRecs = [];
         let adhkarPath = [];
+        let adhkarVariant = 'other';
         let prayerPath = [];
 
         let currentPage = 'auth';
@@ -1353,12 +1256,6 @@
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
-
-            if (id === 'qibla') {
-                document.getElementById('qibla').classList.add('active');
-                openQibla();
-                return;
-            }
 
             if (id === 'times') {
                 document.getElementById('times').classList.add('active');
@@ -1537,21 +1434,8 @@
             showPage('auth');
         }
 
-        function applyTheme(theme) {
-            const isDark = theme === 'dark';
-
-            document.body.classList.toggle('dark-theme', isDark);
-
-            const themeButton =
-                document.getElementById('theme-toggle');
-
-            themeButton.textContent = isDark
-                ? 'التحويل إلى الفاتح'
-                : 'التحويل إلى الداكن';
-
-            document.querySelector(
-                'meta[name="theme-color"]'
-            ).content = isDark ? '#151411' : '#f4f2ed';
+        function applyTheme() {
+            document.body.classList.add('dark-theme');
         }
 
         async function loadRecs() {
@@ -1692,6 +1576,23 @@
             { count: 10, text: 'اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ' }
         ];
 
+        const AFTER_PRAYER_ADHKAR = [
+            { count: 3, text: 'أَسْتَغْفِرُ اللَّهَ' },
+            { count: 1, text: 'اللَّهُمَّ أَنْتَ السَّلَامُ ، وَمِنْكَ السَّلَامُ ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ' },
+            { count: 1, text: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، اللَّهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِيَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ' },
+            { count: 1, text: 'لَا إِلَهَ إِلَّا اللَّهُ، وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ، لَا إِلَهَ إِلَّا اللَّهُ، وَلَا نَعْبُدُ إِلَّا إِيَّاهُ، لَهُ النِّعْمَةُ وَلَهُ الْفَضْلُ وَلَهُ الثَّنَاءُ الْحَسَنُ، لَا إِلَهَ إِلَّا اللَّهُ مُخْلِصِينَ لَهُ الدِّينَ وَلَوْ كَرِهَ الْكَافِرُونَ' },
+            { count: 33, text: 'سُبْحَانَ اللَّهِ' },
+            { count: 33, text: 'الْحَمْدُ لِلَّهِ' },
+            { count: 33, text: 'اللَّهُ أَكْبَرُ' },
+            { count: 1, text: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ' },
+            { quran: true, count: { fajr: 3, maghrib: 3, other: 1 }, text: 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ\nقُلۡ هُوَ ٱللَّهُ أَحَدٌ ١  ٱللَّهُ ٱلصَّمَدُ ٢ لَمۡ يَلِدۡ وَلَمۡ يُولَدۡ ٣  وَلَمۡ يَكُن لَّهُۥ كُفُوًا أَحَدُۢ ٤' },
+            { quran: true, count: { fajr: 3, maghrib: 3, other: 1 }, text: 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ\nقُلۡ أَعُوذُ بِرَبِّ ٱلۡفَلَقِ ١  مِن شَرِّ مَا خَلَقَ ٢  وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ٣  وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِي ٱلۡعُقَدِ ٤  وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ ٥' },
+            { quran: true, count: { fajr: 3, maghrib: 3, other: 1 }, text: 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ\nقُلۡ أَعُوذُ بِرَبِّ ٱلنَّاسِ ١  مَلِكِ ٱلنَّاسِ ٢  إِلَٰهِ ٱلنَّاسِ ٣  مِن شَرِّ ٱلۡوَسۡوَاسِ ٱلۡخَنَّاسِ ٤  ٱلَّذِي يُوَسۡوِسُ فِي صُدُورِ ٱلنَّاسِ ٥  مِنَ ٱلۡجِنَّةِ وَٱلنَّاسِ ٦' },
+            { quran: true, count: 1, text: 'أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\n﴿ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ٱلۡحَيُّ ٱلۡقَيُّومُۚ لَا تَأۡخُذُهُۥ سِنَةࣱ وَلَا نَوۡمࣱۚ لَّهُۥ مَا فِي ٱلسَّمَٰوَٰتِ وَمَا فِي ٱلۡأَرۡضِۗ مَن ذَا ٱلَّذِي يَشۡفَعُ عِندَهُۥٓ إِلَّا بِإِذۡنِهِۦۚ يَعۡلَمُ مَا بَيۡنَ أَيۡدِيهِمۡ وَمَا خَلۡفَهُمۡۖ وَلَا يُحِيطُونَ بِشَيۡءٖ مِّنۡ عِلۡمِهِۦٓ إِلَّا بِمَا شَآءَۚ وَسِعَ كُرۡسِيُّهُ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضَۖ وَلَا يَـُٔودُهُۥ حِفۡظُهُمَاۚ وَهُوَ ٱلۡعَلِيُّ ٱلۡعَظِيمُ٢٥٥﴾' },
+            { count: 10, only: ['fajr', 'maghrib'], text: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، يُحْيِي وَيُمِيتُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ' },
+            { count: 1, only: ['fajr'], text: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا وَرِزْقًا طَيِّبًا ، وَعَمَلًا مُتَقَبَّلًا' }
+        ];
+
         const ADHKAR_TREE = [
             {
                 id: 'duas',
@@ -1709,7 +1610,16 @@
                     { id: 'adhkar-morning', title: 'أذكار الصباح', items: MORNING_ADHKAR },
                     { id: 'adhkar-evening', title: 'أذكار المساء', items: EVENING_ADHKAR },
                     { id: 'adhkar-prayer', title: 'أذكار الصلاة', items: [] },
-                    { id: 'adhkar-after-prayer', title: 'أذكار بعد الصلاة', items: [] },
+                    {
+                        id: 'adhkar-after-prayer',
+                        title: 'أذكار بعد الصلاة',
+                        variants: [
+                            { key: 'fajr', label: 'الفجر' },
+                            { key: 'maghrib', label: 'المغرب' },
+                            { key: 'other', label: 'بقية الصلوات' }
+                        ],
+                        items: AFTER_PRAYER_ADHKAR
+                    },
                     { id: 'adhkar-sleep', title: 'أذكار النوم', items: [] },
                     { id: 'adhkar-wake', title: 'أذكار الاستيقاظ', items: [] }
                 ]
@@ -1763,7 +1673,39 @@
                 return;
             }
 
-            const items = node.items || [];
+            if (node.variants) {
+                const bar = document.createElement('div');
+                bar.className = 'notif-chips';
+
+                node.variants.forEach(variantItem => {
+                    const chip = document.createElement('button');
+                    chip.type = 'button';
+                    chip.className = 'notif-chip' +
+                        (adhkarVariant === variantItem.key ? ' on' : '');
+                    chip.textContent = variantItem.label;
+
+                    chip.addEventListener('click', () => {
+                        adhkarVariant = variantItem.key;
+                        renderAdhkar();
+                    });
+
+                    bar.appendChild(chip);
+                });
+
+                list.appendChild(bar);
+            }
+
+            const variant = node.variants ? adhkarVariant : null;
+
+            const items = (node.items || [])
+                .filter(item => !item.only || item.only.includes(variant))
+                .map(item => (item.count && typeof item.count === 'object')
+                    ? Object.assign({}, item, {
+                        count: item.count[variant] !== undefined
+                            ? item.count[variant]
+                            : item.count.other
+                    })
+                    : item);
 
             if (!items.length) {
                 list.innerHTML =
@@ -1772,7 +1714,8 @@
             }
 
             const storeKey =
-                'yaqeen-adhkar-' + adhkarPath.join('/') + '-' +
+                'yaqeen-adhkar-' + adhkarPath.join('/') +
+                (variant ? '-' + variant : '') + '-' +
                 new Date().toISOString().slice(0, 10);
 
             let progress = [];
@@ -1920,6 +1863,10 @@
                 goBack();
             }
         }
+
+        const IS_NATIVE = !!(window.Capacitor &&
+            Capacitor.isNativePlatform &&
+            Capacitor.isNativePlatform());
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker
@@ -2651,6 +2598,7 @@
 
             if (save) {
                 timesStore(TIMES_LOC_KEY, loc);
+                notifReschedule();
             }
 
             const select = document.getElementById('times-city');
@@ -2747,384 +2695,593 @@
         }
 
 
-        /* ===== اتجاه القبلة ===== */
-        const KAABA = { lat: 21.4225, lng: 39.8262 };
 
-        let qiblaLoc = null;
-        let qiblaBearing = null;
-        let qiblaHeading = null;
-        let qiblaInit = false;
-        let qiblaListening = false;
-        let qiblaWasAligned = false;
-        let qiblaGotSensor = false;
+        /* ===== إشعارات الصلاة (تعمل داخل تطبيق أندرويد) ===== */
+        const NOTIF_KEY = 'yaqeen-notif';
+        const NOTIF_CAL_KEY = 'yaqeen-notif-cal';
+        const NOTIF_DAYS = 7;
+        const NOTIF_PRAYERS = [
+            ['Fajr', 'الفجر'], ['Dhuhr', 'الظهر'], ['Asr', 'العصر'],
+            ['Maghrib', 'المغرب'], ['Isha', 'العشاء']
+        ];
 
-        function qiblaCalc(lat, lng) {
-            const rad = Math.PI / 180;
-            const p1 = lat * rad;
-            const p2 = KAABA.lat * rad;
-            const dl = (KAABA.lng - lng) * rad;
+        let notifBusy = false;
+        let notifAgain = false;
 
-            const y = Math.sin(dl) * Math.cos(p2);
-            const x = Math.cos(p1) * Math.sin(p2) -
-                Math.sin(p1) * Math.cos(p2) * Math.cos(dl);
+        function notifPlugin() {
+            const cap = window.Capacitor;
 
-            const bearing = (Math.atan2(y, x) / rad + 360) % 360;
+            if (cap && cap.isNativePlatform && cap.isNativePlatform() &&
+                cap.Plugins && cap.Plugins.LocalNotifications) {
+                return cap.Plugins.LocalNotifications;
+            }
 
-            const a = Math.sin((p2 - p1) / 2) ** 2 +
-                Math.cos(p1) * Math.cos(p2) * Math.sin(dl / 2) ** 2;
-            const km = 12742 * Math.asin(Math.sqrt(a));
-
-            return { bearing, km };
+            return null;
         }
 
-        let qiblaTarget = null;
-        let qiblaShown = null;
-        let qiblaRaf = null;
+        function notifSettings() {
+            const saved = timesStore(NOTIF_KEY) || {};
+            const prayers = {};
 
-        function qiblaRender() {
-            const angle = document.getElementById('qibla-angle');
-            const sub = document.getElementById('qibla-sub');
+            NOTIF_PRAYERS.forEach(([key]) => {
+                prayers[key] = !saved.prayers || saved.prayers[key] !== false;
+            });
 
-            if (qiblaBearing === null) {
-                angle.textContent = '--';
-                sub.textContent = '';
-                return;
-            }
-
-            const result = qiblaCalc(qiblaLoc.lat, qiblaLoc.lng);
-
-            angle.textContent =
-                toArabicDigits(Math.round(qiblaBearing)) + '° من الشمال';
-            sub.textContent = 'المسافة إلى الكعبة: ' +
-                toArabicDigits(Math.round(result.km).toLocaleString('en')) +
-                ' كم';
-
-            qiblaDraw();
-            qiblaLoop();
+            return {
+                enabled: saved.enabled === true,
+                persistent: saved.persistent === true,
+                prayers,
+                before: Number(saved.before) || 0
+            };
         }
 
-        function qiblaDraw() {
-            if (qiblaBearing === null) {
-                return;
-            }
+        function notifOngoing() {
+            const cap = window.Capacitor;
 
-            const heading = qiblaShown === null ? 0 : qiblaShown;
-
-            document.getElementById('qibla-ring').style.transform =
-                'rotate(' + (-heading) + 'deg)';
-            document.getElementById('qibla-needle').style.transform =
-                'rotate(' + (qiblaBearing - heading) + 'deg)';
-
-            if (qiblaShown === null) {
-                return;
-            }
-
-            let diff = Math.abs(qiblaBearing - heading) % 360;
-            diff = diff > 180 ? 360 - diff : diff;
-
-            const aligned = diff <= 4;
-            const hint = document.getElementById('qibla-hint');
-
-            document.getElementById('qibla-dial')
-                .classList.toggle('aligned', aligned);
-            hint.classList.toggle('ok', aligned);
-            hint.textContent = aligned
-                ? 'أنت متجه نحو القبلة ✓'
-                : 'حرّك جوالك حتى يستقيم السهم للأعلى';
-
-            if (aligned && !qiblaWasAligned && navigator.vibrate) {
-                navigator.vibrate(60);
-            }
-
-            qiblaWasAligned = aligned;
-        }
-
-        function qiblaLoop() {
-            if (qiblaRaf !== null) {
-                return;
-            }
-
-            const step = () => {
-                qiblaRaf = null;
-
-                if (currentPage !== 'qibla') {
-                    return;
+            if (cap && cap.isNativePlatform && cap.isNativePlatform()) {
+                if (cap.Plugins && cap.Plugins.PrayerOngoing) {
+                    return cap.Plugins.PrayerOngoing;
                 }
 
-                if (qiblaTarget !== null) {
-                    if (qiblaShown === null) {
-                        qiblaShown = qiblaTarget;
-                    } else {
-                        let delta = qiblaTarget - qiblaShown;
+                if (cap.registerPlugin) {
+                    try {
+                        return cap.registerPlugin('PrayerOngoing');
+                    } catch (error) {
+                        return null;
+                    }
+                }
+            }
 
-                        if (delta > 180) delta -= 360;
-                        if (delta < -180) delta += 360;
+            return null;
+        }
 
-                        if (Math.abs(delta) > 0.15) {
-                            qiblaShown =
-                                (qiblaShown + delta * 0.15 + 360) % 360;
-                            qiblaDraw();
+        function notifOngoingEntries(events) {
+            return events.map((event, index) => {
+                const previous = index === 0 ? event : events[index - 1];
+
+                return {
+                    from: index === 0 ? 0 : previous.ts,
+                    target: event.ts,
+                    title: 'الصلاة التالية: ' + event.label,
+                    text: 'الأذان ' +
+                        timesFormat(event.data.t[event.key]) + '\n' +
+                        notifDateLine(previous)
+                };
+            });
+        }
+
+        function notifSave(state) {
+            timesStore(NOTIF_KEY, state);
+        }
+
+        function notifSetState(text) {
+            document.getElementById('notif-state').textContent = text;
+        }
+
+        function notifPlural(n, one, two, few, many) {
+            if (n === 1) return one;
+            if (n === 2) return two;
+            return n >= 3 && n <= 10 ? n + ' ' + few : n + ' ' + many;
+        }
+
+        function notifRemain(ms) {
+            const total = Math.max(0, Math.round(ms / 60000));
+            const h = Math.floor(total / 60);
+            const m = total % 60;
+            const parts = [];
+
+            if (h > 0) {
+                parts.push(
+                    h === 1 ? 'ساعة' : h === 2 ? 'ساعتين'
+                        : h <= 10 ? h + ' ساعات' : h + ' ساعة'
+                );
+            }
+
+            if (m > 0) {
+                parts.push(
+                    m === 1 ? 'دقيقة' : m === 2 ? 'دقيقتين'
+                        : m <= 10 ? m + ' دقائق' : m + ' دقيقة'
+                );
+            }
+
+            return toArabicDigits(parts.join(' و') || '0 دقيقة');
+        }
+
+        function notifOffset(ts, tz) {
+            const parts = new Intl.DateTimeFormat('en-US', {
+                timeZone: tz, hourCycle: 'h23',
+                year: 'numeric', month: 'numeric', day: 'numeric',
+                hour: 'numeric', minute: 'numeric', second: 'numeric'
+            }).formatToParts(new Date(ts));
+
+            const get = type =>
+                Number(parts.find(part => part.type === type).value);
+
+            const asUtc = Date.UTC(
+                get('year'), get('month') - 1, get('day'),
+                get('hour'), get('minute'), get('second')
+            );
+
+            return asUtc - Math.floor(ts / 1000) * 1000;
+        }
+
+        // وقت الجدار في المنطقة الزمنية للمدينة ← لحظة مطلقة
+        function notifZoned(y, m, d, secs, tz) {
+            const guess = Date.UTC(y, m - 1, d, 0, 0, 0) + secs * 1000;
+            const first = guess - notifOffset(guess, tz);
+
+            return guess - notifOffset(first, tz);
+        }
+
+        async function notifFetchMonth(loc, year, month) {
+            const cache = timesStore(NOTIF_CAL_KEY) || {};
+            const key = loc.lat.toFixed(2) + ',' + loc.lng.toFixed(2) +
+                '|' + year + '-' + month;
+
+            try {
+                const url = 'https://api.aladhan.com/v1/calendar/' +
+                    year + '/' + month +
+                    '?latitude=' + loc.lat + '&longitude=' + loc.lng +
+                    '&method=4';
+
+                const response = await fetch(url);
+                const json = await response.json();
+
+                if (!json || json.code !== 200 || !json.data) {
+                    throw new Error('bad response');
+                }
+
+                const days = {};
+                let tz = null;
+
+                json.data.forEach(item => {
+                    tz = tz || (item.meta && item.meta.timezone);
+
+                    days[item.date.gregorian.date] = {
+                        t: item.timings,
+                        h: {
+                            day: item.date.hijri.day,
+                            month: item.date.hijri.month.ar,
+                            year: item.date.hijri.year
                         }
+                    };
+                });
+
+                const entry = { days, tz };
+                const next = {};
+                Object.keys(cache).slice(-4).forEach(k => {
+                    next[k] = cache[k];
+                });
+                next[key] = entry;
+                timesStore(NOTIF_CAL_KEY, next);
+
+                return entry;
+            } catch (error) {
+                return cache[key] || null;
+            }
+        }
+
+        async function notifBuildEvents(loc) {
+            const nowDevice = new Date();
+            let y = nowDevice.getFullYear();
+            let m = nowDevice.getMonth() + 1;
+
+            const first = await notifFetchMonth(loc, y, m);
+
+            if (!first) {
+                return null;
+            }
+
+            const tz = first.tz || undefined;
+            const now = timesNow(tz);
+            const months = {};
+            months[now.y + '-' + now.m] = first.days;
+
+            const list = [];
+
+            for (let i = 0; i <= NOTIF_DAYS; i++) {
+                const date = new Date(Date.UTC(now.y, now.m - 1, now.d + i));
+                const dy = date.getUTCFullYear();
+                const dm = date.getUTCMonth() + 1;
+                const dd = date.getUTCDate();
+                const mk = dy + '-' + dm;
+
+                if (!months[mk]) {
+                    const more = await notifFetchMonth(loc, dy, dm);
+                    months[mk] = more ? more.days : {};
+                }
+
+                const data = months[mk][timesDateStr(dy, dm, dd)];
+
+                if (!data) {
+                    continue;
+                }
+
+                NOTIF_PRAYERS.forEach(([key, label]) => {
+                    const secs = timesToSecs(data.t[key]);
+
+                    list.push({
+                        key, label, secs, data, index: i,
+                        ts: notifZoned(dy, dm, dd, secs, tz || 'UTC'),
+                        greg: new Intl.DateTimeFormat(
+                            'ar-SA-u-ca-gregory-nu-arab',
+                            {
+                                weekday: 'long', day: 'numeric',
+                                month: 'long', timeZone: 'UTC'
+                            }
+                        ).format(date)
+                    });
+                });
+            }
+
+            list.sort((a, b) => a.ts - b.ts);
+
+            return list;
+        }
+
+        function notifDateLine(event) {
+            const h = event.data.h;
+
+            return event.greg + ' • ' + toArabicDigits(h.day) + ' ' +
+                h.month + ' ' + toArabicDigits(h.year) + ' هـ';
+        }
+
+        async function notifReschedule() {
+            const LN = notifPlugin();
+
+            if (!LN) {
+                return;
+            }
+
+            if (notifBusy) {
+                notifAgain = true;
+                return;
+            }
+
+            notifBusy = true;
+
+            try {
+                const pending = await LN.getPending();
+
+                if (pending.notifications && pending.notifications.length) {
+                    await LN.cancel({
+                        notifications: pending.notifications.map(
+                            item => ({ id: item.id })
+                        )
+                    });
+                }
+
+                const state = notifSettings();
+                const ongoing = notifOngoing();
+
+                if (!state.persistent && ongoing) {
+                    try {
+                        await ongoing.hide();
+                    } catch (error) {
+                        // لا شيء لإخفائه
                     }
                 }
 
-                qiblaRaf = requestAnimationFrame(step);
-            };
-
-            qiblaRaf = requestAnimationFrame(step);
-        }
-
-        // اتجاه الجوال بالنسبة للشمال مع تعويض الميل
-        function qiblaHeadingFrom(alpha, beta, gamma) {
-            const d = Math.PI / 180;
-            const a = alpha * d;
-            const b = beta * d;
-            const g = gamma * d;
-
-            const cA = Math.cos(a), sA = Math.sin(a);
-            const cB = Math.cos(b), sB = Math.sin(b);
-            const cG = Math.cos(g), sG = Math.sin(g);
-
-            let east;
-            let north;
-
-            if (cB * cG > 0.7) {
-                // الجوال شبه أفقي: نستخدم اتجاه رأس الجوال
-                east = -cB * sA;
-                north = cA * cB;
-            } else {
-                // الجوال مائل أو واقف: نستخدم الاتجاه الذي يواجهه ظهر الجوال
-                east = -(cA * sG + cG * sA * sB);
-                north = -(sA * sG - cA * cG * sB);
-            }
-
-            return (Math.atan2(east, north) / d + 360) % 360;
-        }
-
-        function qiblaOnOrientation(event) {
-            if (currentPage !== 'qibla') {
-                qiblaStop();
-                return;
-            }
-
-            let heading = null;
-
-            if (typeof event.webkitCompassHeading === 'number' &&
-                event.webkitCompassHeading >= 0) {
-                heading = event.webkitCompassHeading;
-            } else if (typeof event.alpha === 'number') {
-                if (event.type !== 'deviceorientationabsolute' &&
-                    event.absolute !== true) {
+                if (!state.enabled && !state.persistent) {
+                    notifSetState('الإشعارات متوقفة.');
                     return;
                 }
 
-                if (typeof event.beta !== 'number' ||
-                    typeof event.gamma !== 'number') {
-                    heading = (360 - event.alpha) % 360;
-                } else {
-                    heading = qiblaHeadingFrom(
-                        event.alpha, event.beta, event.gamma);
+                const loc = timesStore(TIMES_LOC_KEY);
+
+                if (!loc) {
+                    notifSetState(
+                        'اختر مدينتك أولًا من صفحة «مواقيت الصلاة» لتُجدول الإشعارات.'
+                    );
+                    return;
                 }
 
-                const screenAngle =
-                    (screen.orientation && screen.orientation.angle) || 0;
+                const events = await notifBuildEvents(loc);
 
-                heading = (heading + screenAngle) % 360;
-            }
+                if (!events) {
+                    notifSetState(
+                        'تعذر جلب المواقيت لجدولة الإشعارات. اتصل بالإنترنت ثم افتح التطبيق مرة أخرى.'
+                    );
+                    return;
+                }
 
-            if (heading === null || Number.isNaN(heading)) {
-                return;
-            }
+                if (state.persistent && ongoing) {
+                    await ongoing.start({
+                        entries: notifOngoingEntries(events)
+                    });
+                }
 
-            // تنعيم أولي للقراءة الخام
-            if (qiblaHeading === null) {
-                qiblaHeading = heading;
-            } else {
-                let delta = heading - qiblaHeading;
+                const nowMs = Date.now();
+                const items = [];
+                let id = 1;
 
-                if (delta > 180) delta -= 360;
-                if (delta < -180) delta += 360;
-
-                qiblaHeading = (qiblaHeading + delta * 0.3 + 360) % 360;
-            }
-
-            qiblaTarget = qiblaHeading;
-
-            if (!qiblaGotSensor) {
-                qiblaGotSensor = true;
-                document.getElementById('qibla-status').textContent = '';
-                document.getElementById('qibla-start').hidden = true;
-            }
-
-            qiblaLoop();
-        }
-
-        function qiblaStop() {
-            window.removeEventListener(
-                'deviceorientationabsolute', qiblaOnOrientation, true);
-            window.removeEventListener(
-                'deviceorientation', qiblaOnOrientation, true);
-            qiblaListening = false;
-        }
-
-        function qiblaListen() {
-            qiblaStop();
-            window.addEventListener(
-                'deviceorientationabsolute', qiblaOnOrientation, true);
-            window.addEventListener(
-                'deviceorientation', qiblaOnOrientation, true);
-            qiblaListening = true;
-        }
-
-        async function qiblaStart() {
-            const status = document.getElementById('qibla-status');
-
-            if (typeof DeviceOrientationEvent === 'undefined') {
-                status.textContent =
-                    'جهازك لا يدعم حساس الاتجاه، استخدم الزاوية المعروضة مع أي بوصلة.';
-                return;
-            }
-
-            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                try {
-                    const answer =
-                        await DeviceOrientationEvent.requestPermission();
-
-                    if (answer !== 'granted') {
-                        status.textContent =
-                            'لم يُسمح بالوصول لحساس الاتجاه. فعّله من إعدادات المتصفح ثم أعد المحاولة.';
+                events.forEach((event, index) => {
+                    if (!state.enabled || event.index >= NOTIF_DAYS ||
+                        !state.prayers[event.key]) {
                         return;
+                    }
+
+                    const next = events[index + 1];
+                    const dateLine = notifDateLine(event);
+
+                    if (event.ts > nowMs) {
+                        let body = dateLine;
+
+                        if (next) {
+                            body = 'الصلاة التالية: ' + next.label +
+                                ' بعد ' + notifRemain(next.ts - event.ts) +
+                                ' (' + timesFormat(next.data.t[next.key]) +
+                                ')\n' + dateLine;
+                        }
+
+                        items.push({
+                            id: id++,
+                            title: 'حان وقت صلاة ' + event.label + ' 🕌',
+                            body,
+                            channelId: 'prayer',
+                            schedule: {
+                                at: new Date(event.ts),
+                                allowWhileIdle: true
+                            }
+                        });
+                    }
+
+                    const before = event.ts - state.before * 60000;
+
+                    if (state.before > 0 && before > nowMs) {
+                        items.push({
+                            id: id++,
+                            title: 'بقي ' + notifRemain(state.before * 60000) +
+                                ' على صلاة ' + event.label,
+                            body: 'الأذان ' + timesFormat(event.data.t[event.key]) +
+                                '\n' + dateLine,
+                            channelId: 'prayer',
+                            schedule: {
+                                at: new Date(before),
+                                allowWhileIdle: true
+                            }
+                        });
+                    }
+                });
+
+                if (items.length) {
+                    await LN.schedule({ notifications: items });
+                }
+
+                notifSetState(
+                    (state.enabled
+                        ? 'تم جدولة ' + toArabicDigits(items.length) +
+                          ' إشعارًا للأيام القادمة'
+                        : 'الإشعارات متوقفة') +
+                    (state.persistent ? '، والإشعار الدائم يعمل' : '') +
+                    '. تتجدد تلقائيًا كلما فتحت التطبيق.'
+                );
+            } catch (error) {
+                notifSetState('تعذرت جدولة الإشعارات: ' + error.message);
+            } finally {
+                notifBusy = false;
+
+                if (notifAgain) {
+                    notifAgain = false;
+                    notifReschedule();
+                }
+            }
+        }
+
+        async function notifEnable() {
+            const LN = notifPlugin();
+
+            if (!LN) {
+                return false;
+            }
+
+            try {
+                let permission = await LN.checkPermissions();
+
+                if (permission.display !== 'granted') {
+                    permission = await LN.requestPermissions();
+                }
+
+                if (permission.display !== 'granted') {
+                    notifSetState(
+                        'لم يُسمح بالإشعارات. فعّلها من إعدادات الجوال ← التطبيقات ← يَقينُ ← الإشعارات.'
+                    );
+                    return false;
+                }
+
+                await LN.createChannel({
+                    id: 'prayer',
+                    name: 'مواقيت الصلاة',
+                    description: 'تنبيهات أوقات الصلاة',
+                    importance: 4,
+                    visibility: 1,
+                    vibration: true,
+                    lights: true
+                });
+
+                try {
+                    const exact = await LN.checkExactNotificationSetting();
+
+                    if (exact.exact_alarm !== 'granted') {
+                        await LN.changeExactNotificationSetting();
                     }
                 } catch (error) {
-                    status.textContent =
-                        'تعذر تفعيل حساس الاتجاه على هذا الجهاز.';
-                    return;
+                    // أجهزة لا تحتاج هذا الإذن
                 }
+
+                return true;
+            } catch (error) {
+                notifSetState('تعذر تفعيل الإشعارات: ' + error.message);
+                return false;
             }
-
-            qiblaListen();
-
-            status.textContent = 'جارٍ قراءة حساس الاتجاه...';
-
-            setTimeout(() => {
-                if (!qiblaGotSensor && currentPage === 'qibla') {
-                    status.textContent =
-                        'لم يصل أي قراءة من الحساس. استخدم الزاوية المعروضة مع أي بوصلة.';
-                }
-            }, 3000);
         }
 
-        function qiblaSetLocation(loc, save) {
-            qiblaLoc = loc;
-            qiblaBearing = qiblaCalc(loc.lat, loc.lng).bearing;
-            document.getElementById('qibla-place').textContent = loc.name;
+        function notifRenderUI() {
+            const LN = notifPlugin();
+            const state = notifSettings();
+            const toggle = document.getElementById('notif-toggle');
+            const options = document.getElementById('notif-options');
 
-            if (save) {
-                timesStore(TIMES_LOC_KEY, loc);
-                timesLoc = loc;
-            }
+            const persist = document.getElementById('notif-persist');
 
-            const select = document.getElementById('qibla-city');
-            const index = TIMES_CITIES.findIndex(
-                city => city[0] === loc.name && !loc.auto
-            );
-            select.value = index >= 0 ? String(index) : '';
-
-            qiblaRender();
-        }
-
-        function qiblaLocate(silent) {
-            const status = document.getElementById('qibla-status');
-
-            if (!navigator.geolocation) {
-                if (!silent) {
-                    status.textContent = 'المتصفح لا يدعم تحديد الموقع.';
-                }
+            if (!LN) {
+                persist.disabled = true;
+                persist.textContent = 'غير متاح';
+                toggle.disabled = true;
+                toggle.textContent = 'غير متاح';
+                options.hidden = true;
+                notifSetState(
+                    'الإشعارات المجدولة تعمل داخل تطبيق أندرويد فقط، ولا تعمل من المتصفح.'
+                );
                 return;
             }
 
-            status.textContent = 'جارٍ تحديد موقعك...';
+            toggle.disabled = false;
+            toggle.textContent = state.enabled ? 'إيقاف' : 'تفعيل';
+            persist.disabled = false;
+            persist.textContent = state.persistent ? 'إيقاف' : 'تفعيل';
+            options.hidden = !state.enabled;
 
-            navigator.geolocation.getCurrentPosition(
-                position => {
-                    status.textContent = '';
-                    qiblaSetLocation({
-                        name: 'موقعي الحالي',
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                        auto: true
-                    }, true);
-                },
-                () => {
-                    status.textContent =
-                        'تعذر تحديد موقعك. اسمح بالوصول للموقع أو اختر مدينتك من القائمة.';
+            const chips = document.getElementById('notif-prayers');
+            chips.replaceChildren();
 
-                    document.getElementById('qibla-place').textContent =
-                        'اختر مدينتك';
-                },
-                { timeout: 10000, maximumAge: 600000 }
-            );
-        }
+            NOTIF_PRAYERS.forEach(([key, label]) => {
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = 'notif-chip' + (state.prayers[key] ? ' on' : '');
+                chip.textContent = label;
+                chip.setAttribute('aria-pressed', String(state.prayers[key]));
 
-        function openQibla() {
-            if (!qiblaInit) {
-                qiblaInit = true;
-
-                const select = document.getElementById('qibla-city');
-                const blank = document.createElement('option');
-                blank.value = '';
-                blank.textContent = 'اختر المدينة';
-                select.appendChild(blank);
-
-                TIMES_CITIES.forEach((city, index) => {
-                    const option = document.createElement('option');
-                    option.value = String(index);
-                    option.textContent = city[0];
-                    select.appendChild(option);
+                chip.addEventListener('click', () => {
+                    const current = notifSettings();
+                    current.prayers[key] = !current.prayers[key];
+                    notifSave(current);
+                    notifRenderUI();
+                    notifReschedule();
                 });
 
-                select.addEventListener('change', () => {
-                    if (select.value === '') {
+                chips.appendChild(chip);
+            });
+
+            document.getElementById('notif-before').value =
+                String(state.before);
+        }
+
+        function notifInit() {
+            document.getElementById('notif-toggle')
+                .addEventListener('click', async () => {
+                    const state = notifSettings();
+
+                    if (!state.enabled) {
+                        if (!(await notifEnable())) {
+                            return;
+                        }
+                    }
+
+                    state.enabled = !state.enabled;
+                    notifSave(state);
+                    notifRenderUI();
+                    notifReschedule();
+                });
+
+            document.getElementById('notif-persist')
+                .addEventListener('click', async () => {
+                    const state = notifSettings();
+
+                    if (!state.persistent) {
+                        if (!(await notifEnable())) {
+                            return;
+                        }
+                    }
+
+                    state.persistent = !state.persistent;
+                    notifSave(state);
+                    notifRenderUI();
+                    notifReschedule();
+                });
+
+            document.getElementById('notif-before')
+                .addEventListener('change', event => {
+                    const state = notifSettings();
+                    state.before = Number(event.target.value) || 0;
+                    notifSave(state);
+                    notifReschedule();
+                });
+
+            document.getElementById('notif-test')
+                .addEventListener('click', async () => {
+                    const LN = notifPlugin();
+
+                    if (!LN || !(await notifEnable())) {
                         return;
                     }
 
-                    const city = TIMES_CITIES[Number(select.value)];
+                    try {
+                        await LN.schedule({
+                            notifications: [{
+                                id: 999999,
+                                title: 'إشعار تجريبي 🕌',
+                                body: 'ستصلك تنبيهات الصلاة بهذا الشكل بإذن الله.',
+                                channelId: 'prayer',
+                                schedule: {
+                                    at: new Date(Date.now() + 3000),
+                                    allowWhileIdle: true
+                                }
+                            }]
+                        });
 
-                    qiblaSetLocation({
-                        name: city[0], lat: city[1], lng: city[2]
-                    }, true);
+                        notifSetState('سيصلك إشعار تجريبي بعد ثوانٍ...');
+                    } catch (error) {
+                        notifSetState('تعذر إرسال الإشعار: ' + error.message);
+                    }
                 });
 
-                document.getElementById('qibla-locate')
-                    .addEventListener('click', () => qiblaLocate(false));
+            notifRenderUI();
 
-                document.getElementById('qibla-start')
-                    .addEventListener('click', qiblaStart);
+            if (notifSettings().enabled) {
+                notifReschedule();
             }
 
-            qiblaHeading = null;
-            qiblaTarget = null;
-            qiblaShown = null;
-            qiblaGotSensor = false;
-            qiblaWasAligned = false;
-            document.getElementById('qibla-start').hidden = false;
-            document.getElementById('qibla-status').textContent = '';
+            // زر الرجوع في أندرويد
+            const AppPlugin = window.Capacitor && Capacitor.Plugins &&
+                Capacitor.Plugins.App;
 
-            const saved = timesLoc || timesStore(TIMES_LOC_KEY);
-
-            if (saved) {
-                qiblaSetLocation(saved, false);
-            } else {
-                qiblaBearing = null;
-                qiblaRender();
-                document.getElementById('qibla-place').textContent =
-                    'جارٍ تحديد الموقع...';
-                qiblaLocate(true);
-            }
-
-            // نستمع مباشرة (أندرويد يعمل بدون إذن)، وزر التفعيل لطلب الإذن في آيفون.
-            if (typeof DeviceOrientationEvent !== 'undefined') {
-                qiblaListen();
+            if (IS_NATIVE && AppPlugin && AppPlugin.addListener) {
+                AppPlugin.addListener('backButton', () => {
+                    if (document.getElementById('sidebar')
+                        .classList.contains('active')) {
+                        closeSidebar();
+                    } else if (currentPage === 'adhkar') {
+                        adhkarBack();
+                    } else if (currentPage === 'prayer') {
+                        prayerBack();
+                    } else if (currentPage === 'home' ||
+                        currentPage === 'auth') {
+                        AppPlugin.exitApp();
+                    } else {
+                        goBack();
+                    }
+                });
             }
         }
 
@@ -3138,21 +3295,9 @@
         }
 
         window.addEventListener('load', async () => {
-            document.getElementById('theme-toggle')
-                .addEventListener('click', () => {
-                    const isDark =
-                        document.body.classList.contains('dark-theme');
+            applyTheme();
 
-                    const newTheme = isDark ? 'light' : 'dark';
-
-                    localStorage.setItem('yaqeen-theme', newTheme);
-                    applyTheme(newTheme);
-                });
-
-            const savedTheme =
-                localStorage.getItem('yaqeen-theme') || 'light';
-
-            applyTheme(savedTheme);
+            notifInit();
 
             await checkSession();
 
