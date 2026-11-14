@@ -1625,7 +1625,7 @@
 
                 <button class="guest-button" type="button"
                         id="profile-link"
-                        onclick="showPage('auth')">ربط حسابي بالبريد</button>
+                        onclick="showPage('auth')">تسجيل الدخول / إنشاء حساب</button>
                 <button class="guest-button" type="button"
                         id="profile-logout"
                         onclick="handleLogout()">تسجيل الخروج</button>
@@ -1884,22 +1884,6 @@
                     lsRemove(GUEST_KEY);
                     await checkSession();
                     showPage('home');
-                } else if (currentUser && currentUser.is_anonymous) {
-                    const { error } =
-                        await supabaseClient.auth.updateUser({
-                            email,
-                            password
-                        });
-
-                    if (error) {
-                        throw error;
-                    }
-
-                    alert(
-                        'تم ربط حسابك. تحقق من بريدك الإلكتروني لتأكيده.'
-                    );
-                    await checkSession();
-                    showPage('home');
                 } else {
                     const { data, error } =
                         await supabaseClient.auth.signUp({
@@ -1912,6 +1896,7 @@
                     }
 
                     if (data.session) {
+                        lsRemove(GUEST_KEY);
                         await checkSession();
                         showPage('home');
                     } else {
@@ -1950,7 +1935,7 @@
         }
 
         function isGuestAccount() {
-            return !currentUser || !!currentUser.is_anonymous;
+            return !currentUser;
         }
 
         function accountName() {
@@ -1967,8 +1952,7 @@
                 return saved;
             }
 
-            if (currentUser && !currentUser.is_anonymous &&
-                currentUser.email) {
+            if (currentUser && currentUser.email) {
                 return currentUser.email.split('@')[0];
             }
 
@@ -1984,8 +1968,7 @@
             const button = document.getElementById('account-btn');
             const identity = hasIdentity();
             const guest = isGuestAccount();
-            const email = currentUser && !currentUser.is_anonymous
-                ? (currentUser.email || '') : '';
+            const email = currentUser ? (currentUser.email || '') : '';
 
             button.classList.toggle('show', identity);
             button.textContent = accountInitial();
@@ -2063,9 +2046,9 @@
 
             if (identity) {
                 document.getElementById('auth-title').textContent =
-                    'ربط حسابك';
+                    'تسجيل الدخول';
                 document.getElementById('auth-description').textContent =
-                    'أنشئ حسابًا لحفظ بياناتك، أو سجّل الدخول بحساب موجود';
+                    'سجّل الدخول بحسابك، أو أنشئ حسابًا جديدًا';
             }
         }
 
@@ -2094,32 +2077,10 @@
             setTimeout(() => { status.textContent = ''; }, 2000);
         }
 
-        async function continueAsGuest() {
-            const button = document.getElementById('guest-btn');
-            button.disabled = true;
-
-            try {
-                const { data, error } =
-                    await supabaseClient.auth.signInAnonymously();
-
-                if (error) {
-                    throw error;
-                }
-
-                currentUser =
-                    data.user || (data.session && data.session.user) || null;
-
-                if (!currentUser) {
-                    throw new Error('no user');
-                }
-            } catch (error) {
-                // لا إنترنت أو الدخول المجهول غير مفعّل: ضيف محلي على الجهاز
-                currentUser = null;
-                lsSet(GUEST_KEY, '1');
-            } finally {
-                button.disabled = false;
-            }
-
+        function continueAsGuest() {
+            // الضيف محلي على الجهاز فقط، بدون حساب في Supabase
+            currentUser = null;
+            lsSet(GUEST_KEY, '1');
             updateUserStatus();
             pageHistory.length = 0;
             showPage('home');
