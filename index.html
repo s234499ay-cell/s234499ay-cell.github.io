@@ -112,6 +112,16 @@
             font-size: 23px;
         }
 
+        .boot-splash {
+            display: grid;
+            min-height: 60vh;
+            place-items: center;
+        }
+
+        .boot-splash .auth-mark {
+            opacity: .7;
+        }
+
         .account-btn {
             display: none;
             width: 36px;
@@ -1419,7 +1429,9 @@
     </aside>
 
     <main>
-        <section id="auth" class="page auth-page active">
+        <div class="boot-splash" id="boot-splash"><div class="auth-mark">۞</div></div>
+
+        <section id="auth" class="page auth-page">
             <div class="subpage-back-row" id="auth-back" style="display:none">
                 <button class="back-button"
                         type="button"
@@ -2129,7 +2141,15 @@
             updateUserStatus();
         }
 
+        const HINT_KEY = 'yaqeen-hint';
+
         function updateUserStatus() {
+            if (hasIdentity()) {
+                lsSet(HINT_KEY, '1');
+            } else {
+                lsRemove(HINT_KEY);
+            }
+
             renderAccount();
         }
 
@@ -4520,16 +4540,51 @@
             }
         }
 
+        function leaveSplash() {
+            const splash = document.getElementById('boot-splash');
+
+            if (splash) {
+                splash.remove();
+            }
+        }
+
         window.addEventListener('load', async () => {
             applyTheme();
 
             notifInit();
 
-            await checkSession();
-
             pageHistory.length = 0;
-            currentPage = hasIdentity() ? 'home' : 'auth';
-            showPage(currentPage);
+
+            // إذا سبق وأن دخل المستخدم نفتح الرئيسية فورًا بدون وميض
+            // صفحة الدخول، ثم نتحقق من الجلسة في الخلفية.
+            const returning = lsGet(HINT_KEY) === '1' ||
+                lsGet(GUEST_KEY) === '1';
+
+            if (returning) {
+                currentPage = 'home';
+                leaveSplash();
+                showPage('home');
+            }
+
+            try {
+                await checkSession();
+            } catch (error) {
+                console.error(error);
+            }
+
+            if (hasIdentity()) {
+                if (!returning) {
+                    currentPage = 'home';
+                    leaveSplash();
+                    showPage('home');
+                }
+            } else {
+                // لا توجد جلسة صالحة: صفحة الدخول
+                pageHistory.length = 0;
+                currentPage = 'auth';
+                leaveSplash();
+                showPage('auth');
+            }
         });
     </script>
 </body>
