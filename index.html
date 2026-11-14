@@ -833,57 +833,48 @@
         }
 
         .home-verse {
-            margin: 2px 6px 18px;
-            color: var(--text);
+            margin: 0 6px 18px;
+            color: var(--muted);
             font-family: 'AmiriQuranLocal', 'Amiri Quran', 'Traditional Arabic', serif;
-            font-size: 1.15rem;
+            font-size: 1rem;
             line-height: 2;
             text-align: center;
         }
 
         .home-verse span {
             display: block;
-            color: var(--muted);
             font-family: inherit;
-            font-size: .8rem;
+            font-size: .76rem;
         }
 
         .home-date-card {
-            margin-bottom: 22px;
-            padding: 20px 16px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 16px 16px;
             border: 1px solid var(--border);
-            border-radius: 20px;
-            background:
-                radial-gradient(circle at 85% 0%, rgba(228, 201, 130, .12), transparent 55%),
-                var(--surface);
-            box-shadow: var(--shadow);
-            text-align: center;
+            border-radius: 16px;
+            background: var(--surface);
+            box-shadow: inset -3px 0 0 var(--gold);
         }
 
         .hd-weekday {
-            color: #e4c982;
-            font-family: 'AmiriQuranLocal', 'Amiri Quran', 'Traditional Arabic', serif;
-            font-size: 2.6rem;
+            font-size: 1.35rem;
+            font-weight: 700;
             line-height: 1.5;
         }
 
-        .hd-day {
-            color: var(--gold);
-            font-size: 2.2rem;
-            font-weight: 700;
-            line-height: 1.3;
-        }
-
-        .hd-month {
-            margin-top: 2px;
-            font-size: 1.3rem;
-            font-weight: 700;
+        .hd-hijri {
+            color: var(--muted);
+            font-size: .95rem;
         }
 
         .hd-greg {
-            margin-top: 6px;
             color: var(--muted);
-            font-size: .92rem;
+            font-size: .88rem;
+            text-align: left;
         }
 
         .home-times-head {
@@ -891,13 +882,12 @@
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            margin: 0 2px 10px;
+            margin: 0 4px 8px;
         }
 
         .home-times-title {
-            padding-right: 10px;
-            border-right: 4px solid var(--gold);
-            font-size: 1.1rem;
+            color: var(--muted);
+            font-size: .78rem;
             font-weight: 700;
         }
 
@@ -906,84 +896,137 @@
             border-radius: 999px;
             background: var(--surface-soft);
             color: var(--muted);
-            font-size: .78rem;
+            font-size: .76rem;
         }
 
         .home-hero {
             display: block;
             width: 100%;
-            padding: 22px 18px 16px;
-            border: 1px solid rgba(184, 148, 82, .45);
-            border-radius: 20px;
-            background:
-                radial-gradient(circle at 15% 0%, rgba(228, 201, 130, .14), transparent 55%),
-                linear-gradient(145deg, #2a2720, #12110f);
-            color: #f5f0e5;
+            padding: 20px 16px 16px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--surface);
+            color: var(--text);
             font: inherit;
             text-align: center;
-            box-shadow: var(--shadow);
+            box-shadow: inset -3px 0 0 var(--gold);
             cursor: pointer;
         }
 
+        .hh-ring {
+            position: relative;
+            display: grid;
+            place-items: center;
+            width: 176px;
+            height: 176px;
+            margin: 0 auto 16px;
+        }
+
+        .hh-ring svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hh-track,
+        .hh-arc {
+            fill: none;
+            stroke-width: 5;
+        }
+
+        .hh-track {
+            stroke: var(--surface-soft);
+        }
+
+        .hh-arc {
+            stroke: var(--gold);
+            stroke-linecap: round;
+            transition: stroke-dasharray 1s linear;
+        }
+
+        .hh-ring-text {
+            position: relative;
+            padding: 0 8px;
+        }
+
         .hh-label {
-            font-size: 1.15rem;
+            color: var(--muted);
+            font-size: .88rem;
         }
 
         .hh-count {
-            margin: 6px 0 18px;
-            color: #e4c982;
-            font-size: 2.7rem;
+            margin-top: 2px;
+            color: var(--text);
+            font-size: 1.55rem;
             font-weight: 700;
-            line-height: 1.3;
+            line-height: 1.4;
             direction: ltr;
-            letter-spacing: 1px;
         }
 
-        .hh-bar {
-            position: relative;
-            height: 10px;
-            overflow: hidden;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, .1);
-        }
-
-        .hh-fill {
-            position: absolute;
-            top: 0;
-            right: 0;
-            height: 100%;
-            width: 0;
-            border-radius: 999px;
-            background: linear-gradient(270deg, #b89452, #e4c982);
-            transition: width 1s linear;
-        }
-
-        .hh-ends {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 12px;
-        }
-
-        .hh-end {
+        .hh-list {
             display: flex;
             flex-direction: column;
             gap: 2px;
             text-align: start;
         }
 
-        .hh-end b {
-            font-size: 1rem;
+        .hh-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 12px;
+            border-radius: 12px;
+            color: var(--text);
+            font-size: .98rem;
         }
 
-        .hh-end small {
-            color: #cfc8b8;
+        .hh-row.small {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            color: var(--muted);
             font-size: .82rem;
         }
 
+        .hh-row.done {
+            color: var(--muted);
+        }
+
+        .hh-row.done .hh-rtime::before {
+            content: '✓ ';
+            color: var(--gold);
+        }
+
+        .hh-row.next {
+            background: var(--surface-soft);
+            font-weight: 700;
+            box-shadow: inset -3px 0 0 var(--gold);
+        }
+
+        .hh-rtime {
+            color: var(--muted);
+            font-size: .9rem;
+        }
+
+        .hh-row.next .hh-rtime {
+            color: var(--text);
+        }
+
+        .home-hero.empty .hh-ring {
+            width: auto;
+            height: auto;
+            margin: 0;
+        }
+
+        .home-hero.empty .hh-ring svg,
         .home-hero.empty .hh-count,
-        .home-hero.empty .hh-bar,
-        .home-hero.empty .hh-ends {
+        .home-hero.empty .hh-list {
             display: none;
+        }
+
+        .home-hero.empty .hh-label {
+            color: var(--text);
+            font-size: 1rem;
         }
 
         .rules-note ol {
@@ -1212,9 +1255,13 @@
             </p>
 
             <div class="home-date-card">
-                <div class="hd-weekday" id="hd-weekday"></div>
-                <div class="hd-day" id="hd-day"></div>
-                <div class="hd-month" id="hd-month"></div>
+                <div class="hd-main">
+                    <div class="hd-weekday" id="hd-weekday"></div>
+                    <div class="hd-hijri">
+                        <span id="hd-day"></span>
+                        <span id="hd-month"></span>
+                    </div>
+                </div>
                 <div class="hd-greg" id="hd-greg"></div>
             </div>
 
@@ -1225,20 +1272,26 @@
 
             <button class="home-hero" id="home-hero" type="button"
                     onclick="showPage('times')">
-                <div class="hh-label" id="home-next-label">...</div>
-                <div class="hh-count" id="home-next-count"></div>
-                <div class="hh-bar">
-                    <div class="hh-fill" id="home-fill"></div>
+                <div class="hh-ring">
+                    <svg viewBox="0 0 120 120" aria-hidden="true">
+                        <circle class="hh-track" cx="60" cy="60" r="54"/>
+                        <circle class="hh-arc" id="home-arc" cx="60" cy="60"
+                                r="54" pathLength="100"
+                                stroke-dasharray="0 100"
+                                transform="rotate(-90 60 60)"/>
+                    </svg>
+                    <div class="hh-ring-text">
+                        <div class="hh-label" id="home-next-label">...</div>
+                        <div class="hh-count" id="home-next-count"></div>
+                    </div>
                 </div>
-                <div class="hh-ends">
-                    <div class="hh-end">
-                        <b id="home-prev-name"></b>
-                        <small id="home-prev-time"></small>
-                    </div>
-                    <div class="hh-end">
-                        <b id="home-next-name"></b>
-                        <small id="home-next-time"></small>
-                    </div>
+                <div class="hh-list">
+                    <div class="hh-row" data-key="Fajr"><span>الفجر</span><span class="hh-rtime"></span></div>
+                    <div class="hh-row small" data-key="Sunrise"><span>الشروق</span><span class="hh-rtime"></span></div>
+                    <div class="hh-row" data-key="Dhuhr"><span>الظهر</span><span class="hh-rtime"></span></div>
+                    <div class="hh-row" data-key="Asr"><span>العصر</span><span class="hh-rtime"></span></div>
+                    <div class="hh-row" data-key="Maghrib"><span>المغرب</span><span class="hh-rtime"></span></div>
+                    <div class="hh-row" data-key="Isha"><span>العشاء</span><span class="hh-rtime"></span></div>
                 </div>
             </button>
         </section>
@@ -3019,16 +3072,25 @@
                 'باقي على ' + nameOf(nextKey);
             document.getElementById('home-next-count').textContent =
                 remain > 0 ? timesCountdown(remain) : '';
-            document.getElementById('home-fill').style.width =
-                Math.min(Math.max(done, 0), 1) * 100 + '%';
-            document.getElementById('home-prev-name').textContent =
-                nameOf(prevKey);
-            document.getElementById('home-prev-time').textContent =
-                timesFormat(homeDay.timings[prevKey]);
-            document.getElementById('home-next-name').textContent =
-                nameOf(nextKey);
-            document.getElementById('home-next-time').textContent =
-                timesFormat(nextTime);
+            document.getElementById('home-arc').setAttribute(
+                'stroke-dasharray',
+                Math.min(Math.max(done, 0), 1) * 100 + ' 100'
+            );
+
+            document.querySelectorAll('#home-hero .hh-row').forEach(row => {
+                const key = row.dataset.key;
+                const time = homeDay.timings[key];
+                const isNext = key === nextKey;
+
+                row.querySelector('.hh-rtime').textContent =
+                    time ? timesFormat(isNext ? nextTime : time) : '';
+                row.classList.toggle('next', isNext);
+                row.classList.toggle(
+                    'done',
+                    !isNext && !!time && timesToSecs(time) <= now.secs
+                );
+            });
+
             homeRenderDate();
         }
 
