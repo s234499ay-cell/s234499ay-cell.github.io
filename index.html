@@ -400,6 +400,12 @@
             font-weight: 700;
         }
 
+        .qibla-loc-box.has-loc .loc-btn {
+            border: 1px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+        }
+
         .loc-btn:disabled {
             opacity: .65;
         }
@@ -1972,10 +1978,9 @@
                 </div>
 
                 <p class="settings-description" id="qibla-note"></p>
-                <div class="qibla-loc-box" id="qibla-loc-box"
-                     style="display:none">
+                <div class="qibla-loc-box" id="qibla-loc-box">
                     <button type="button" class="loc-btn"
-                            onclick="appLocate()">📍 تحديد موقعي</button>
+                            onclick="appLocate()">📍 موقعي</button>
                     <button type="button" class="loc-link"
                             onclick="showPage('times')">أو اختر مدينة</button>
                     <div class="loc-msg" id="qibla-msg"></div>
@@ -2392,7 +2397,8 @@
             const note = document.getElementById('qibla-note');
 
             card.classList.toggle('no-loc', !loc);
-            box.style.display = loc ? 'none' : 'flex';
+            box.style.display = 'flex';
+            box.classList.toggle('has-loc', !!loc);
             document.getElementById('qibla-card').classList.remove('aligned');
             card.classList.remove('aligned');
 
