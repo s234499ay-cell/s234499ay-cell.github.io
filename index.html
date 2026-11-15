@@ -249,6 +249,192 @@
             transition: right .25s ease, visibility 0s;
         }
 
+        .home-qibla {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 14px 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background:
+                radial-gradient(circle at 88% 50%,
+                    rgba(184, 148, 82, .14), transparent 58%),
+                var(--surface);
+            box-shadow: inset -3px 0 0 var(--gold);
+            cursor: pointer;
+            transition: border-color .25s, box-shadow .25s;
+        }
+
+        .home-qibla.no-loc {
+            cursor: default;
+        }
+
+        .home-qibla.aligned {
+            border-color: var(--gold);
+            box-shadow: inset -3px 0 0 var(--gold),
+                0 0 22px rgba(184, 148, 82, .28);
+        }
+
+        .hq-dial {
+            flex: none;
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                rgba(184, 148, 82, .10), transparent 70%);
+        }
+
+        .hq-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .hq-dial .qibla-tick {
+            stroke-width: 5;
+        }
+
+        .hq-dial .qibla-tick.major {
+            stroke-width: 8;
+        }
+
+        .hq-dial .qibla-letter {
+            font-size: 38px;
+        }
+
+        .home-qibla.aligned .qibla-ring {
+            stroke: var(--gold);
+            stroke-width: 7;
+        }
+
+        .home-qibla.aligned .hq-dial {
+            animation: hqPulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes hqPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(184, 148, 82, .35); }
+            50% { box-shadow: 0 0 0 9px rgba(184, 148, 82, 0); }
+        }
+
+        .hq-body,
+        .hq-prompt {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hq-label {
+            color: var(--gold);
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .02em;
+        }
+
+        .hq-main {
+            font-size: 1.7rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .hq-sub {
+            color: var(--muted);
+            font-size: .85rem;
+            line-height: 1.5;
+        }
+
+        .home-qibla.aligned .hq-sub {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .hq-chev {
+            flex: none;
+            color: var(--muted);
+            font-size: 1.6rem;
+            line-height: 1;
+        }
+
+        .hq-prompt,
+        .home-qibla.no-loc .hq-body,
+        .home-qibla.no-loc .hq-chev {
+            display: none;
+        }
+
+        .home-qibla.no-loc .hq-prompt {
+            display: block;
+        }
+
+        .home-qibla.no-loc .hq-dial {
+            opacity: .35;
+        }
+
+        .hq-ptext {
+            margin: 3px 0 9px;
+            font-size: .88rem;
+            line-height: 1.6;
+        }
+
+        .hq-actions,
+        .qibla-loc-box {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 14px;
+        }
+
+        .qibla-loc-box {
+            flex-direction: column;
+            margin-top: 6px;
+        }
+
+        .loc-btn {
+            padding: 9px 18px;
+            border: 0;
+            border-radius: 999px;
+            background: var(--gold);
+            color: #151411;
+            font: inherit;
+            font-size: .88rem;
+            font-weight: 700;
+        }
+
+        .loc-btn:disabled {
+            opacity: .65;
+        }
+
+        .loc-link {
+            padding: 4px 2px;
+            border: 0;
+            background: transparent;
+            color: var(--gold);
+            font: inherit;
+            font-size: .82rem;
+            text-decoration: underline;
+        }
+
+        .loc-msg {
+            flex-basis: 100%;
+            color: #e0a458;
+            font-size: .8rem;
+            line-height: 1.6;
+        }
+
+        .loc-msg:empty {
+            display: none;
+        }
+
+        .home-city[role="button"] {
+            cursor: pointer;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .home-qibla.aligned .hq-dial {
+                animation: none;
+            }
+        }
+
         .qibla-card {
             text-align: center;
         }
@@ -1588,9 +1774,50 @@
                 <div class="hd-greg" id="hd-greg"></div>
             </div>
 
+            <div class="home-qibla no-loc" id="home-qibla"
+                 onclick="homeQiblaTap()">
+                <div class="hq-dial">
+                    <svg class="hq-svg" viewBox="-10 -16 320 326"
+                         aria-hidden="true">
+                        <polygon class="qibla-pointer"
+                                 points="150,-16 132,6 168,6"></polygon>
+                        <g id="hq-dial">
+                            <circle class="qibla-ring" cx="150" cy="150"
+                                    r="122"></circle>
+                            <g id="hq-ticks"></g>
+                            <g id="hq-kaaba">
+                                <circle class="qibla-kaaba-dot" cx="150"
+                                        cy="42" r="40"></circle>
+                                <text x="150" y="58" text-anchor="middle"
+                                      font-size="46">🕋</text>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+                <div class="hq-body">
+                    <div class="hq-label">القبلة</div>
+                    <div class="hq-main" id="hq-main">--</div>
+                    <div class="hq-sub" id="hq-sub"></div>
+                </div>
+                <div class="hq-prompt">
+                    <div class="hq-label">القبلة</div>
+                    <div class="hq-ptext">حدّد موقعك أولاً ليظهر اتجاه القبلة
+                        في الجهة الصحيحة</div>
+                    <div class="hq-actions">
+                        <button type="button" class="loc-btn"
+                                onclick="appLocate()">📍 تحديد موقعي</button>
+                        <button type="button" class="loc-link"
+                                onclick="showPage('times')">أو اختر مدينة</button>
+                    </div>
+                    <div class="loc-msg" id="hq-msg"></div>
+                </div>
+                <span class="hq-chev" aria-hidden="true">‹</span>
+            </div>
+
             <div class="home-times-head">
                 <span class="home-times-title">أوقات الصلاة</span>
-                <span class="home-city" id="home-city">📍 حدّد موقعك</span>
+                <span class="home-city" id="home-city" role="button"
+                      onclick="homeCityTap()">📍 حدّد موقعك</span>
             </div>
 
             <button class="home-hero" id="home-hero" type="button"
@@ -1745,9 +1972,14 @@
                 </div>
 
                 <p class="settings-description" id="qibla-note"></p>
-                <button class="photo-button" id="qibla-loc-btn" type="button"
-                        style="display:none"
-                        onclick="showPage('times')">تحديد الموقع</button>
+                <div class="qibla-loc-box" id="qibla-loc-box"
+                     style="display:none">
+                    <button type="button" class="loc-btn"
+                            onclick="appLocate()">📍 تحديد موقعي</button>
+                    <button type="button" class="loc-link"
+                            onclick="showPage('times')">أو اختر مدينة</button>
+                    <div class="loc-msg" id="qibla-msg"></div>
+                </div>
             </div>
         </section>
 
@@ -1931,7 +2163,7 @@
                 renderAccount();
             }
 
-            if (currentPage === 'qibla' && id !== 'qibla') {
+            if (id !== 'home' && id !== 'qibla') {
                 qiblaStop();
             }
 
@@ -1948,6 +2180,7 @@
             if (id === 'home') {
                 document.getElementById('home').classList.add('active');
                 homeRefresh();
+                qiblaEnsure();
                 return;
             }
 
@@ -1959,7 +2192,7 @@
 
             if (id === 'qibla') {
                 document.getElementById('qibla').classList.add('active');
-                qiblaStart();
+                qiblaEnsure();
                 return;
             }
 
@@ -2007,6 +2240,10 @@
         let qiblaListener = null;
         let qiblaWebHandler = null;
         let qiblaWasAligned = false;
+        let qiblaRunning = false;
+        let qiblaRunKey = '';
+        let qiblaToken = 0;
+        let qiblaSubText = '';
 
         function qiblaBearing(lat, lng) {
             const r = Math.PI / 180;
@@ -2057,17 +2294,25 @@
             return null;
         }
 
-        function qiblaBuildDial() {
-            const ticks = document.getElementById('qibla-ticks');
+        function qiblaLoc() {
+            const loc = timesStore(TIMES_LOC_KEY);
 
-            if (ticks.childNodes.length) {
+            return loc && isFinite(loc.lat) && isFinite(loc.lng) ? loc : null;
+        }
+
+        function qiblaBuildTicks(groupId, mini) {
+            const group = document.getElementById(groupId);
+
+            if (!group || group.childNodes.length) {
                 return;
             }
 
             const ns = 'http://www.w3.org/2000/svg';
-            const letters = { 0: 'ش', 90: 'ق', 180: 'ج', 270: 'غ' };
+            const letters = mini ? { 0: 'ش' } :
+                { 0: 'ش', 90: 'ق', 180: 'ج', 270: 'غ' };
+            const step = mini ? 15 : 10;
 
-            for (let a = 0; a < 360; a += 10) {
+            for (let a = 0; a < 360; a += step) {
                 const major = a % 90 === 0;
                 const line = document.createElementNS(ns, 'line');
                 const len = major ? 14 : (a % 30 === 0 ? 10 : 6);
@@ -2079,21 +2324,29 @@
                 line.setAttribute('transform', 'rotate(' + a + ' 150 150)');
                 line.setAttribute('class',
                     'qibla-tick' + (major ? ' major' : ''));
-                ticks.appendChild(line);
+                group.appendChild(line);
 
                 if (letters[a]) {
                     const text = document.createElementNS(ns, 'text');
 
                     text.setAttribute('x', 150);
-                    text.setAttribute('y', 150 - 122 + 38);
+                    text.setAttribute('y', 150 - 122 + (mini ? 44 : 38));
                     text.setAttribute('text-anchor', 'middle');
                     text.setAttribute('transform',
                         'rotate(' + a + ' 150 150)');
                     text.setAttribute('class',
                         'qibla-letter' + (a === 0 ? ' north' : ''));
                     text.textContent = letters[a];
-                    ticks.appendChild(text);
+                    group.appendChild(text);
                 }
+            }
+        }
+
+        function qiblaSetText(id, text) {
+            const el = document.getElementById(id);
+
+            if (el) {
+                el.textContent = text;
             }
         }
 
@@ -2106,18 +2359,79 @@
 
         function qiblaDraw() {
             const heading = qiblaHeading === null ? 0 : qiblaHeading;
+            const rotate = 'rotate(' + (-heading) + ' 150 150)';
 
-            document.getElementById('qibla-dial').setAttribute(
-                'transform', 'rotate(' + (-heading) + ' 150 150)');
+            ['qibla-dial', 'hq-dial'].forEach(id => {
+                const el = document.getElementById(id);
+
+                if (el) {
+                    el.setAttribute('transform', rotate);
+                }
+            });
 
             if (qiblaAngle !== null) {
-                document.getElementById('qibla-kaaba').setAttribute(
-                    'transform', 'rotate(' + qiblaAngle + ' 150 150)');
+                ['qibla-kaaba', 'hq-kaaba'].forEach(id => {
+                    const el = document.getElementById(id);
+
+                    if (el) {
+                        el.setAttribute('transform',
+                            'rotate(' + qiblaAngle + ' 150 150)');
+                    }
+                });
             }
 
-            document.getElementById('qibla-deg').textContent =
-                qiblaHeading === null ? '--' :
-                    Math.round(qiblaHeading) + '°';
+            qiblaSetText('qibla-deg', qiblaHeading === null ? '--' :
+                Math.round(qiblaHeading) + '°');
+        }
+
+        // يحدّث النصوص الثابتة في الرئيسية وصفحة القبلة، ويعيد الموقع أو null
+        function qiblaRefreshViews() {
+            const loc = qiblaLoc();
+            const card = document.getElementById('home-qibla');
+            const box = document.getElementById('qibla-loc-box');
+            const note = document.getElementById('qibla-note');
+
+            card.classList.toggle('no-loc', !loc);
+            box.style.display = loc ? 'none' : 'flex';
+            document.getElementById('qibla-card').classList.remove('aligned');
+            card.classList.remove('aligned');
+
+            if (!loc) {
+                qiblaAngle = null;
+                qiblaSubText = '';
+                qiblaSetText('qibla-bearing', '--');
+                qiblaSetText('qibla-distance', '--');
+                qiblaSetText('qibla-place', '--');
+                qiblaSetText('hq-main', '--');
+                qiblaSetText('hq-sub', '');
+                qiblaSetStatus(
+                    'حدّد موقعك أولاً ليظهر اتجاه القبلة في الجهة الصحيحة',
+                    true);
+                note.textContent = '';
+                return null;
+            }
+
+            const lat = Number(loc.lat);
+            const lng = Number(loc.lng);
+            const km = Math.round(qiblaDistance(lat, lng))
+                .toLocaleString('ar-EG');
+
+            qiblaAngle = qiblaBearing(lat, lng);
+            qiblaSubText = qiblaDirName(qiblaAngle) + ' · ' + km + ' كم';
+
+            qiblaSetText('hq-main', Math.round(qiblaAngle) + '°');
+            qiblaSetText('hq-sub', qiblaSubText);
+            qiblaSetText('qibla-bearing',
+                Math.round(qiblaAngle) + '° (' +
+                qiblaDirName(qiblaAngle) + ')');
+            qiblaSetText('qibla-distance', km + ' كم');
+            qiblaSetText('qibla-place', loc.name || '--');
+            qiblaSetStatus('', false);
+            note.textContent =
+                'ضع الجوال أفقياً أو قائماً، وأدِره حتى تصل 🕋 إلى أعلى ' +
+                'البوصلة فتكون باتجاه القبلة.';
+
+            return loc;
         }
 
         function qiblaUpdate(rawHeading, accuracy) {
@@ -2129,14 +2443,13 @@
             if (qiblaHeading === null) {
                 qiblaHeading = rawHeading;
             } else {
-                let diff = ((rawHeading - qiblaHeading + 540) % 360) - 180;
+                const diff = ((rawHeading - qiblaHeading + 540) % 360) - 180;
 
                 qiblaHeading = (qiblaHeading + diff * 0.3 + 360) % 360;
             }
 
             qiblaDraw();
 
-            const card = document.getElementById('qibla-card');
             let aligned = false;
 
             if (qiblaAngle !== null) {
@@ -2146,26 +2459,38 @@
                 aligned = off <= 3;
             }
 
-            card.classList.toggle('aligned', aligned);
+            const weak = typeof accuracy === 'number' && accuracy <= 1;
+
+            document.getElementById('qibla-card')
+                .classList.toggle('aligned', aligned);
+            document.getElementById('home-qibla')
+                .classList.toggle('aligned', aligned);
 
             if (aligned) {
                 qiblaSetStatus('أنت باتجاه القبلة ✓', false);
+                qiblaSetText('hq-sub', 'أنت باتجاه القبلة ✓');
 
                 if (!qiblaWasAligned && navigator.vibrate) {
                     try { navigator.vibrate(40); } catch (e) { /* لا شيء */ }
                 }
-            } else if (typeof accuracy === 'number' && accuracy <= 1) {
+            } else if (weak) {
                 qiblaSetStatus(
                     'دقة البوصلة ضعيفة، حرّك الجوال في الهواء على شكل ٨ ' +
                     'وابتعد عن المعادن والمغناطيس.', true);
+                qiblaSetText('hq-sub', 'حرّك الجوال على شكل ٨ للمعايرة');
             } else {
                 qiblaSetStatus('', false);
+                qiblaSetText('hq-sub', qiblaSubText);
             }
 
             qiblaWasAligned = aligned;
         }
 
         function qiblaStop() {
+            qiblaToken++;
+            qiblaRunning = false;
+            qiblaRunKey = '';
+
             try {
                 if (qiblaListener && qiblaListener.remove) {
                     qiblaListener.remove();
@@ -2187,71 +2512,75 @@
             }
         }
 
-        async function qiblaStart() {
-            qiblaStop();
-            qiblaBuildDial();
-            qiblaHeading = null;
-            qiblaWasAligned = false;
-            document.getElementById('qibla-card').classList.remove('aligned');
+        function qiblaNoSensor(text) {
+            qiblaSetStatus(text, true);
+            qiblaSetText('hq-sub', qiblaSubText);
+        }
 
-            const loc = timesStore(TIMES_LOC_KEY);
-            const hasLoc = loc && isFinite(loc.lat) && isFinite(loc.lng);
-            const locBtn = document.getElementById('qibla-loc-btn');
-            const note = document.getElementById('qibla-note');
+        // تهيئة البطاقة والصفحة، وتشغيل المستشعر إن لزم (مرة واحدة فقط)
+        async function qiblaEnsure() {
+            qiblaBuildTicks('qibla-ticks', false);
+            qiblaBuildTicks('hq-ticks', true);
 
-            locBtn.style.display = hasLoc ? 'none' : 'inline-block';
+            const loc = qiblaRefreshViews();
 
-            if (!hasLoc) {
-                qiblaAngle = null;
+            if (!loc) {
+                qiblaStop();
+                qiblaHeading = null;
                 qiblaDraw();
-                document.getElementById('qibla-bearing').textContent = '--';
-                document.getElementById('qibla-distance').textContent = '--';
-                document.getElementById('qibla-place').textContent = '--';
-                qiblaSetStatus('حدّد موقعك أولاً لحساب اتجاه القبلة', true);
-                note.textContent = '';
                 return;
             }
 
-            qiblaAngle = qiblaBearing(Number(loc.lat), Number(loc.lng));
-            document.getElementById('qibla-bearing').textContent =
-                Math.round(qiblaAngle) + '° (' +
-                qiblaDirName(qiblaAngle) + ')';
-            document.getElementById('qibla-distance').textContent =
-                Math.round(qiblaDistance(Number(loc.lat), Number(loc.lng)))
-                    .toLocaleString('ar-EG') + ' كم';
-            document.getElementById('qibla-place').textContent =
-                loc.name || '--';
-            qiblaDraw();
-            qiblaSetStatus('', false);
-            note.textContent =
-                'ضع الجوال أفقياً أو قائماً، وأدِره حتى تصل 🕋 إلى أعلى ' +
-                'البوصلة فتكون باتجاه القبلة.';
+            const key = loc.lat + ',' + loc.lng;
 
+            if (qiblaRunning && key === qiblaRunKey) {
+                qiblaDraw();
+                return;
+            }
+
+            qiblaStop();
+            qiblaRunning = true;
+            qiblaRunKey = key;
+            qiblaHeading = null;
+            qiblaWasAligned = false;
+            qiblaDraw();
+
+            const token = qiblaToken;
             const plugin = qiblaPlugin();
 
             if (plugin) {
                 try {
-                    qiblaListener = await plugin.addListener('heading',
+                    const handle = await plugin.addListener('heading',
                         event => qiblaUpdate(event.heading, event.accuracy));
+
+                    if (token !== qiblaToken) {
+                        handle.remove();
+                        return;
+                    }
+
+                    qiblaListener = handle;
 
                     const result = await plugin.start({
                         lat: Number(loc.lat),
                         lng: Number(loc.lng)
                     });
 
-                    if (!result || result.available === false) {
-                        qiblaSetStatus(
+                    if (token === qiblaToken &&
+                        (!result || result.available === false)) {
+                        qiblaNoSensor(
                             'جهازك لا يحتوي مستشعر اتجاه. اتجاه القبلة ' +
-                            'موضح أدناه بالدرجات من الشمال.', true);
+                            'موضح بالدرجات من الشمال.');
                     }
                 } catch (error) {
-                    qiblaSetStatus('تعذّر تشغيل البوصلة على هذا الجهاز.', true);
+                    if (token === qiblaToken) {
+                        qiblaNoSensor('تعذّر تشغيل البوصلة على هذا الجهاز.');
+                    }
                 }
 
                 return;
             }
 
-            // خارج التطبيق: قراءة تقريبية من المتصفح (تعمل بدقة أفضل والجوال مسطّح)
+            // خارج التطبيق: قراءة تقريبية من المتصفح (الأفضل والجوال مسطّح)
             if ('ondeviceorientationabsolute' in window) {
                 qiblaWebHandler = event => {
                     if (typeof event.alpha === 'number') {
@@ -2260,12 +2589,106 @@
                 };
                 window.addEventListener(
                     'deviceorientationabsolute', qiblaWebHandler, true);
-                note.textContent +=
+                document.getElementById('qibla-note').textContent +=
                     ' الدقة داخل التطبيق أفضل منها في المتصفح.';
             } else {
-                qiblaSetStatus(
+                qiblaNoSensor(
                     'البوصلة الحية متاحة داخل التطبيق فقط. اتجاه القبلة ' +
-                    'موضح أدناه بالدرجات من الشمال.', true);
+                    'موضح بالدرجات من الشمال.');
+            }
+        }
+
+        function homeQiblaTap() {
+            if (!document.getElementById('home-qibla')
+                .classList.contains('no-loc')) {
+                showPage('qibla');
+            }
+        }
+
+        // ---------- تحديد الموقع (مشترك بين كل الصفحات) ----------
+        let appLocating = false;
+
+        function locMsg(text) {
+            document.querySelectorAll('.loc-msg').forEach(el => {
+                el.textContent = text || '';
+            });
+        }
+
+        function locBusy(busy) {
+            document.querySelectorAll('.loc-btn').forEach(button => {
+                if (!button.dataset.label) {
+                    button.dataset.label = button.textContent;
+                }
+
+                button.disabled = busy;
+                button.textContent = busy
+                    ? 'جارٍ تحديد موقعك...' : button.dataset.label;
+            });
+        }
+
+        function appLocate() {
+            if (appLocating) {
+                return;
+            }
+
+            if (!navigator.geolocation) {
+                locMsg('هذا الجهاز لا يدعم تحديد الموقع. اختر مدينتك يدوياً.');
+                return;
+            }
+
+            appLocating = true;
+            locMsg('');
+            locBusy(true);
+
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    const loc = {
+                        name: 'موقعي الحالي',
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        auto: true
+                    };
+
+                    timesStore(TIMES_LOC_KEY, loc);
+                    timesLoc = loc;
+                    appLocating = false;
+                    locBusy(false);
+                    locMsg('');
+
+                    try { notifReschedule(); } catch (error) { /* لا شيء */ }
+
+                    appLocationChanged();
+                },
+                () => {
+                    appLocating = false;
+                    locBusy(false);
+                    locMsg(
+                        'تعذّر تحديد موقعك. اسمح للتطبيق بالوصول للموقع ' +
+                        'من إعدادات الجوال، أو اختر مدينتك يدوياً.');
+                },
+                { timeout: 15000, maximumAge: 600000 }
+            );
+        }
+
+        function appLocationChanged() {
+            if (currentPage === 'home') {
+                homeRefresh();
+            }
+
+            if (currentPage === 'home' || currentPage === 'qibla') {
+                qiblaEnsure();
+            }
+
+            if (currentPage === 'times' && timesInit && timesLoc) {
+                timesSetLocation(timesLoc, false);
+            }
+        }
+
+        function homeCityTap() {
+            if (timesStore(TIMES_LOC_KEY)) {
+                showPage('times');
+            } else {
+                appLocate();
             }
         }
 
@@ -4480,8 +4903,8 @@
             if (!loc) {
                 homeDay = null;
                 document.getElementById('home-city').textContent =
-                    '📍 حدّد موقعك';
-                homeMsg('اضغط هنا لاختيار مدينتك');
+                    '📍 تحديد موقعي';
+                homeMsg('حدّد موقعك لعرض أوقات الصلاة');
                 homeRenderDate();
                 return;
             }
