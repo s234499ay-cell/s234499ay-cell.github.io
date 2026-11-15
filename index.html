@@ -112,112 +112,6 @@
             font-size: 23px;
         }
 
-        .tour-shield {
-            position: fixed;
-            inset: 0;
-            z-index: 2000;
-        }
-
-        .tour-spot {
-            position: fixed;
-            z-index: 2001;
-            border: 2px solid var(--gold);
-            border-radius: 16px;
-            box-shadow: 0 0 0 9999px rgba(8, 8, 7, .78);
-            pointer-events: none;
-            transition: top .28s ease, left .28s ease,
-                width .28s ease, height .28s ease;
-        }
-
-        .tour-card {
-            position: fixed;
-            z-index: 2002;
-            width: min(320px, calc(100vw - 24px));
-            padding: 16px 16px 14px;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            background: var(--surface);
-            box-shadow: 0 12px 34px rgba(0, 0, 0, .55),
-                inset -3px 0 0 var(--gold);
-            transition: top .28s ease, left .28s ease;
-        }
-
-        .tour-title {
-            margin: 0 0 6px;
-            font-size: 1.05rem;
-            font-weight: 700;
-        }
-
-        .tour-text {
-            margin: 0 0 14px;
-            color: var(--muted);
-            font-size: .92rem;
-            line-height: 1.8;
-        }
-
-        .tour-dots {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 12px;
-        }
-
-        .tour-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--surface-soft);
-            transition: width .2s, background .2s;
-        }
-
-        .tour-dot.on {
-            width: 20px;
-            border-radius: 999px;
-            background: var(--gold);
-        }
-
-        .tour-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .tour-btn {
-            padding: 8px 16px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            background: transparent;
-            color: var(--text);
-            font: inherit;
-            font-size: .9rem;
-        }
-
-        .tour-btn.primary {
-            border-color: var(--gold);
-            background: var(--gold);
-            color: #151411;
-            font-weight: 700;
-        }
-
-        .tour-btn.skip {
-            margin-inline-start: auto;
-            padding-inline: 6px;
-            border-color: transparent;
-            color: var(--muted);
-        }
-
-        .tour-btn:focus-visible {
-            outline: 2px solid #e4c982;
-            outline-offset: 2px;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .tour-spot,
-            .tour-card,
-            .tour-dot {
-                transition: none;
-            }
-        }
-
         .boot-splash {
             display: grid;
             min-height: 60vh;
@@ -226,53 +120,6 @@
 
         .boot-splash .auth-mark {
             opacity: .7;
-        }
-
-        .account-btn {
-            display: none;
-            width: 36px;
-            height: 36px;
-            border: 0;
-            border-radius: 50%;
-            background: var(--gold);
-            color: #151411;
-            font-size: 1rem;
-            font-weight: 700;
-            place-items: center;
-        }
-
-        .account-btn.show {
-            display: grid;
-        }
-
-        .account-btn:focus-visible {
-            outline: 2px solid #e4c982;
-            outline-offset: 2px;
-        }
-
-        .account-menu {
-            position: fixed;
-            top: 64px;
-            left: 12px;
-            z-index: 1003;
-            display: none;
-            width: min(280px, calc(100vw - 24px));
-            padding: 6px;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            background: var(--surface);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
-        }
-
-        .account-menu.open {
-            display: block;
-        }
-
-        .account-head {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 10px;
         }
 
         .account-avatar,
@@ -289,10 +136,6 @@
             place-items: center;
         }
 
-        .account-info {
-            min-width: 0;
-        }
-
         .account-name {
             font-weight: 700;
         }
@@ -303,30 +146,6 @@
             font-size: .8rem;
             text-overflow: ellipsis;
             white-space: nowrap;
-        }
-
-        .account-sep {
-            height: 1px;
-            margin: 6px 4px;
-            background: var(--border);
-        }
-
-        .account-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            padding: 11px 10px;
-            border: 0;
-            border-radius: 10px;
-            background: transparent;
-            color: var(--text);
-            font: inherit;
-            text-align: start;
-        }
-
-        .account-item:hover {
-            background: var(--surface-soft);
         }
 
         .profile-card {
@@ -428,6 +247,32 @@
             right: 0;
             visibility: visible;
             transition: right .25s ease, visibility 0s;
+        }
+
+        .sidebar-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            width: 100%;
+            padding: 6px 10px 10px;
+            border: 0;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--text);
+            font: inherit;
+            text-align: center;
+        }
+
+        .sidebar-profile:hover {
+            background: var(--surface-soft);
+        }
+
+        .sidebar-profile .account-avatar {
+            width: 68px;
+            height: 68px;
+            margin-bottom: 4px;
+            font-size: 1.7rem;
         }
 
         .sidebar-title {
@@ -1512,53 +1357,29 @@
                     onclick="toggleSidebar()">☰</button>
             <span class="brand">يَقينُ</span>
         </div>
-        <button class="account-btn"
-                id="account-btn"
-                type="button"
-                aria-label="قائمة الحساب"
-                aria-haspopup="menu"
-                aria-expanded="false"
-                aria-controls="account-menu"
-                onclick="toggleAccountMenu(event)"></button>
     </nav>
 
     <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
-    <div class="account-menu" id="account-menu" role="menu">
-        <div class="account-head">
-            <div class="account-avatar" id="account-avatar-big"></div>
-            <div class="account-info">
+    <aside class="sidebar" id="sidebar" aria-label="القائمة الرئيسية">
+        <div id="sidebar-profile-wrap">
+            <button class="sidebar-profile" type="button"
+                    onclick="showPage('profile')">
+                <div class="account-avatar" id="account-avatar-big"></div>
                 <div class="account-name" id="account-name"></div>
                 <div class="account-sub" id="account-sub"></div>
-            </div>
+            </button>
+            <div class="sidebar-sep"></div>
         </div>
-        <div class="account-sep"></div>
-        <button class="account-item" type="button" role="menuitem"
-                onclick="showPage('profile')">
-            <span class="sidebar-icon">👤</span>الملف الشخصي
-        </button>
-        <button class="account-item" type="button" role="menuitem"
-                onclick="showPage('settings')">
-            <span class="sidebar-icon">⚙️</span>الإعدادات
-        </button>
-        <div class="account-sep"></div>
-        <button class="account-item" type="button" role="menuitem"
-                id="account-link" onclick="showPage('auth')">
-            <span class="sidebar-icon">🔗</span>تسجيل الدخول / إنشاء حساب
-        </button>
-        <button class="account-item" type="button" role="menuitem"
-                id="account-logout" onclick="handleLogout()">
-            <span class="sidebar-icon">🚪</span>تسجيل الخروج
-        </button>
-    </div>
-
-    <aside class="sidebar" id="sidebar" aria-label="القائمة الرئيسية">
         <div class="sidebar-title">القائمة</div>
         <a data-page="home" onclick="showPage('home')"><span class="sidebar-icon">🏠</span>الرئيسية</a>
         <a data-page="times" onclick="showPage('times')"><span class="sidebar-icon">🕋</span>مواقيت الصلاة</a>
         <a data-page="adhkar" onclick="showPage('adhkar')"><span class="sidebar-icon">🤲</span>الأذكار</a>
         <a data-page="prayer" onclick="showPage('prayer')"><span class="sidebar-icon">📿</span>أحكام الصلاة</a>
         <a data-page="settings" onclick="showPage('settings')"><span class="sidebar-icon">⚙️</span>الإعدادات</a>
+        <div class="sidebar-sep"></div>
+        <a id="account-link" data-page="auth" onclick="showPage('auth')"><span class="sidebar-icon">🔗</span>تسجيل الدخول / إنشاء حساب</a>
+        <a id="account-logout" onclick="handleLogout()" style="display:none"><span class="sidebar-icon">🚪</span>تسجيل الخروج</a>
     </aside>
 
     <main>
@@ -1902,7 +1723,6 @@
 
         function showPage(id, isGoingBack = false) {
             closeSidebar();
-            closeAccountMenu();
             markSidebar(id);
 
             if (id === 'auth') {
@@ -1926,7 +1746,6 @@
             if (id === 'home') {
                 document.getElementById('home').classList.add('active');
                 homeRefresh();
-                maybeStartTour();
                 return;
             }
 
@@ -2279,7 +2098,6 @@
         }
 
         function renderAccount() {
-            const button = document.getElementById('account-btn');
             const identity = hasIdentity();
             const guest = isGuestAccount();
             const email = currentUser ? (currentUser.email || '') : '';
@@ -2287,8 +2105,8 @@
             const photo = avatarSrc();
             const letter = accountInitial();
 
-            button.classList.toggle('show', identity);
-            paintAvatar(button, photo, letter);
+            document.getElementById('sidebar-profile-wrap').style.display =
+                identity ? 'block' : 'none';
             paintAvatar(
                 document.getElementById('account-avatar-big'), photo, letter);
             paintAvatar(
@@ -2321,38 +2139,6 @@
                     ? '' : accountName();
             }
         }
-
-        function toggleAccountMenu(event) {
-            if (event) {
-                event.stopPropagation();
-            }
-
-            const menu = document.getElementById('account-menu');
-            const open = !menu.classList.contains('open');
-
-            closeSidebar();
-            menu.classList.toggle('open', open);
-            document.getElementById('account-btn')
-                .setAttribute('aria-expanded', String(open));
-        }
-
-        function closeAccountMenu() {
-            document.getElementById('account-menu').classList.remove('open');
-            document.getElementById('account-btn')
-                .setAttribute('aria-expanded', 'false');
-        }
-
-        document.addEventListener('click', event => {
-            if (!event.target.closest('#account-menu, #account-btn')) {
-                closeAccountMenu();
-            }
-        });
-
-        document.addEventListener('keydown', event => {
-            if (event.key === 'Escape') {
-                closeAccountMenu();
-            }
-        });
 
         function prepareAuthPage() {
             const identity = hasIdentity();
@@ -2433,8 +2219,6 @@
         }
 
         async function handleLogout() {
-            closeAccountMenu();
-
             try {
                 const { error } =
                     await supabaseClient.auth.signOut();
@@ -4788,12 +4572,7 @@
 
             if (IS_NATIVE && AppPlugin && AppPlugin.addListener) {
                 AppPlugin.addListener('backButton', () => {
-                    if (tourActive()) {
-                        endTour();
-                    } else if (document.getElementById('account-menu')
-                        .classList.contains('open')) {
-                        closeAccountMenu();
-                    } else if (document.getElementById('sidebar')
+                    if (document.getElementById('sidebar')
                         .classList.contains('active')) {
                         closeSidebar();
                     } else if (currentPage === 'auth' && hasIdentity()) {
@@ -4819,202 +4598,6 @@
             } else {
                 goBack();
             }
-        }
-
-        // ---------- الجولة التعريفية (تظهر مرة واحدة فقط) ----------
-        const TOUR_KEY = 'yaqeen-tour-done';
-
-        const TOUR_STEPS = [
-            {
-                target: '#home-hero',
-                title: 'الصلاة القادمة',
-                text: 'هنا ترى الصلاة القادمة والوقت المتبقي لها مع جدول ' +
-                    'صلوات اليوم. اضغط عليها لفتح صفحة المواقيت.'
-            },
-            {
-                target: '#hamburger',
-                title: 'قائمة التطبيق',
-                text: 'من هنا تصل إلى المواقيت والأذكار (ومنها الأدعية) ' +
-                    'وأحكام الصلاة والإعدادات.'
-            },
-            {
-                target: '#account-btn',
-                title: 'حسابك',
-                text: 'صورتك وملفك الشخصي، وتسجيل الدخول أو الخروج.'
-            },
-            {
-                target: '#hamburger',
-                title: 'الإشعارات',
-                text: 'لتفعيل إشعارات الأذان والإشعار الدائم: ' +
-                    'القائمة ← الإعدادات ← الإشعارات.'
-            }
-        ];
-
-        let tourIndex = -1;
-        let tourSteps = [];
-
-        function tourActive() {
-            return tourIndex >= 0;
-        }
-
-        function maybeStartTour() {
-            if (tourActive() || lsGet(TOUR_KEY) === '1') {
-                return;
-            }
-
-            setTimeout(() => {
-                if (!tourActive() && currentPage === 'home' &&
-                    lsGet(TOUR_KEY) !== '1') {
-                    startTour();
-                }
-            }, 900);
-        }
-
-        function startTour() {
-            tourSteps = TOUR_STEPS.filter(step => {
-                const element = document.querySelector(step.target);
-                return element && element.getClientRects().length;
-            });
-
-            if (!tourSteps.length) {
-                return;
-            }
-
-            const shield = document.createElement('div');
-            shield.className = 'tour-shield';
-            shield.id = 'tour-shield';
-
-            const spot = document.createElement('div');
-            spot.className = 'tour-spot';
-            spot.id = 'tour-spot';
-
-            const card = document.createElement('div');
-            card.className = 'tour-card';
-            card.id = 'tour-card';
-            card.setAttribute('role', 'dialog');
-            card.setAttribute('aria-modal', 'true');
-            card.setAttribute('aria-labelledby', 'tour-title');
-            card.setAttribute('aria-describedby', 'tour-text');
-            card.innerHTML =
-                '<div class="tour-dots" id="tour-dots"></div>' +
-                '<h3 class="tour-title" id="tour-title"></h3>' +
-                '<p class="tour-text" id="tour-text"></p>' +
-                '<div class="tour-actions">' +
-                '<button type="button" class="tour-btn primary" ' +
-                'id="tour-next"></button>' +
-                '<button type="button" class="tour-btn" ' +
-                'id="tour-back">رجوع</button>' +
-                '<button type="button" class="tour-btn skip" ' +
-                'id="tour-skip">تخطي</button></div>';
-
-            document.body.append(shield, spot, card);
-
-            document.getElementById('tour-next')
-                .addEventListener('click', () => tourGo(tourIndex + 1));
-            document.getElementById('tour-back')
-                .addEventListener('click', () => tourGo(tourIndex - 1));
-            document.getElementById('tour-skip')
-                .addEventListener('click', endTour);
-
-            window.addEventListener('resize', tourLayout);
-            document.addEventListener('keydown', tourKey);
-
-            tourIndex = 0;
-            tourRender();
-        }
-
-        function tourKey(event) {
-            if (event.key === 'Escape') {
-                endTour();
-            }
-        }
-
-        function tourGo(index) {
-            if (index >= tourSteps.length) {
-                endTour();
-                return;
-            }
-
-            tourIndex = Math.max(index, 0);
-            tourRender();
-        }
-
-        function tourRender() {
-            const step = tourSteps[tourIndex];
-            const last = tourIndex === tourSteps.length - 1;
-
-            document.getElementById('tour-title').textContent = step.title;
-            document.getElementById('tour-text').textContent = step.text;
-            document.getElementById('tour-next').textContent =
-                last ? 'ابدأ' : 'التالي';
-            document.getElementById('tour-back').style.display =
-                tourIndex === 0 ? 'none' : '';
-            document.getElementById('tour-skip').style.display =
-                last ? 'none' : '';
-            document.getElementById('tour-dots').innerHTML =
-                tourSteps.map((_, i) =>
-                    '<span class="tour-dot' +
-                    (i === tourIndex ? ' on' : '') + '"></span>'
-                ).join('');
-
-            const target = document.querySelector(step.target);
-            target.scrollIntoView({ block: 'center' });
-
-            tourLayout();
-            document.getElementById('tour-next').focus({ preventScroll: true });
-        }
-
-        function tourLayout() {
-            if (!tourActive()) {
-                return;
-            }
-
-            const target = document.querySelector(
-                tourSteps[tourIndex].target);
-            const spot = document.getElementById('tour-spot');
-            const card = document.getElementById('tour-card');
-            const pad = 6;
-            const rect = target.getBoundingClientRect();
-            const vw = window.innerWidth;
-            const vh = window.innerHeight;
-
-            spot.style.top = rect.top - pad + 'px';
-            spot.style.left = rect.left - pad + 'px';
-            spot.style.width = rect.width + pad * 2 + 'px';
-            spot.style.height = rect.height + pad * 2 + 'px';
-
-            const cardWidth = card.offsetWidth;
-            const cardHeight = card.offsetHeight;
-            let left = rect.left + rect.width / 2 - cardWidth / 2;
-            left = Math.min(Math.max(left, 12), vw - cardWidth - 12);
-
-            let top = rect.bottom + pad + 14;
-
-            if (top + cardHeight > vh - 12) {
-                top = rect.top - pad - 14 - cardHeight;
-            }
-
-            if (top < 12) {
-                top = vh - cardHeight - 12;
-            }
-
-            card.style.left = left + 'px';
-            card.style.top = top + 'px';
-        }
-
-        function endTour() {
-            lsSet(TOUR_KEY, '1');
-            tourIndex = -1;
-            window.removeEventListener('resize', tourLayout);
-            document.removeEventListener('keydown', tourKey);
-
-            ['tour-shield', 'tour-spot', 'tour-card'].forEach(id => {
-                const element = document.getElementById(id);
-
-                if (element) {
-                    element.remove();
-                }
-            });
         }
 
         function leaveSplash() {
