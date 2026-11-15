@@ -416,6 +416,36 @@
             color: var(--primary-contrast);
         }
 
+        .google-button {
+            display: none;
+            width: 100%;
+            margin-top: 10px;
+            padding: 11px 15px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+            color: var(--text);
+            font-weight: bold;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .google-button:disabled {
+            opacity: .6;
+        }
+
+        .google-button .g-mark {
+            display: inline-grid;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fff;
+            color: #4285f4;
+            font: 700 .95rem Arial, sans-serif;
+            place-items: center;
+        }
+
         .guest-button {
             border: 1px solid var(--border);
             background: var(--surface);
@@ -1413,6 +1443,11 @@
                         type="button"
                         onclick="handleAuth()">دخول</button>
 
+                <button class="google-button"
+                        id="google-btn"
+                        type="button"
+                        onclick="handleGoogle()"><span class="g-mark">G</span>المتابعة مع قوقل</button>
+
                 <button class="guest-button"
                         id="guest-btn"
                         type="button"
@@ -2140,8 +2175,103 @@
             }
         }
 
+        // ---------- تسجيل الدخول بقوقل (داخل تطبيق أندرويد فقط) ----------
+        const GOOGLE_WEB_CLIENT_ID =
+            '897898009603-l9cmtq3odouksftrfrf79gmcedhe9ra7.apps.googleusercontent.com';
+        let googleReady = false;
+
+        function googlePlugin() {
+            const cap = window.Capacitor;
+
+            if (!(cap && cap.isNativePlatform && cap.isNativePlatform())) {
+                return null;
+            }
+
+            if (cap.Plugins && cap.Plugins.SocialLogin) {
+                return cap.Plugins.SocialLogin;
+            }
+
+            if (cap.registerPlugin) {
+                try {
+                    return cap.registerPlugin('SocialLogin');
+                } catch (error) {
+                    return null;
+                }
+            }
+
+            return null;
+        }
+
+        function showGoogleButton() {
+            const button = document.getElementById('google-btn');
+
+            if (button) {
+                button.style.display = googlePlugin() ? 'flex' : 'none';
+            }
+        }
+
+        async function handleGoogle() {
+            const plugin = googlePlugin();
+            const button = document.getElementById('google-btn');
+
+            if (!plugin) {
+                alert('الدخول بقوقل متاح داخل التطبيق فقط.');
+                return;
+            }
+
+            button.disabled = true;
+
+            try {
+                if (!googleReady) {
+                    await plugin.initialize({
+                        google: {
+                            webClientId: GOOGLE_WEB_CLIENT_ID,
+                            mode: 'online'
+                        }
+                    });
+                    googleReady = true;
+                }
+
+                const response = await plugin.login({
+                    provider: 'google',
+                    options: { scopes: ['email', 'profile'] }
+                });
+                const token = response && response.result &&
+                    response.result.idToken;
+
+                if (!token) {
+                    throw new Error('no-token');
+                }
+
+                const { error } =
+                    await supabaseClient.auth.signInWithIdToken({
+                        provider: 'google',
+                        token
+                    });
+
+                if (error) {
+                    throw error;
+                }
+
+                lsRemove(GUEST_KEY);
+                await checkSession();
+                pageHistory.length = 0;
+                showPage('home');
+            } catch (error) {
+                const text = String((error && error.message) || error || '');
+
+                if (!/cancel|dismiss|closed/i.test(text)) {
+                    alert('تعذّر تسجيل الدخول بقوقل. تأكد من اتصالك بالإنترنت وحاول مرة أخرى.');
+                    console.error('Google sign-in:', text);
+                }
+            } finally {
+                button.disabled = false;
+            }
+        }
+
         function prepareAuthPage() {
             const identity = hasIdentity();
+            showGoogleButton();
 
             document.getElementById('auth-back').style.display =
                 identity ? 'flex' : 'none';
