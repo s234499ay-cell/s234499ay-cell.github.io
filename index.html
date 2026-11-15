@@ -234,6 +234,30 @@
             font-size: 1.9rem;
         }
 
+        .has-photo {
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: transparent;
+        }
+
+        .profile-photo-actions {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .photo-button {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: transparent;
+            color: var(--text);
+            font: inherit;
+            font-size: .82rem;
+        }
+
         .profile-type {
             margin-bottom: 16px;
             color: var(--muted);
@@ -1613,6 +1637,15 @@
 
             <div class="settings-card profile-card">
                 <div class="profile-avatar" id="profile-avatar"></div>
+                <div class="profile-photo-actions">
+                    <button class="photo-button" type="button"
+                            onclick="document.getElementById('avatar-file').click()">تغيير الصورة</button>
+                    <button class="photo-button" type="button"
+                            id="photo-remove"
+                            onclick="removeAvatar()">حذف الصورة</button>
+                </div>
+                <input type="file" id="avatar-file" accept="image/*"
+                       hidden onchange="pickAvatar(event)">
                 <div class="profile-type" id="profile-type"></div>
 
                 <label class="profile-label" for="profile-name">الاسم</label>
@@ -1967,17 +2000,194 @@
             return name === 'ضيف' ? 'ض' : name.charAt(0).toUpperCase();
         }
 
+        const AVATAR_KEY = 'yaqeen-avatar-guest';
+
+        function avatarSrc() {
+            if (currentUser) {
+                return (currentUser.user_metadata &&
+                    currentUser.user_metadata.avatar_url) || '';
+            }
+
+            return lsGet(AVATAR_KEY) || '';
+        }
+
+        function paintAvatar(element, src, letter) {
+            if (element.dataset.src === src && element.dataset.letter === letter) {
+                return;
+            }
+
+            element.dataset.src = src;
+            element.dataset.letter = letter;
+
+            const showLetter = () => {
+                element.classList.remove('has-photo');
+                element.style.backgroundImage = '';
+                element.textContent = letter;
+            };
+
+            if (!src) {
+                showLetter();
+                return;
+            }
+
+            const probe = new Image();
+
+            probe.onload = () => {
+                if (element.dataset.src !== src) {
+                    return;
+                }
+
+                element.classList.add('has-photo');
+                element.style.backgroundImage =
+                    'url("' + src.replace(/"/g, '%22') + '")';
+                element.textContent = '';
+            };
+
+            probe.onerror = showLetter;
+            probe.src = src;
+        }
+
+        // يقصّ الصورة مربعة من الوسط ويصغّرها إلى ٢٥٦ بكسل
+        function squareImage(file) {
+            return new Promise((resolve, reject) => {
+                const url = URL.createObjectURL(file);
+                const image = new Image();
+
+                image.onload = () => {
+                    const side = Math.min(image.width, image.height);
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 256;
+                    canvas.height = 256;
+
+                    canvas.getContext('2d').drawImage(
+                        image,
+                        (image.width - side) / 2,
+                        (image.height - side) / 2,
+                        side, side, 0, 0, 256, 256
+                    );
+
+                    URL.revokeObjectURL(url);
+                    canvas.toBlob(blob => {
+                        blob ? resolve({
+                            blob,
+                            dataUrl: canvas.toDataURL('image/jpeg', 0.85)
+                        }) : reject(new Error('blob'));
+                    }, 'image/jpeg', 0.85);
+                };
+
+                image.onerror = () => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('image'));
+                };
+
+                image.src = url;
+            });
+        }
+
+        function profileMessage(text) {
+            const status = document.getElementById('profile-status');
+            status.textContent = text;
+            setTimeout(() => {
+                if (status.textContent === text) {
+                    status.textContent = '';
+                }
+            }, 3000);
+        }
+
+        async function pickAvatar(event) {
+            const input = event.target;
+            const file = input.files && input.files[0];
+            input.value = '';
+
+            if (!file) {
+                return;
+            }
+
+            try {
+                const { blob, dataUrl } = await squareImage(file);
+
+                if (!currentUser) {
+                    // الضيف: صورة على الجهاز فقط
+                    lsSet(AVATAR_KEY, dataUrl);
+                    renderAccount();
+                    profileMessage('تم حفظ الصورة');
+                    return;
+                }
+
+                profileMessage('جارٍ رفع الصورة...');
+
+                const path = currentUser.id + '/avatar.jpg';
+                const bucket = supabaseClient.storage.from('avatars');
+                const { error } = await bucket.upload(path, blob, {
+                    contentType: 'image/jpeg',
+                    upsert: true
+                });
+
+                if (error) {
+                    throw error;
+                }
+
+                const url = bucket.getPublicUrl(path).data.publicUrl +
+                    '?v=' + Date.now();
+                const result = await supabaseClient.auth.updateUser({
+                    data: { avatar_url: url }
+                });
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                currentUser = result.data.user || currentUser;
+                renderAccount();
+                profileMessage('تم حفظ الصورة');
+            } catch (error) {
+                profileMessage('تعذّر حفظ الصورة. حاول مرة أخرى.');
+            }
+        }
+
+        async function removeAvatar() {
+            try {
+                if (!currentUser) {
+                    lsRemove(AVATAR_KEY);
+                } else {
+                    await supabaseClient.storage.from('avatars')
+                        .remove([currentUser.id + '/avatar.jpg']);
+
+                    const result = await supabaseClient.auth.updateUser({
+                        data: { avatar_url: null }
+                    });
+
+                    if (result.error) {
+                        throw result.error;
+                    }
+
+                    currentUser = result.data.user || currentUser;
+                }
+
+                renderAccount();
+                profileMessage('تم حذف الصورة');
+            } catch (error) {
+                profileMessage('تعذّر حذف الصورة. حاول مرة أخرى.');
+            }
+        }
+
         function renderAccount() {
             const button = document.getElementById('account-btn');
             const identity = hasIdentity();
             const guest = isGuestAccount();
             const email = currentUser ? (currentUser.email || '') : '';
 
-            button.classList.toggle('show', identity);
-            button.textContent = accountInitial();
+            const photo = avatarSrc();
+            const letter = accountInitial();
 
-            document.getElementById('account-avatar-big').textContent =
-                accountInitial();
+            button.classList.toggle('show', identity);
+            paintAvatar(button, photo, letter);
+            paintAvatar(
+                document.getElementById('account-avatar-big'), photo, letter);
+            paintAvatar(
+                document.getElementById('profile-avatar'), photo, letter);
+            document.getElementById('photo-remove').style.display =
+                photo ? 'inline-block' : 'none';
             document.getElementById('account-name').textContent =
                 accountName();
             document.getElementById('account-sub').textContent =
@@ -1988,8 +2198,6 @@
             document.getElementById('account-logout').style.display =
                 guest ? 'none' : 'flex';
 
-            document.getElementById('profile-avatar').textContent =
-                accountInitial();
             document.getElementById('profile-type').textContent =
                 guest ? 'حساب ضيف' : 'حساب مسجّل';
             document.getElementById('profile-email').textContent =
