@@ -2234,7 +2234,7 @@
 
                 const response = await plugin.login({
                     provider: 'google',
-                    options: { scopes: ['email', 'profile'] }
+                    options: {}
                 });
                 const token = response && response.result &&
                     response.result.idToken;
