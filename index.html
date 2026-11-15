@@ -2261,7 +2261,9 @@
                 const text = String((error && error.message) || error || '');
 
                 if (!/cancel|dismiss|closed/i.test(text)) {
-                    alert('تعذّر تسجيل الدخول بقوقل. تأكد من اتصالك بالإنترنت وحاول مرة أخرى.');
+                    const code = error && error.code ? ' [' + error.code + ']' : '';
+                    alert('تعذّر تسجيل الدخول بقوقل.\n\nالتفاصيل: ' +
+                        text.slice(0, 300) + code);
                     console.error('Google sign-in:', text);
                 }
             } finally {
