@@ -1,11 +1,13 @@
-const CACHE_NAME = 'yaqeen-v4';
+const CACHE_NAME = 'yaqeen-v5';
 
 const APP_SHELL = [
     './',
     './index.html',
     './manifest.json',
     './icon-192.png',
-    './icon-512.png'
+    './icon-512.png',
+    './QuranMushaf.ttf',
+    './mushaf.json'
 ];
 
 self.addEventListener('install', event => {

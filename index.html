@@ -633,6 +633,21 @@
             display: block;
         }
 
+
+        @font-face { font-family: 'QuranMushaf'; src: url('QuranMushaf.ttf') format('truetype'); font-display: swap; }
+        .mushaf-search { width: 100%; box-sizing: border-box; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-size: 16px; margin: 4px 0 12px; }
+        .mushaf-resume { width: 100%; text-align: right; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--gold); background: var(--surface); color: var(--text); font: inherit; font-weight: 700; margin-bottom: 12px; cursor: pointer; }
+        .mushaf-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .mushaf-item { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; cursor: pointer; text-align: right; }
+        .mushaf-item .mnum { min-width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; color: var(--gold); border: 1px solid var(--gold); }
+        .mushaf-bar { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 8px; padding: 10px 0; background: var(--background); }
+        .mushaf-bar .mtitle { flex: 1; text-align: center; font-weight: 800; color: var(--gold); }
+        .mushaf-bar button { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 10px; padding: 8px 12px; font: inherit; cursor: pointer; }
+        .mushaf-text { direction: rtl; font-family: 'QuranMushaf', serif; font-size: var(--mfs, 30px); line-height: 2.5; text-align: justify; text-align-last: center; color: var(--text); padding: 18px 14px 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; white-space: normal; word-spacing: 2px; }
+        .mushaf-bas { display: block; text-align: center; text-align-last: center; font-size: 1.2em; line-height: 2; margin-bottom: 8px; direction: ltr; }
+        .mushaf-nav { display: flex; gap: 8px; margin-top: 12px; }
+        .mushaf-nav button { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; cursor: pointer; }
+        .mushaf-nav button:disabled { opacity: .4; }
         .page {
             display: none;
             width: min(100%, 540px);
@@ -1709,6 +1724,7 @@
         <a data-page="times" onclick="showPage('times')"><span class="sidebar-icon">🕋</span>مواقيت الصلاة</a>
         <a data-page="adhkar" onclick="showPage('adhkar')"><span class="sidebar-icon">🤲</span>الأذكار</a>
         <a data-page="prayer" onclick="showPage('prayer')"><span class="sidebar-icon">📿</span>أحكام الصلاة</a>
+        <a data-page="mushaf" onclick="showPage('mushaf')"><span class="sidebar-icon">📖</span>المصحف</a>
         <a data-page="qibla" onclick="showPage('qibla')"><span class="sidebar-icon">🧭</span>القبلة</a>
         <a data-page="settings" onclick="showPage('settings')"><span class="sidebar-icon">⚙️</span>الإعدادات</a>
         <div class="sidebar-sep"></div>
@@ -1931,6 +1947,31 @@
             </div>
 
             <div id="recitations-list"></div>
+        </section>
+
+        <section id="mushaf" class="page">
+            <div class="subpage-back-row">
+                <button class="back-button" type="button" onclick="goBack()">← رجوع</button>
+            </div>
+            <h2 class="mosque-heading">المصحف الشريف</h2>
+            <div id="mushaf-list-view">
+                <button class="mushaf-resume" id="mushaf-resume" type="button" style="display:none" onclick="mushafResume()"></button>
+                <input class="mushaf-search" id="mushaf-search" type="search" placeholder="ابحث عن سورة…" oninput="mushafFilter()" autocomplete="off">
+                <div class="mushaf-list" id="mushaf-list"></div>
+            </div>
+            <div id="mushaf-read-view" style="display:none">
+                <div class="mushaf-bar">
+                    <button type="button" onclick="mushafShowList()">☰ السور</button>
+                    <div class="mtitle" id="mushaf-title"></div>
+                    <button type="button" onclick="mushafSize(-2)" aria-label="تصغير الخط">أ−</button>
+                    <button type="button" onclick="mushafSize(2)" aria-label="تكبير الخط">أ+</button>
+                </div>
+                <div class="mushaf-text" id="mushaf-text"></div>
+                <div class="mushaf-nav">
+                    <button type="button" id="mushaf-next" onclick="mushafOpen(mushafCur+1)">السورة التالية ←</button>
+                    <button type="button" id="mushaf-prev" onclick="mushafOpen(mushafCur-1)">→ السورة السابقة</button>
+                </div>
+            </div>
         </section>
 
         <section id="qibla" class="page">
@@ -2192,6 +2233,12 @@
             if (id === 'times') {
                 document.getElementById('times').classList.add('active');
                 openTimes();
+                return;
+            }
+
+            if (id === 'mushaf') {
+                document.getElementById('mushaf').classList.add('active');
+                mushafInit();
                 return;
             }
 
@@ -5652,6 +5699,92 @@
                 showPage('auth');
             }
         });
+    
+        /* ===== المصحف ===== */
+        let mushafData = null, mushafCur = -1, mushafLoading = false;
+        const MUSHAF_KEY = 'yaqeen-mushaf-pos';
+        const MUSHAF_FS_KEY = 'yaqeen-mushaf-fs';
+        function mfGet(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+        function mfSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+        function mfDigits(n) { return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]); }
+        async function mushafLoad() {
+            if (mushafData) return true;
+            if (mushafLoading) return false;
+            mushafLoading = true;
+            const list = document.getElementById('mushaf-list');
+            list.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted)">جارٍ تحميل المصحف…</div>';
+            try {
+                const r = await fetch('mushaf.json');
+                if (!r.ok) throw new Error('http ' + r.status);
+                mushafData = await r.json();
+                return true;
+            } catch (e) {
+                list.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted)">تعذّر تحميل المصحف. تأكد من الإنترنت ثم أعد المحاولة.</div>';
+                return false;
+            } finally { mushafLoading = false; }
+        }
+        async function mushafInit() {
+            const fs = mfGet(MUSHAF_FS_KEY);
+            if (fs) document.documentElement.style.setProperty('--mfs', fs + 'px');
+            if (!(await mushafLoad())) return;
+            mushafRenderList();
+            const pos = mfGet(MUSHAF_KEY), btn = document.getElementById('mushaf-resume');
+            if (pos && mushafData[pos.s]) {
+                btn.style.display = '';
+                btn.textContent = '📖 تابع القراءة: سورة ' + mushafData[pos.s].n;
+            } else btn.style.display = 'none';
+        }
+        function mushafRenderList() {
+            const q = document.getElementById('mushaf-search').value.trim()
+                .replace(/[ً-ٰٟ]/g, '').replace(/[أإآ]/g, 'ا');
+            document.getElementById('mushaf-list').innerHTML = mushafData.map((s, i) => {
+                const n = s.n.replace(/[أإآ]/g, 'ا');
+                return (!q || n.includes(q) || String(i + 1) === q)
+                    ? '<button class="mushaf-item" type="button" onclick="mushafOpen(' + i + ')"><span class="mnum">' + mfDigits(i + 1) + '</span>' + s.n + '</button>' : '';
+            }).join('');
+        }
+        function mushafFilter() { if (mushafData) mushafRenderList(); }
+        function mushafShowList() {
+            document.getElementById('mushaf-read-view').style.display = 'none';
+            document.getElementById('mushaf-list-view').style.display = '';
+            window.scrollTo(0, 0);
+            mushafInit();
+        }
+        function mushafOpen(i, y) {
+            if (!mushafData || i < 0 || i >= mushafData.length) return;
+            mushafCur = i;
+            document.getElementById('mushaf-title').textContent = 'سورة ' + mushafData[i].n;
+            const box = document.getElementById('mushaf-text'), full = mushafData[i].t, BAS = '\uE269\uE26A\uE26B';
+            box.textContent = '';
+            let body = full;
+            if (full.startsWith(BAS + ' ')) {
+                const b = document.createElement('div');
+                b.className = 'mushaf-bas';
+                b.textContent = BAS;
+                box.appendChild(b);
+                body = full.slice(BAS.length + 1);
+            }
+            box.appendChild(document.createTextNode(body.replace(/ /g, ' \u200F')));
+            document.getElementById('mushaf-prev').disabled = i === 0;
+            document.getElementById('mushaf-next').disabled = i === mushafData.length - 1;
+            document.getElementById('mushaf-list-view').style.display = 'none';
+            document.getElementById('mushaf-read-view').style.display = '';
+            mfSet(MUSHAF_KEY, { s: i, y: y || 0 });
+            window.scrollTo(0, y || 0);
+        }
+        function mushafResume() { const p = mfGet(MUSHAF_KEY); if (p) mushafOpen(p.s, p.y); }
+        function mushafSize(d) {
+            const cur = parseInt(getComputedStyle(document.getElementById('mushaf-text')).fontSize, 10) || 30;
+            const n = Math.max(20, Math.min(56, cur + d));
+            document.documentElement.style.setProperty('--mfs', n + 'px');
+            mfSet(MUSHAF_FS_KEY, n);
+        }
+        let mushafScrollT = null;
+        window.addEventListener('scroll', () => {
+            if (currentPage !== 'mushaf' || mushafCur < 0 || document.getElementById('mushaf-read-view').style.display === 'none') return;
+            clearTimeout(mushafScrollT);
+            mushafScrollT = setTimeout(() => mfSet(MUSHAF_KEY, { s: mushafCur, y: Math.round(window.scrollY) }), 400);
+        }, { passive: true });
     </script>
 </body>
 </html>
