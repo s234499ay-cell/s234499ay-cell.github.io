@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yaqeen-v5';
+const CACHE_NAME = 'yaqeen-v6';
 
 const APP_SHELL = [
     './',
@@ -7,6 +7,7 @@ const APP_SHELL = [
     './icon-192.png',
     './icon-512.png',
     './QuranMushaf.ttf',
+    './SurahNames.ttf',
     './mushaf.json'
 ];
 
