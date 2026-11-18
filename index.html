@@ -656,6 +656,10 @@
         .mpage.prev { animation: mpPrev .25s ease; }
         @keyframes mpNext { from { opacity: .2; transform: translateX(-30px); } to { opacity: 1; transform: none; } }
         @keyframes mpPrev { from { opacity: .2; transform: translateX(30px); } to { opacity: 1; transform: none; } }
+        .mhead.even { flex-direction: row-reverse; }
+        .mpage.odd { box-shadow: inset 22px 0 26px -16px rgba(0,0,0,.85), inset 0 0 60px rgba(0,0,0,.45), 0 0 0 1px #000; }
+        .mpage.evenp { box-shadow: inset -22px 0 26px -16px rgba(0,0,0,.85), inset 0 0 60px rgba(0,0,0,.45), 0 0 0 1px #000; }
+        .mpage { will-change: transform, opacity; }
         .mhead { display: flex; justify-content: space-between; align-items: center; color: var(--mgold); font-size: 13px; font-weight: 700; padding: 6px 8px 5px; margin: 0 2px 4px; border-bottom: 1px solid var(--mline); background: linear-gradient(90deg, transparent, rgba(212,179,110,.10), transparent); }
         .mlines { flex: 1; min-height: 0; display: grid; direction: rtl; font-family: 'QuranMushaf', serif; font-size: var(--mfs, 22px); color: var(--mink); }
         .mrow { display: flex; direction: rtl; align-items: center; justify-content: space-between; white-space: nowrap; min-width: 0; overflow: visible; }
@@ -5852,6 +5856,10 @@
             if (dir) { void pg.offsetWidth; pg.classList.add(dir > 0 ? 'next' : 'prev'); }
             const s = mushafSurahOf(mPageNo);
             document.getElementById('mushaf-title').textContent = 'سورة ' + s.n;
+            const odd = mPageNo % 2 === 1;
+            document.querySelector('.mhead').classList.toggle('even', !odd);
+            pg.classList.toggle('odd', odd);
+            pg.classList.toggle('evenp', !odd);
             document.getElementById('mh-surah').textContent = 'سورة ' + s.n;
             document.getElementById('mh-juz').textContent = 'الجزء ' + mfDigits(mPageNo < 22 ? 1 : Math.floor((mPageNo - 2) / 20) + 1);
             document.getElementById('mfoot').textContent = mfDigits(mPageNo);
@@ -5860,17 +5868,63 @@
             document.getElementById('mushaf-next').disabled = mPageNo === 604;
             mfSet(MUSHAF_KEY, { page: mPageNo });
         }
-        function mushafNext() { if (mPageNo < 604) mushafOpen(mPageNo + 1, 1); }
-        function mushafPrev() { if (mPageNo > 1) mushafOpen(mPageNo - 1, -1); }
+        let mBusy = false;
+        const mSleep = ms => new Promise(r => setTimeout(r, ms));
+        async function mushafTurn(sign) {
+            const pg = document.getElementById('mpage');
+            const np = mPageNo + sign;
+            if (np < 1 || np > 604) { pg.style.transition = 'transform .25s ease, opacity .25s'; pg.style.transform = ''; pg.style.opacity = ''; return; }
+            if (mBusy) return;
+            mBusy = true;
+            const W = pg.offsetWidth;
+            pg.style.transition = 'transform .17s ease-in, opacity .17s ease-in';
+            pg.style.transform = 'translateX(' + (sign * W) + 'px)';
+            pg.style.opacity = '0.15';
+            await mSleep(170);
+            await mushafOpen(np);
+            pg.style.transition = 'none';
+            pg.style.transform = 'translateX(' + (-sign * W * 0.3) + 'px)';
+            pg.style.opacity = '0.2';
+            void pg.offsetWidth;
+            pg.style.transition = 'transform .26s cubic-bezier(.2,.8,.2,1), opacity .26s ease-out';
+            pg.style.transform = '';
+            pg.style.opacity = '';
+            await mSleep(270);
+            pg.style.transition = '';
+            mBusy = false;
+        }
+        function mushafNext() { mushafTurn(1); }
+        function mushafPrev() { mushafTurn(-1); }
         (function () {
             document.body.appendChild(document.getElementById('mreader'));
             const st = document.getElementById('mstage');
-            let x0 = 0, y0 = 0;
-            st.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
-            st.addEventListener('touchend', e => {
-                const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
-                if (Math.abs(dx) > 50 && Math.abs(dy) < 70) { if (dx > 0) mushafNext(); else mushafPrev(); }
+            let x0 = 0, y0 = 0, t0 = 0, lock = null, dx = 0;
+            st.addEventListener('touchstart', e => {
+                if (mBusy) return;
+                x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now(); lock = null; dx = 0;
             }, { passive: true });
+            st.addEventListener('touchmove', e => {
+                if (mBusy) return;
+                const t = e.touches[0], mx = t.clientX - x0, my = t.clientY - y0;
+                if (!lock && (Math.abs(mx) > 8 || Math.abs(my) > 8)) lock = Math.abs(mx) > Math.abs(my) ? 'x' : 'y';
+                if (lock !== 'x') return;
+                const pg = document.getElementById('mpage'), W = pg.offsetWidth;
+                const sign = mx > 0 ? 1 : -1, np = mPageNo + sign;
+                dx = (np < 1 || np > 604) ? mx * 0.25 : mx;
+                pg.style.transition = 'none';
+                pg.style.transform = 'translateX(' + dx + 'px)';
+                pg.style.opacity = String(1 - Math.min(Math.abs(dx) / W, 1) * 0.6);
+            }, { passive: true });
+            const endDrag = () => {
+                if (lock !== 'x' || mBusy) { lock = null; return; }
+                lock = null;
+                const pg = document.getElementById('mpage'), W = pg.offsetWidth;
+                const v = dx / Math.max(1, Date.now() - t0), sign = dx > 0 ? 1 : -1;
+                if (Math.abs(dx) > W * 0.22 || Math.abs(v) > 0.45) mushafTurn(sign);
+                else { pg.style.transition = 'transform .22s ease-out, opacity .22s'; pg.style.transform = ''; pg.style.opacity = ''; }
+            };
+            st.addEventListener('touchend', endDrag, { passive: true });
+            st.addEventListener('touchcancel', endDrag, { passive: true });
             document.addEventListener('keydown', e => {
                 if (!mushafIsOpen()) return;
                 if (e.key === 'ArrowLeft') mushafNext();
