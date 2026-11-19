@@ -636,45 +636,52 @@
 
         @font-face { font-family: 'QuranMushaf'; src: url('QuranMushaf.ttf') format('truetype'); font-display: swap; }
         .mushaf-search { width: 100%; box-sizing: border-box; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-size: 16px; margin: 4px 0 12px; }
-        .mushaf-resume { width: 100%; text-align: right; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--gold); background: var(--surface); color: var(--text); font: inherit; font-weight: 700; margin-bottom: 12px; cursor: pointer; }
-        .mushaf-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .mushaf-item { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; cursor: pointer; text-align: right; }
-        .mushaf-item .mnum { min-width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; color: var(--gold); border: 1px solid var(--gold); }
         @font-face { font-family: 'SurahNames'; src: url('SurahNames.ttf') format('truetype'); font-display: swap; }
-        .mreader { --mbg:#0c0b08; --mpaper:#15130e; --mink:#efe6d0; --mgold:#d4b36e; --mline:#8a7140; position: fixed; inset: 0; z-index: 2000; display: none; flex-direction: column; background: var(--mbg); color: var(--mink); }
+        .mreader { --mbg:#14100a; --mpaper:#f7efd6; --mpaper2:#efe2b9; --mink:#1a1209; --mgreen:#1f5a47; --mgold:#a8802f; --mline:#b8923f; position: fixed; inset: 0; z-index: 2000; display: none; flex-direction: column; background: var(--mbg); color: #e9dcb8; }
         .mreader.open { display: flex; }
         .mreader, .mreader * { letter-spacing: 0 !important; }
         .mtop { display: flex; align-items: center; gap: 8px; padding: calc(env(safe-area-inset-top, 0px) + 8px) 10px 4px; }
-        .mtop .mtitle { flex: 1; text-align: center; font: inherit; font-weight: 800; color: var(--mgold); }
-        .mtop button, .mbot button { border: 1px solid var(--mline); background: transparent; color: var(--mink); border-radius: 10px; min-width: 40px; height: 36px; padding: 0 12px; font: inherit; cursor: pointer; }
+        .mtop .mtitle { flex: 1; text-align: center; font: inherit; font-weight: 800; color: #e9dcb8; }
+        .mtop button, .mbot button { border: 1px solid rgba(233,220,184,.35); background: transparent; color: #e9dcb8; border-radius: 10px; min-width: 40px; height: 36px; padding: 0 12px; font: inherit; cursor: pointer; }
         .mtop .spacer { width: 40px; }
         .mstage { flex: 1; min-height: 0; padding: 2px 6px; display: flex; touch-action: pan-y; }
-        .mpage { flex: 1; min-width: 0; position: relative; display: flex; flex-direction: column; background: radial-gradient(ellipse at 50% 0%, #1d1a12 0%, var(--mpaper) 60%); border: 3px double var(--mgold); border-radius: 8px; padding: 10px 10px 8px; box-shadow: inset 0 0 60px rgba(0,0,0,.55), 0 0 0 1px #000; }
-        .mpage::before { content: ''; position: absolute; inset: 4px; border: 1px solid var(--mline); border-radius: 5px; pointer-events: none; }
-        .mpage::after { content: '❖        ❖'; position: absolute; top: -1px; left: 50%; transform: translate(-50%,-50%); color: var(--mgold); font: 12px serif; background: var(--mbg); padding: 0 8px; white-space: pre; display: none; }
-        .mpage.next { animation: mpNext .25s ease; }
-        .mpage.prev { animation: mpPrev .25s ease; }
-        @keyframes mpNext { from { opacity: .2; transform: translateX(-30px); } to { opacity: 1; transform: none; } }
-        @keyframes mpPrev { from { opacity: .2; transform: translateX(30px); } to { opacity: 1; transform: none; } }
+        .mpage { flex: 1; min-width: 0; position: relative; display: flex; flex-direction: column; background: radial-gradient(ellipse at 50% 40%, var(--mpaper) 55%, var(--mpaper2) 100%); border: 3px solid var(--mgreen); border-radius: 6px; padding: 10px 10px 8px; color: var(--mink); will-change: transform, opacity; box-shadow: 0 0 0 1px var(--mgold), 0 8px 24px rgba(0,0,0,.55); }
+        .mpage::before { content: ''; position: absolute; inset: 4px; border: 1px solid var(--mgold); border-radius: 3px; pointer-events: none; }
+        .mpage.odd { background-image: linear-gradient(90deg, rgba(90,60,10,.20), transparent 9%), radial-gradient(ellipse at 50% 40%, var(--mpaper) 55%, var(--mpaper2) 100%); }
+        .mpage.evenp { background-image: linear-gradient(270deg, rgba(90,60,10,.20), transparent 9%), radial-gradient(ellipse at 50% 40%, var(--mpaper) 55%, var(--mpaper2) 100%); }
         .mhead.even { flex-direction: row-reverse; }
-        .mpage.odd { box-shadow: inset 22px 0 26px -16px rgba(0,0,0,.85), inset 0 0 60px rgba(0,0,0,.45), 0 0 0 1px #000; }
-        .mpage.evenp { box-shadow: inset -22px 0 26px -16px rgba(0,0,0,.85), inset 0 0 60px rgba(0,0,0,.45), 0 0 0 1px #000; }
-        .mpage { will-change: transform, opacity; }
-        .mhead { display: flex; justify-content: space-between; align-items: center; color: var(--mgold); font-size: 13px; font-weight: 700; padding: 6px 8px 5px; margin: 0 2px 4px; border-bottom: 1px solid var(--mline); background: linear-gradient(90deg, transparent, rgba(212,179,110,.10), transparent); }
+        .mhead { display: flex; justify-content: space-between; align-items: center; color: var(--mgreen); font-size: 13px; font-weight: 800; padding: 6px 8px 5px; margin: 0 2px 4px; border-bottom: 1px solid var(--mline); }
         .mlines { flex: 1; min-height: 0; display: grid; direction: rtl; font-family: 'QuranMushaf', serif; font-size: var(--mfs, 22px); color: var(--mink); }
         .mrow { display: flex; direction: rtl; align-items: center; justify-content: space-between; white-space: nowrap; min-width: 0; overflow: visible; }
         .mrow.short { justify-content: center; gap: .3em; }
         .mw { display: inline-flex; direction: rtl; gap: .12em; flex: none; }
         .mw > span { direction: ltr; unicode-bidi: isolate; display: inline-block; }
-        .mrow.hdr { justify-content: center; margin: 2px 0; border: 2px solid var(--mgold); border-radius: 6px; background: linear-gradient(180deg, rgba(212,179,110,.24), rgba(212,179,110,.06) 55%, rgba(212,179,110,.22)); box-shadow: inset 0 0 0 3px #15130e, inset 0 0 0 4px rgba(212,179,110,.55); position: relative; }
-        .mrow.hdr::before, .mrow.hdr::after { content: '❖'; position: absolute; top: 50%; transform: translateY(-50%); color: var(--mgold); font-size: .55em; font-family: serif; }
+        .mrow.hdr { justify-content: center; margin: 2px 0; border: 2px solid var(--mgreen); border-radius: 6px; background: linear-gradient(180deg, #f3e7bd, #e8d79c 50%, #f3e7bd); box-shadow: inset 0 0 0 3px #f7efd6, inset 0 0 0 4px var(--mgold); position: relative; }
+        .mrow.hdr::before, .mrow.hdr::after { content: '❖'; position: absolute; top: 50%; transform: translateY(-50%); color: var(--mgreen); font-size: .55em; font-family: serif; }
         .mrow.hdr::before { right: 8px; } .mrow.hdr::after { left: 8px; }
-        .mrow.hdr .sn { direction: ltr; unicode-bidi: isolate; font-family: 'SurahNames', serif; color: #f1d58f; font-size: 1.6em; line-height: 1; padding-top: 6px; }
+        .mrow.hdr .sn { direction: ltr; unicode-bidi: isolate; font-family: 'SurahNames', serif; color: var(--mgreen); font-size: 1.6em; line-height: 1; padding-top: 6px; }
         .mrow.bas { justify-content: center; direction: ltr; }
-        .mfoot { align-self: center; min-width: 38px; text-align: center; color: var(--mgold); font-size: 13px; font-weight: 700; margin-top: 4px; padding: 2px 12px; border: 1px solid var(--mline); border-radius: 14px; background: rgba(212,179,110,.08); }
-        .mbot { display: flex; align-items: center; gap: 8px; padding: 4px 10px calc(env(safe-area-inset-bottom, 0px) + 8px); }
-        .mbot .mpos { flex: 1; text-align: center; font-size: 13px; color: var(--mgold); }
+        .mfoot { align-self: center; min-width: 38px; text-align: center; color: var(--mgreen); font-size: 13px; font-weight: 800; margin-top: 4px; padding: 2px 12px; border: 1px solid var(--mgold); border-radius: 14px; background: rgba(168,128,47,.10); }
+        .mbot { display: flex; align-items: center; gap: 8px; padding: 6px 10px calc(env(safe-area-inset-bottom, 0px) + 8px); }
+        .mbot .mpos { flex: 1; text-align: center; font-size: 13px; color: #cdbb8a; }
         .mbot button:disabled { opacity: .35; }
+        /* ===== فهرس المصحف ===== */
+        .mtabs { display: flex; gap: 6px; padding: 4px; margin: 4px 0 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
+        .mtabs button { flex: 1; padding: 10px 0; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font: inherit; font-weight: 800; font-size: 15px; cursor: pointer; }
+        .mtabs button.on { background: var(--gold); color: #1b1407; }
+        .mushaf-resume { display: flex; align-items: center; gap: 10px; width: 100%; text-align: right; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--gold); background: linear-gradient(90deg, rgba(212,179,110,.14), transparent); color: var(--text); font: inherit; font-weight: 700; margin-bottom: 12px; cursor: pointer; }
+        .mushaf-list { display: flex; flex-direction: column; gap: 8px; }
+        .mi { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; cursor: pointer; text-align: right; width: 100%; }
+        .mi:active { transform: scale(.99); }
+        .mi .badge { position: relative; flex: none; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: var(--gold); }
+        .mi .badge::before, .mi .badge::after { content: ''; position: absolute; inset: 6px; border: 1.5px solid var(--gold); border-radius: 3px; }
+        .mi .badge::after { transform: rotate(45deg); }
+        .mi .badge span { position: relative; z-index: 1; }
+        .mi .mname { flex: 1; min-width: 0; }
+        .mi .mname b { display: block; font-size: 17px; font-weight: 800; }
+        .mi .mname small { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+        .mi .mpg { flex: none; color: var(--muted); font-size: 12px; text-align: center; line-height: 1.3; }
+        .mi .mpg b { display: block; color: var(--text); font-size: 15px; }
         .page {
             display: none;
             width: min(100%, 540px);
@@ -1982,13 +1989,17 @@
             </div>
             <h2 class="mosque-heading">المصحف الشريف</h2>
             <div id="mushaf-list-view">
+                <div class="mtabs">
+                    <button type="button" id="mtab-s" class="on" onclick="mushafTab('s')">السور</button>
+                    <button type="button" id="mtab-j" onclick="mushafTab('j')">الأجزاء</button>
+                </div>
                 <button class="mushaf-resume" id="mushaf-resume" type="button" style="display:none" onclick="mushafResume()"></button>
-                <input class="mushaf-search" id="mushaf-search" type="search" placeholder="ابحث عن سورة…" oninput="mushafFilter()" autocomplete="off">
+                <input class="mushaf-search" id="mushaf-search" type="search" placeholder="ابحث عن سورة أو رقم صفحة…" oninput="mushafFilter()" autocomplete="off">
                 <div class="mushaf-list" id="mushaf-list"></div>
             </div>
             <div class="mreader" id="mreader" aria-label="قراءة المصحف">
                 <div class="mtop">
-                    <button type="button" onclick="mushafClose()" aria-label="إغلاق">✕</button>
+                    <button type="button" onclick="mushafClose()" aria-label="رجوع إلى الفهرس">→ الفهرس</button>
                     <div class="mtitle" id="mushaf-title" style="visibility:hidden"></div>
                     <div class="spacer"></div>
                 </div>
@@ -2231,7 +2242,7 @@
         }
 
         function showPage(id, isGoingBack = false) {
-            if (typeof mushafIsOpen === 'function' && id !== 'mushaf') document.getElementById('mreader').classList.remove('open');
+            if (id !== 'mushaf-read') document.getElementById('mreader').classList.remove('open');
             closeSidebar();
             markSidebar(id);
 
@@ -2267,6 +2278,11 @@
             if (id === 'times') {
                 document.getElementById('times').classList.add('active');
                 openTimes();
+                return;
+            }
+
+            if (id === 'mushaf-read') {
+                document.getElementById('mreader').classList.add('open');
                 return;
             }
 
@@ -5659,9 +5675,7 @@
 
             if (IS_NATIVE && AppPlugin && AppPlugin.addListener) {
                 AppPlugin.addListener('backButton', () => {
-                    if (mushafIsOpen()) {
-                        mushafClose();
-                    } else if (document.getElementById('sidebar')
+                    if (document.getElementById('sidebar')
                         .classList.contains('active')) {
                         closeSidebar();
                     } else if (currentPage === 'auth' && hasIdentity()) {
@@ -5743,7 +5757,17 @@
         function mfGet(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
         function mfSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
         function mfDigits(n) { return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]); }
-        function mushafIsOpen() { return document.getElementById('mreader').classList.contains('open'); }
+        function mushafIsOpen() { return currentPage === 'mushaf-read'; }
+        let mTab = 's';
+        const JUZ_START = [1,22,42,62,82,102,122,142,162,182,202,222,242,262,282,302,322,342,362,382,402,422,442,462,482,502,522,542,562,582];
+        const JUZ_NAMES = ['الأول','الثاني','الثالث','الرابع','الخامس','السادس','السابع','الثامن','التاسع','العاشر','الحادي عشر','الثاني عشر','الثالث عشر','الرابع عشر','الخامس عشر','السادس عشر','السابع عشر','الثامن عشر','التاسع عشر','العشرون','الحادي والعشرون','الثاني والعشرون','الثالث والعشرون','الرابع والعشرون','الخامس والعشرون','السادس والعشرون','السابع والعشرون','الثامن والعشرون','التاسع والعشرون','الثلاثون'];
+        function mushafTab(t) {
+            mTab = t;
+            document.getElementById('mtab-s').classList.toggle('on', t === 's');
+            document.getElementById('mtab-j').classList.toggle('on', t === 'j');
+            document.getElementById('mushaf-search').style.display = t === 's' ? '' : 'none';
+            if (mushafData) mushafRenderList();
+        }
         async function mushafLoad() {
             if (mushafData) return true;
             if (mushafLoading) return false;
@@ -5780,28 +5804,34 @@
             return { n: mushafData.s[idx][0], i: idx };
         }
         function mushafRenderList() {
+            const out = document.getElementById('mushaf-list');
+            if (mTab === 'j') {
+                out.innerHTML = JUZ_START.map((p, i) => {
+                    const sn = mushafSurahOf(p).n;
+                    return '<button class="mi" type="button" onclick="mushafOpen(' + p + ')"><span class="badge"><span>' + mfDigits(i + 1) + '</span></span><span class="mname"><b>الجزء ' + JUZ_NAMES[i] + '</b><small>يبدأ من سورة ' + sn + '</small></span><span class="mpg">صفحة<b>' + mfDigits(p) + '</b></span></button>';
+                }).join('');
+                return;
+            }
             const q = document.getElementById('mushaf-search').value.trim()
                 .replace(/[ً-ٰٟ]/g, '').replace(/[أإآ]/g, 'ا');
             const items = mushafData.s.map((s, i) => {
                 const n = s[0].replace(/[أإآ]/g, 'ا');
                 return (!q || n.includes(q) || String(i + 1) === q)
-                    ? '<button class="mushaf-item" type="button" onclick="mushafOpen(' + s[1] + ')"><span class="mnum">' + mfDigits(i + 1) + '</span><span style="flex:1">' + s[0] + '</span><span style="color:var(--muted);font-size:12px">ص ' + mfDigits(s[1]) + '</span></button>' : '';
+                    ? '<button class="mi" type="button" onclick="mushafOpen(' + s[1] + ')"><span class="badge"><span>' + mfDigits(i + 1) + '</span></span><span class="mname"><b>' + s[0] + '</b><small>' + (s[3] ? 'مدنية' : 'مكية') + ' · ' + mfDigits(s[2]) + ' آية</small></span><span class="mpg">صفحة<b>' + mfDigits(s[1]) + '</b></span></button>' : '';
             }).join('');
             const pg = parseInt(q, 10);
             const extra = (pg > 114 && pg <= 604)
-                ? '<button class="mushaf-item" style="grid-column:1/-1" type="button" onclick="mushafOpen(' + pg + ')">الذهاب إلى الصفحة ' + mfDigits(pg) + '</button>' : '';
-            document.getElementById('mushaf-list').innerHTML = extra + items;
+                ? '<button class="mi" type="button" onclick="mushafOpen(' + pg + ')"><span class="mname"><b>الذهاب إلى الصفحة ' + mfDigits(pg) + '</b></span></button>' : '';
+            out.innerHTML = extra + (items || '<div style="text-align:center;color:var(--muted);padding:20px">لا نتائج</div>');
         }
         function mushafFilter() { if (mushafData) mushafRenderList(); }
         function mushafShowList() { mushafClose(); }
-        function mushafClose() {
-            document.getElementById('mreader').classList.remove('open');
-            if (currentPage === 'mushaf') mushafInit();
-        }
+        function mushafClose() { if (currentPage === 'mushaf-read') goBack(); }
         async function mushafOpen(page, dir) {
             if (!mushafData) return;
             try { await Promise.all([document.fonts.load('40px QuranMushaf'), document.fonts.load('40px SurahNames')]); } catch (e) {}
             mPageNo = Math.max(1, Math.min(604, page));
+            if (currentPage !== 'mushaf-read') showPage('mushaf-read');
             document.getElementById('mreader').classList.add('open');
             mushafRender(dir || 0);
         }
