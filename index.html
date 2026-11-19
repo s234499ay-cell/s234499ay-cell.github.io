@@ -661,6 +661,8 @@
         .mrow.hdr::before { right: 8px; } .mrow.hdr::after { left: 8px; }
         .mrow.hdr .sn { direction: ltr; unicode-bidi: isolate; font-family: 'SurahNames', serif; color: var(--mgreen); font-size: 1.6em; line-height: 1; padding-top: 6px; }
         .mrow.bas { justify-content: center; direction: ltr; }
+        .mrow.fbas { direction: rtl; gap: .35em; }
+        .mrow.fbas > span { direction: ltr; unicode-bidi: isolate; }
         .mfoot { align-self: center; min-width: 38px; text-align: center; color: var(--mgreen); font-size: 13px; font-weight: 800; margin-top: 4px; padding: 2px 12px; border: 1px solid var(--mgold); border-radius: 14px; background: rgba(168,128,47,.10); }
         .mbot { display: flex; align-items: center; gap: 8px; padding: 6px 10px calc(env(safe-area-inset-bottom, 0px) + 8px); }
         .mbot .mpos { flex: 1; text-align: center; font-size: 13px; color: #cdbb8a; }
@@ -5843,7 +5845,7 @@
             const rows = lines.length === 8 ? 8 : 15;
             box.style.gridTemplateRows = 'repeat(' + rows + ', 1fr)';
             const texts = [];
-            lines.forEach(ln => {
+            lines.forEach((ln, li) => {
                 const row = document.createElement('div');
                 row.className = 'mrow';
                 if (ln[0] === 'H' && ln.length === 4) {
@@ -5852,6 +5854,11 @@
                     sn.className = 'sn';
                     sn.textContent = ln.slice(1);
                     row.appendChild(sn);
+                } else if (mPageNo === 1 && li === 1) {
+                    // الفاتحة: البسملة كما في بقية السور، ورقم الآية ١ بجانبها
+                    row.classList.add('bas', 'fbas');
+                    const marker = ln.split(' ').pop().split('\u200A').pop();
+                    [BAS, marker].forEach(t => { const s = document.createElement('span'); s.textContent = t; row.appendChild(s); });
                 } else if (ln === 'B') {
                     row.classList.add('bas');
                     row.textContent = BAS;
@@ -5882,6 +5889,12 @@
             });
             box.querySelectorAll('.hdr').forEach(r => { r.style.height = (rowH - 4) + 'px'; r.style.fontSize = (rowH * 0.46) + 'px'; });
             box.querySelectorAll('.bas').forEach(r => { r.style.fontSize = Math.min(rowH * 0.62, boxW / 9.5) + 'px'; });
+            if (mPageNo === 1) texts.forEach(r => r.classList.add('short'));
+            box.querySelectorAll('.fbas').forEach(r => {
+                let w = Array.from(r.children).reduce((a, c) => a + c.getBoundingClientRect().width, 0) + parseFloat(getComputedStyle(r).fontSize) * 0.35;
+                const fs0 = parseFloat(r.style.fontSize);
+                if (w > boxW * 0.98) r.style.fontSize = (fs0 * boxW * 0.96 / w) + 'px';
+            });
             pg.classList.remove('next', 'prev');
             if (dir) { void pg.offsetWidth; pg.classList.add(dir > 0 ? 'next' : 'prev'); }
             const s = mushafSurahOf(mPageNo);
